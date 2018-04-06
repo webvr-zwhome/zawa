@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>test_scene</title>
+    <style>body { margin: 0; } video { width: 0px; margin: 0px }</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="./index.css"></head>
+  </head>
+  <body>
+    <!-- singIn -->
+    <!-- <div id="SignTab">
+        <div><span class="label">Connect Id</span></div>
+        <div><textarea id="MyID" class="id-area"></textarea></div> -->
+        <!-- <div><span class="label">CONNECT ID </span><textarea id="connectID" class="id-area"></textarea></div> -->
+        <!-- <div><button id="confirm">confirm</button></div>
+    </div> -->
+    <!-- When you're ready to deploy your app, update this line to point to your compiled client.bundle.js -->
+    <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+    <script src="./client.bundle?platform=vr"></script>
+    <!-- <script src="signIn.js"></script> -->
+    <script>
+      // Initialize the React VR application
+      ReactVR.init(
+        // When you're ready to deploy your app, update this line to point to
+        // your compiled index.bundle.js
+        '../index.vr.bundle?platform=vr&dev=true',
+        // Attach it to the body tag
+        document.body
+      );
+    </script>
+  </body>
+</html>
+
