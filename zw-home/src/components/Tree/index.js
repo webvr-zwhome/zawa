@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:17:33 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-04-12 23:57:48
+ * @Last Modified time: 2018-04-14 14:46:52
  */
 import React from 'react';
 import {
@@ -29,8 +29,9 @@ export default class Tree extends React.Component{
       <View
         style={{
           transform: [
+            {translate: [x, -1, y]},
             {scale: [scale, scale + height, scale]},
-            {translate: [x, -1, y]}
+
           ]
         }}
       >

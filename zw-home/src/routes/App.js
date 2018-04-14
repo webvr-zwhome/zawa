@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-04-13 00:04:03
+ * @Last Modified time: 2018-04-14 14:59:09
  */
 import React from 'react';
 import {
@@ -22,7 +22,7 @@ import {
 import Camera from '../components/Camera';
 import Home from '../components/Home';
 import Tree from '../components/Tree';
-import Light from '../components/Light/ambientLight'; 
+// import AmbientLightAll from '../components/Light/ambientLightAll'; 
 import World from '../components/World';
 
 export default class App extends React.Component{
@@ -32,7 +32,7 @@ export default class App extends React.Component{
   render() {
     return (
       <View>
-        <Light />
+        {/* <AmbientLightAll /> */}
         <Camera />
         <World >
           <Home />

@@ -1,8 +1,8 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:17:59 
- * @Last Modified by:   zhaoxiaoqi 
- * @Last Modified time: 2018-04-12 23:17:59 
+ * @Last Modified by: zhaoxiaoqi
+ * @Last Modified time: 2018-04-14 14:30:28
  */
 import React from 'react';
 import {
@@ -11,7 +11,7 @@ import {
   AmbientLight,
 } from 'react-vr';
 
-export default class Light extends React.Component {
+export default class AmbientLightAll extends React.Component {
   constructor(props) {
     super(props);
   }
