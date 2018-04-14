@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 22:54:45 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-04-13 00:30:28
+ * @Last Modified time: 2018-04-13 21:10:25
  */
 import React from 'react';
 import {
@@ -21,12 +21,24 @@ export default class World extends React.Component {
   }
 
   static defaultProps = {
+    sky: asset('heaven.png'),
     size: 100,  // 树的数量
   }
 
   randomPosition() {
-    const pos = Math.floor(Math.random() * 100 - 50);
-    return (pos > -40 && pos < 40) ? (pos <= 0 ? pos -40 : pos + 40) : pos;
+    let x = Math.floor(Math.random() * 100 - 50);
+    let y = Math.floor(Math.random() * 100 - 50);
+    const threshold = 40;
+    // return (pos > -40 && pos < 40) ? (pos <= 0 ? pos -40 : pos + 40) : pos;
+    if(!this.isValid(x, y, threshold)) {
+      x = x >= 0 ? x + threshold : x - threshold;
+      y = y >= 0 ? y + threshold : y - threshold;
+    }
+    return {x, y};
+  }
+
+  isValid(x, y, threshold) {
+    return (x * x + y * y) > threshold * threshold;
   }
 
   randomScale() {
@@ -40,22 +52,26 @@ export default class World extends React.Component {
   generateForest(size) {
     const forest = [];
     for(let i = 0; i < size; i++) {
-      forst.push({
-        x: this.randomPosition(),
-        y: this.randomPosition(),
+      const pos = this.randomPosition();
+      forest.push({
+        // x: this.randomPosition(),
+        // y: this.randomPosition(),
+        ...pos,
         height: this.randomHeight(),
         scale: this.randomScale(),
-      })
+      });
+      
+      console.log(forest[i]);
     }
     return forest;
   }
 
   render() {
-    const { size } = this.props;
+    const { sky, size } = this.props;
     const forest = this.generateForest(size);
     return (
       <View>
-        <WorldPano source={asset('heaven.png')} />
+        <WorldPano source={sky} />
         {
           forest.map((tree, index) => (
             <Tree 
@@ -67,7 +83,7 @@ export default class World extends React.Component {
             />
           ))
         }
-        { this.props.children }
+        {/* { this.props.children } */}
         <WorldPlane position={[0, 0, 0]}/>
       </View>
     )
