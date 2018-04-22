@@ -2,13 +2,14 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 22:54:45 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-04-14 14:58:44
+ * @Last Modified time: 2018-04-22 22:59:58
  */
 import React from 'react';
 import {
   View,
   Pano,
   asset,
+  Model,
 } from 'react-vr';
 import WorldPano from './WorldPano';
 import WorldPlane from './WorldPlane';
@@ -87,6 +88,19 @@ export default class World extends React.Component {
           ))
         }
         { this.props.children }
+        <Model
+          source={{ 
+            obj: asset('models/food/donut.obj'), 
+            mtl: asset('models/food/donut.mtl') 
+          }}
+          lit={true}
+          style={{ 
+            transform: [
+              // {scale: [scale, scale, scale + height]},
+              {translate:[0, 8, -18]}
+            ] 
+          }}
+        />
         <WorldPlane position={[0, 0, 0]}/>
       </View>
     )
