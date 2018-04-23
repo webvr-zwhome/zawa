@@ -13,6 +13,7 @@ import {
 } from 'react-vr';
 import App from './src/routes/App';
 import Chess from './src/routes/Chess';
+import FoodShot from './src/routes/FoodShot';
 
 // const history = createBrowserHistory();
 
@@ -22,8 +23,9 @@ export default class zw_home extends React.Component {
       <Router>
         <View>
         {/* <Switch> */}
-          <Route exact path="/" component={App} />
-          <Route exact path="/chess" component={Chess} />
+          {/* <Route exact path="/" component={App} />
+          <Route exact path="/chess" component={Chess} /> */}
+          <Route exact path="/" component={FoodShot} />
         {/* </Switch> */}
         </View>
       </Router>
