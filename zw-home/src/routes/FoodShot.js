@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-04-23 23:38:41
+ * @Last Modified time: 2018-04-26 00:08:09
  */
 import React from 'react';
 import {
@@ -30,7 +30,6 @@ export default class FoodShot extends React.Component{
   render() {
     return (
       <View>
-        {/* <AmbientLightAll /> */}
         <Camera />
         <World hasTree={false}>
         </World>

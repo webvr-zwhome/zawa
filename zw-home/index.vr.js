@@ -3,13 +3,13 @@ import React from 'react';
 // import createBrowserHistory from 'history/createBrowserHistory';
 import { MemoryRouter as Router, Route, Link, Switch } from 'react-router';
 
-
 import {
   AppRegistry,
   asset,
   Pano,
   Text,
   View,
+  VrButton,
 } from 'react-vr';
 import App from './src/routes/App';
 import Chess from './src/routes/Chess';
@@ -18,15 +18,40 @@ import FoodShot from './src/routes/FoodShot';
 // const history = createBrowserHistory();
 
 export default class zw_home extends React.Component {
+  state = {
+    mode: 'home',
+  }
+  handleClick(e) {
+    this.setState({
+      mode: e.target.id,
+    })
+  }
   render() {
+    const mode = this.state.mode;
     return (
       <Router>
         <View>
-        {/* <Switch> */}
-          {/* <Route exact path="/" component={App} />
-          <Route exact path="/chess" component={Chess} /> */}
-          <Route exact path="/" component={FoodShot} />
-        {/* </Switch> */}
+          {
+            mode !== "home" ? null : 
+            <View>
+              <VrButton id="home" onClick={e => this.handleClick(e)}></VrButton>
+              <Route exact path="/" component={App}></Route>
+            </View>
+          }
+          {
+            mode !== 'game-chess' ? null :
+            <View>
+              <VrButton id="game-chess" onClick={e => this.handleClick(e)}></VrButton>
+              <Route exact path="/" component={Chess} />
+            </View>
+          }
+          {
+            mode !== 'game-foodshot' ? null :
+            <View>
+              <VrButton id="game-foodshot" onClick={ e => this.handleClick(e) }></VrButton>
+              <Route exact path="/" component={FoodShot} />
+            </View>
+          }
         </View>
       </Router>
     );

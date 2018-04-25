@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-23 23:08:39 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-04-23 23:54:57
+ * @Last Modified time: 2018-04-25 23:04:58
  */
 const Food = {
   prefix: 'models/food',
@@ -38,15 +38,23 @@ function getFoodUrl() {
 }
 
 function initPosition() {
-  const x = Math.random() * 100 - 100 / 2;
-  const z = Math.random() * 100 - 100 / 2;
-  return {
-    x,
-    z,
-  };
+  return [
+    Math.random() * 100 - 100 / 2,
+    Math.random() * 15 + 5,
+    Math.random() * 100 - 100 / 2,
+  ];
+}
+
+function initOrientation() {
+  return [
+    Math.random() * 360,
+    Math.random() * 360,
+    Math.random() * 360,
+  ];
 }
 
 export default {
   getFoodUrl,
   initPosition,
+  initOrientation,
 }
