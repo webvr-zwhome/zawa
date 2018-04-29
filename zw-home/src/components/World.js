@@ -69,9 +69,10 @@ export default class World extends React.Component {
     }
     return forest;
   }
-
+  
   render() {
     const { sky, size, hasTree } = this.props;
+    const test = 1;
     const forest = this.generateForest(size);
     return (
       <View>
