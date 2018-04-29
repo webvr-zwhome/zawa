@@ -10,7 +10,7 @@ import ThreeDOFRayCaster from '../src/native_components/inputs/3dof/ThreeDOFRayC
 
 function init(bundle, parent, options) {
   const scene = new THREE.Scene();
-  const vr = new VRInstance(bundle, 'zw_home', parent, {
+  const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
     raycasters: [
       new ThreeDOFRayCaster(scene),

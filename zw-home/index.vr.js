@@ -17,7 +17,7 @@ import FoodShot from './src/routes/FoodShot';
 
 // const history = createBrowserHistory();
 
-export default class zw_home extends React.Component {
+export default class zawa extends React.Component {
   state = {
     mode: 'home',
   }
@@ -58,7 +58,7 @@ export default class zw_home extends React.Component {
   }
 };
 
-// export default class zw_home extends React.Component {
+// export default class zawa extends React.Component {
 //   render() {
 //     return (
 //       <View>
@@ -82,4 +82,4 @@ export default class zw_home extends React.Component {
 //   }
 // };
 
-AppRegistry.registerComponent('zw_home', () => zw_home);
+AppRegistry.registerComponent('zawa', () => zawa);
