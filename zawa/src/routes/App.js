@@ -35,7 +35,7 @@ export default class App extends React.Component{
         {/* <AmbientLightAll /> */}
         <Camera />
         <World >
-          <Home />
+          {/* <Home /> */}
         </World>
       </View> 
     )
