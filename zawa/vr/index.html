@@ -3,11 +3,27 @@
     <title>zawa</title>
     <style>body { margin: 0; }</style>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="./index.css"></head>
   </head>
   <body>
+
+    <!-- singIn -->
+    <div id="SignTab">
+        <div><span class="label">Connect Id</span></div>
+        <div><textarea id="MyID" class="id-area"></textarea></div>
+        <!-- <div><span class="label">CONNECT ID </span><textarea id="connectID" class="id-area"></textarea></div> -->
+        <div><button id="confirm">confirm</button></div>
+    </div>
+
+    <!-- peer -->
+    <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+
     <!-- When you're ready to deploy your app, update this line to point to your compiled client.bundle.js -->
     <script src="./client.bundle?platform=vr"></script>
-    <script>
+
+    <script src="../src/server/signIn.js"></script>
+
+    <!-- <script>
       // Initialize the React VR application
       ReactVR.init(
         // When you're ready to deploy your app, update this line to point to
@@ -16,7 +32,7 @@
         // Attach it to the body tag
         document.body
       );
-    </script>
+    </script> -->
   </body>
 </html>
 
