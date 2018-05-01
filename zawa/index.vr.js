@@ -16,11 +16,83 @@ import Chess from './src/routes/Chess';
 import FoodShot from './src/routes/FoodShot';
 
 // const history = createBrowserHistory();
+//pusher
+importScripts('https://js.pusher.com/4.1/pusher.worker.min.js');
+
 
 export default class zawa extends React.Component {
   state = {
     mode: 'home',
   }
+
+  //pusher
+  componentWillMount(){
+    const pusher = new Pusher('0b6e86e935ef11ade5df',{
+      authEndpoint:'http://123.206.180.98:5000/pusher/auth',
+      auth: {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers':'Content-Type, Authorization'
+        }
+      },
+      cluster: 'ap1',
+      encrypted: true
+    })
+
+    this.socketId = null;
+    
+    //   fetch('http://127.0.0.1:5000/pusher/trigger', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     socketId: this.socketId,
+    //     channelId: this.channelId,
+    //   })
+    // });
+    // })
+
+    // this.channelId ='channel-' + document.getElementById('MyID').value
+    // this.channelId = 'channel-1234';
+    // console.log('channelId: ',this.channelId)
+    // const channel = pusher.subscribe(this.channelId)
+
+    // channel.bind('my-event',(data) => {
+    //   console.log('data: ',data)
+    //   alert(data.message)
+    // })
+
+    // presence channel
+    this.presenceChannelName = 'presence-1234'
+    const presenceChannel = pusher.subscribe(this.presenceChannelName);
+
+    //事件绑定
+    presenceChannel.bind('pusher:member_added', (member)=>{
+      console.log(member.id)
+    })
+    presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
+      console.log('sucessConnect')
+    })
+    pusher.connection.bind('connected',() => {
+      this.socketId = pusher.connection.socket_id
+      console.log('connected: ', this.socketId)
+
+      // fetch('http://127.0.0.1:5000/pusher/auth', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     socketId: this.socketId,
+      //     channelId: this.presenceChannelName,
+      //   })
+      // });
+    })    
+  }
+
   handleClick(e) {
     this.setState({
       mode: e.target.id,
