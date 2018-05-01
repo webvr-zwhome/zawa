@@ -28,7 +28,7 @@ export default class zawa extends React.Component {
   //pusher
   componentWillMount(){
     const pusher = new Pusher('0b6e86e935ef11ade5df',{
-      authEndpoint:'http://127.0.0.1:5000/pusher/auth',
+      authEndpoint:'http://123.206.180.98:5000/pusher/auth',
       auth: {
         headers: {
           'Access-Control-Allow-Origin': '*',
