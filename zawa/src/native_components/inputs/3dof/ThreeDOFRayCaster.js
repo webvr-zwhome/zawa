@@ -13,7 +13,8 @@
  */
 
 import * as THREE from 'three';
-import {RayCaster} from 'ovrui';
+import { MeshLine, MeshLineMaterial  } from 'three.meshline';
+import { RayCaster } from 'ovrui';
 import { cameraMove } from '../../../components/Camera/move';
 
 const LEFT_ORIGIN = [-0.3, -0.5, -0.3];
@@ -97,31 +98,47 @@ function createBeamLineMesh() {
 
 function updateCurveMeshGeometry(controller, angle, direction) {
 
+  var curvePoints = [];
   if(controller && angle && direction) {
-    var curvePoints = [];
-    var p1 = startPoint = new THREE.Vector3(0, 0, 0);
-    var unitDistance = 1 / 60;
-    var distance = 90 / Math.PI * angle * unitDistance;
-    var p2 = endPoint = new THREE.Vector3(distance * Math.cos(direction), 1, distance * Math.sin(direction));
-    var middlePoint = startPoint.add(endPoint).divideScalar(2);
-    var p3 = projection = new THREE.Vector3(controller.position.x, 1, controller.position.z);
+    var startPoint = new THREE.Vector3(0, 0, 0);
+    var unitDistance = 20;
+    var distance = angle * unitDistance;
+    var endPointInWorld = new THREE.Vector3(distance * Math.cos(direction), 1, distance * Math.sin(direction));
+
+
+    var stratpointInWorld = new THREE.Vector3();
+    controller.getWorldPosition(stratpointInWorld);
+
+    var vecStartToEnd = endPointInWorld.sub(stratpointInWorld);
+    var endPoint = controller.children[1].worldToLocal(vecStartToEnd);
+    // console.log(endPoint);
+
+    curvePoints.push(startPoint);
+    curvePoints.push(new THREE.Vector3(endPoint.x, endPoint.y, endPoint.z));
+
+    // console.log(curvePoints);
+    // var middlePoint = startPoint.add(endPoint).divideScalar(2);
+    // var p3 = projection = new THREE.Vector3(controller.position.x, 1, controller.position.z);
     
-    var a = (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z),
-        b = (p2.z - p1.z) * (p3.x - p1.x) - (p3.z - p1.z) * (p2.x - p1.x),
-        c = (p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y);
-    var equation = function (x, y, z) {
-      return a * x + b * y + c * z;
-    }
-    var p1p2 = p2.sub(p1);
+    // var a = (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z),
+    //     b = (p2.z - p1.z) * (p3.x - p1.x) - (p3.z - p1.z) * (p2.x - p1.x),
+    //     c = (p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y);
+    // var equation = function (x, y, z) {
+    //   return a * x + b * y + c * z;
+    // }
+    // var p1p2 = p2.sub(p1);
     // var curvePointMiddlePoint = middlePoint.sub()
   }
  
-  console.log(angle, direction);
-  const spline = new THREE.CatmullRomCurve3([
+  // console.log(angle, direction);
+  var pointsArray = curvePoints.length > 0 ? curvePoints : [
     new THREE.Vector3(0, 0, 0),
     new THREE.Vector3(0, 0, -1),
     new THREE.Vector3(0, -1, -2),
-  ]);
+  ];
+
+  // console.log(pointsArray);
+  const spline = new THREE.CatmullRomCurve3(pointsArray);
 
   const points = spline.getPoints(25);
   const geometry = new THREE.Geometry();
@@ -141,9 +158,22 @@ function createBeamCurveMesh(controller, angle, direction) {
   // geometry.vertices = points;
 
   var geometry = updateCurveMeshGeometry(controller, angle, direction);
+  // console.log(geometry);
+  // const material = new THREE.LineDashedMaterial( { 
+  //   color: 0xffff00,
+  //   linewidth: 50,
+  // } );
+  // const beam_curve = new THREE.Line(geometry, material);
+  var line = new MeshLine();
+  line.setGeometry( geometry );
+  var material = new MeshLineMaterial({
+    color: 0xffff00,
+    lineWidth: 10,
+    opacity: 0.8,
+  });
 
-  const material = new THREE.MeshNormalMaterial( { color: 0xffff00 } );
-  const beam_curve = new THREE.Line(geometry, material);
+
+  const beam_curve = new THREE.Mesh( line.geometry, material ); 
   return beam_curve;
 }
 
@@ -239,12 +269,14 @@ export default class ThreeDOFRayCaster extends RayCaster {
   }
   // 当button1按下时采用曲线光束，否则采用默认光束
   changeController(gamepad, angle, direction) {
-    // console.log('vector', vector);
     if (gamepad && gamepad.pose) {
       if (gamepad.buttons[1].pressed) {
+        const beamCurve = createBeamCurveMesh(this._mesh, angle, direction);
+        beamCurve.parent = this._mesh;
+        this._mesh.children[1] = beamCurve;
+        
         this._mesh.children[0].visible = false;
         this._mesh.children[1].visible = true;
-        createBeamCurveMesh(this._mesh, angle, direction);
       } else {
         this._mesh.children[0].visible = true;
         this._mesh.children[1].visible = false;
@@ -330,9 +362,6 @@ export default class ThreeDOFRayCaster extends RayCaster {
       );
       this._gamepadPosition = gamepadPosition;
     }
-    // follow movement and rotation of `scene(camera)` in vr
-    // the `scene(camera)` here is differernt from `this._scene`
-    // this.followCamera(gamepad);
   }
 
   /**
