@@ -10,6 +10,7 @@ import {
   Text,
   View,
   VrButton,
+  StyleSheet,
 } from 'react-vr';
 import App from './src/routes/App';
 import Chess from './src/routes/Chess';
@@ -17,14 +18,62 @@ import FoodShot from './src/routes/FoodShot';
 
 // const history = createBrowserHistory();
 
+var Styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#777879',
+    borderRadius: 0.2,
+    borderWidth: 0.01,
+    borderColor: '#7b612f',
+    flex: 1,
+    flexDirection: 'column',
+    width: 2,
+    height: 0.5,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  getIntoChess: {
+    transform: [
+      {translate: [3, 6, -15]},
+    ],
+  },
+  getIntoFoodShot: {
+    transform: [
+      {translate: [-10, 6, 3]},
+      {rotateY: 90}
+    ],
+  },
+  backHome: {
+    transform: [
+      {translate: [4, 4, -3]}
+    ],
+  },
+  text: {
+    fontSize: 0.2, 
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  }
+});
 export default class zawa extends React.Component {
   state = {
-    mode: 'home',
+    mode: "home",
   }
-  handleClick(e) {
+  
+  backHome() {
     this.setState({
-      mode: e.target.id,
+      mode: 'home',
     })
+  }
+
+  getIntoChess() {
+    this.setState({
+      mode: 'game-chess',
+    });
+  }
+
+  getIntoFoodShot() {
+    this.setState({
+      mode: 'game-foodshot',
+    });
   }
   render() {
     const mode = this.state.mode;
@@ -34,21 +83,54 @@ export default class zawa extends React.Component {
           {
             mode !== "home" ? null : 
             <View>
-              <VrButton id="home" onClick={e => this.handleClick(e)}></VrButton>
+              <VrButton 
+                class="game-foodshot" 
+                style={[
+                  Styles.button,
+                  Styles.getIntoFoodShot
+                ]}
+                onClick={ () => this.getIntoFoodShot() }>
+                  <Text style={Styles.text}>FOODSHOT</Text>
+              </VrButton>
+              <VrButton 
+                class="game-chess" 
+                style={[
+                  Styles.button,
+                  Styles.getIntoChess
+                ]}
+                onClick={ () => this.getIntoChess() }>
+                  <Text style={Styles.text}>CHESS</Text>
+              </VrButton>
               <Route exact path="/" component={App}></Route>
             </View>
           }
           {
             mode !== 'game-chess' ? null :
             <View>
-              <VrButton id="game-chess" onClick={e => this.handleClick(e)}></VrButton>
+              <VrButton 
+                class="home" 
+                style={[
+                  Styles.button,
+                  Styles.backHome
+                ]}
+                onClick={ () => this.backHome() }>
+                <Text style={Styles.text}>BACK</Text>
+              </VrButton>
               <Route exact path="/" component={Chess} />
             </View>
           }
           {
             mode !== 'game-foodshot' ? null :
             <View>
-              <VrButton id="game-foodshot" onClick={ e => this.handleClick(e) }></VrButton>
+              <VrButton 
+                class="home" 
+                style={[
+                  Styles.button,
+                  Styles.backHome
+                ]}
+                onClick={ () => this.backHome() }>
+                <Text style={Styles.text}>BACK</Text>
+              </VrButton>
               <Route exact path="/" component={FoodShot} />
             </View>
           }
