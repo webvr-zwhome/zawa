@@ -37,8 +37,10 @@ function gotMedia(stream){
 
         peer1.on('open',function(id){
             console.log('peer1 opening');
+            console.log(id)
             idHost += id;
             window.PeerId = id;
+            console.log(idHost)
             document.getElementById('MyID').textContent = idHost;
         });
         peer1.on('call',function(call){

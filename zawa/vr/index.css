@@ -66,6 +66,9 @@ video {
     border: 2px solid #9c712f; 
     padding: 7px 16px;
     resize: none;
+    font-size: 18px;
+    /* letter-spacing: 2px; */
+    text-align: center
 }
 
 #confirm {
