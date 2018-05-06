@@ -2,7 +2,7 @@
  * @Author: penghuiwu 
  * @Date: 2018-05-01 13:54:51 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-06 14:41:02
+ * @Last Modified time: 2018-05-06 20:55:58
  */
 
 import React from 'react';
@@ -26,8 +26,8 @@ const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 export default class Human extends React.Component {
     // mixins: [TimerMixin]
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             headPosition: [0, 5.2, -7],
             headRotation: [0, 0, 0],
@@ -61,20 +61,41 @@ export default class Human extends React.Component {
         // }else{
         //     clearInterval(headExist);
         // }
-        headExist =  this.setInterval(()=>{
-            const position = VrHeadModel.position();
-            const rotation = VrHeadModel.rotation();
-            that.setState({
-                headPosition: position,
-                headRotation: rotation,
-                bodyPosition: [position[0],position[1]-1,position[2]]
-            })
-        },  500)
+        if(!this.props.HumanId){
+            headExist =  setInterval(()=>{
+                const position = VrHeadModel.position();
+                const rotation = VrHeadModel.rotation();
+                that.setState({
+                    headPosition: [position[0],position[1]-1,position[2]],
+                    headRotation: rotation,
+                    bodyPosition: [position[0],position[1]-2,position[2]]
+                })
+            },  200)
+        }
     }
 
 
     render() {
-
+        let headTran = [];
+        let bodyTran = [];
+        let rotation = [];
+        if(this.props.HumanId){
+            // position[0] = this.props.HumanPosition[0];
+            // position[1] = this.props.HumanPosition[1];
+            // position[2] = this.props.HumanPosition[2];
+            // rotation[0] = this.props.HumanRotation[0];
+            // rotation[1] = this.props.HumanRotation[1];
+            // rotation[2] = this.props.HumanRotation[2];
+            headTran = this.props.HumanPosition.slice();
+            bodyTran = this.props.HumanPosition.slice();
+            headTran[1] -= 1;
+            bodyTran[1] -= 2;
+            rotation = this.props.HumanRotation.slice();
+        }else{
+            headTran = this.state.headPosition.slice();
+            bodyTran = this.state.bodyPosition.slice();
+            rotation = this.state.headRotation.slice();
+        }
         // const position = this.state.position;
         // const rotation = this.state.rotation;
         // console.log(position);
@@ -89,10 +110,10 @@ export default class Human extends React.Component {
                       }}
                       style={{
                         transform: [
-                            { translate: this.state.headPosition}, //初始化进入时的高度
-                            { rotateX: this.state.headRotation[0] },         //矫正camera的视角
-                            { rotateY: this.state.headRotation[1] },         //矫正camera的视角
-                            { rotateZ: this.state.headRotation[2] },         //矫正camera的视角,
+                            { translate: headTran}, //初始化进入时的高度
+                            { rotateX: rotation[0] },         //矫正camera的视角
+                            { rotateY: rotation[1] },         //矫正camera的视角
+                            { rotateZ: rotation[2] },         //矫正camera的视角,
                             {scale: 0.5}
                         ],
                       }}
@@ -107,10 +128,10 @@ export default class Human extends React.Component {
                       }}
                       style={{
                         transform: [
-                            { translate: this.state.bodyPosition }, //初始化进入时的高度
-                            { rotateX: this.state.bodyRotation[0] },         //矫正camera的视角
-                            { rotateY: this.state.bodyRotation[1] },         //矫正camera的视角
-                            { rotateZ: this.state.bodyRotation[2] },         //矫正camera的视角
+                            { translate: bodyTran }, //初始化进入时的高度
+                            { rotateX: rotation[0] },         //矫正camera的视角
+                            { rotateY: rotation[1] },         //矫正camera的视角
+                            { rotateZ: rotation[2] },         //矫正camera的视角
                             {scale: 0.5}
                         ],
                       }}
