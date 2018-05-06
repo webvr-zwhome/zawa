@@ -25,6 +25,7 @@ import Tree from '../components/Tree';
 // import AmbientLightAll from '../components/Light/ambientLightAll'; 
 import World from '../components/World';
 import Human from '../components/Human';
+import Hoster from '../components/Human/Hoster';
 
 export default class App extends React.Component{
   constructor(props) {
@@ -76,7 +77,7 @@ export default class App extends React.Component{
         this.UpdateMember(this.props.AppMemberId,this.props.AppPosition,this.props.AppRotation):
         this.AddMember(this.props.AppMemberId,this.props.AppPosition,this.props.AppRotation);
     const keyArr = Object.keys(this.memberList);
-    console.log('memberList: ',this.memberList)
+    // console.log('memberList: ',this.memberList)
     const newMemList = Object.assign({},this.memberList)
     list = keyArr.map((memkey) => {
       return <Human HumanId={memkey} HumanPosition={newMemList[memkey]["position"]} HumanRotation={newMemList[memkey]["rotation"]} />
@@ -89,11 +90,13 @@ export default class App extends React.Component{
       <View>
         {/* <AmbientLightAll /> */}
         <Camera />
-        <World >
-          <Home />
-          <Human></Human>
+        <World  />
+          
+        {/* </World> */}
+        <Home />
+          {/* <Human></Human> */}
+          <Hoster />
           {list}
-        </World>
       </View> 
     )
   }

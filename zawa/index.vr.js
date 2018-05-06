@@ -74,10 +74,10 @@ export default class zawa extends React.Component {
 
     //事件绑定
     presenceChannel.bind('pusher:member_added', (member)=>{
-      console.log(member.id)
+      // console.log(member.id)
     })
     presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
-      console.log('sucessConnect')
+      // console.log('sucessConnect')
       setInterval(()=>{
         presenceChannel.trigger('client-headUpdate',{
           position:VrHeadModel.position(),
@@ -88,7 +88,7 @@ export default class zawa extends React.Component {
     })
 
     presenceChannel.bind('client-headUpdate',(data)=>{
-      console.log('VRhead: ',data)
+      // console.log('VRhead: ',data)
       this.setState({
         headPosition: data.position,
         headRotation: data.rotation,
@@ -99,7 +99,7 @@ export default class zawa extends React.Component {
 
     pusher.connection.bind('connected',() => {
       this.socketId = pusher.connection.socket_id
-      console.log('connected: ', this.socketId);
+      // console.log('connected: ', this.socketId);
     })    
   }
 
