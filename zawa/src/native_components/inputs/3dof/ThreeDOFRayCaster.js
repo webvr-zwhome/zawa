@@ -100,8 +100,8 @@ function updateCurveMeshGeometry(controller, angle, vector) {
 
   var curvePoints = [];
   if(controller && angle && vector) {
-    console.log('angle: ', angle);
-    console.log('vec:', vector);
+    // console.log('angle: ', angle);
+    // console.log('vec:', vector);
     var startPoint = new THREE.Vector3();
     controller.getWorldPosition(startPoint);
     var maxDistance = 20;
@@ -235,7 +235,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
 
     const beamLine = createBeamLineMesh();
     const beamCurve = createBeamCurveMesh();
-    beamCurve.rotateX = - Math.PI / 2;
+    // beamCurve.rotateX = - Math.PI / 2;
     const wand = new THREE.Mesh(
       new THREE.CylinderGeometry(0.02, 0.03, 0.2, 16),
       new THREE.MeshBasicMaterial({color: '#000000'})
@@ -258,8 +258,24 @@ export default class ThreeDOFRayCaster extends RayCaster {
     this._mesh = controller;
 
     // teleport
+    const beamCircleInner = new THREE.Mesh( 
+      new THREE.RingBufferGeometry( 0.3, 0.35, 32 ), 
+      new THREE.MeshBasicMaterial( { color: 0xffff00, side: THREE.DoubleSide } ) 
+    );
+
+    const beamCircleOuter = new THREE.Mesh( 
+      new THREE.RingBufferGeometry( 0.5, 0.55, 32 ), 
+      new THREE.MeshBasicMaterial( { color: 0xffff00, side: THREE.DoubleSide } ) 
+    );
+
+    const beamCircle = new THREE.Object3D();
+    beamCircle.add(beamCircleInner);
+    beamCircle.add(beamCircleOuter);
+    
+    beamCircle.rotation.x = - Math.PI / 2;
     const teleport = new THREE.Object3D();
     teleport.add(beamCurve);
+    teleport.add(beamCircle);
     this._teleport = teleport;
 
     // temp
@@ -272,15 +288,20 @@ export default class ThreeDOFRayCaster extends RayCaster {
       if (gamepad.buttons[1].pressed) {
         const vector = this.getRayVector();
         const beamCurve = createBeamCurveMesh(this._mesh, angle, vector);
+        const endPointPosition = beamCurve.geometry.vertices[beamCurve.geometry.vertices.length - 1];
+        // console.log(endPointPosition);
         beamCurve.parent = this._teleport;
         this._teleport.children[0] = beamCurve;
+        this._teleport.children[1].position.copy(endPointPosition);
+        // console.log(this._teleport.children[1]);
+
         this._mesh.children[0].visible = false;
-        this._teleport.children[0].visible = true;
+        this._teleport.visible = true;
         // this._mesh.children[1] = beamCurve;
         // this._mesh.children[1].visible = true; 
       } else {
         this._mesh.children[0].visible = true;
-        this._teleport.children[0].visible = false;
+        this._teleport.visible = false;
         // this._mesh.children[1].visible = false;
       }
     }
