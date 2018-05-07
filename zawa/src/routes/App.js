@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-06 21:25:21
+ * @Last Modified time: 2018-05-07 10:02:45
  */
 import React from 'react';
 import {
@@ -79,8 +79,8 @@ export default class App extends React.Component{
     const keyArr = Object.keys(this.memberList);
     // console.log('memberList: ',this.memberList)
     const newMemList = Object.assign({},this.memberList)
-    list = keyArr.map((memkey) => {
-      return <Human HumanId={memkey} HumanPosition={newMemList[memkey]["position"]} HumanRotation={newMemList[memkey]["rotation"]} />
+    list = keyArr.map((memkey,index) => {
+      return <Human key={index} HumanId={memkey} HumanPosition={newMemList[memkey]["position"]} HumanRotation={newMemList[memkey]["rotation"]} />
     })
     }else{
       list = null;
@@ -94,9 +94,9 @@ export default class App extends React.Component{
           
         {/* </World> */}
         <Home />
-          {/* <Human></Human> */}
-          <Hoster />
-          {list}
+        <Human />
+        {/* <Hoster /> */}
+        {list}
       </View> 
     )
   }

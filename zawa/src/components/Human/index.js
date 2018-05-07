@@ -2,7 +2,7 @@
  * @Author: penghuiwu 
  * @Date: 2018-05-01 13:54:51 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-06 20:55:58
+ * @Last Modified time: 2018-05-07 11:33:17
  */
 
 import React from 'react';
@@ -29,10 +29,12 @@ export default class Human extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            headPosition: [0, 5.2, -7],
-            headRotation: [0, 0, 0],
-            bodyPosition: [0, 4, -7],
-            bodyRotation: [0, 0, 0],
+            position: [0,0,0],
+            rotation: [0,0,0]
+            // headPosition: [0, 5.2, -7],
+            // headRotation: [0, 0, 0],
+            // bodyPosition: [0, 4, -7],
+           
         //     rotateX: 0,
         //     rotateY: 0,
         //     rotateZ: 0
@@ -46,7 +48,7 @@ export default class Human extends React.Component {
     // }
 
     componentDidMount () {
-        that = this;
+        // that = this;
         let headExist = null;
         // if(VrHeadModel.getVRStatus()){
         //     headExist =  setInterval(()=>{
@@ -63,12 +65,14 @@ export default class Human extends React.Component {
         // }
         if(!this.props.HumanId){
             headExist =  setInterval(()=>{
-                const position = VrHeadModel.position();
-                const rotation = VrHeadModel.rotation();
-                that.setState({
-                    headPosition: [position[0],position[1]-1,position[2]],
-                    headRotation: rotation,
-                    bodyPosition: [position[0],position[1]-2,position[2]]
+                const VHposition = VrHeadModel.position();
+                const VHrotation = VrHeadModel.rotation();
+                this.setState({
+                    // headPosition: [position[0],position[1]-1,position[2]],
+                    // headRotation: rotation,
+                    // bodyPosition: [position[0],position[1]-2,position[2]]
+                    position: VHposition,
+                    rotation: VHrotation
                 })
             },  200)
         }
@@ -77,8 +81,7 @@ export default class Human extends React.Component {
 
     render() {
         let headTran = [];
-        let bodyTran = [];
-        let rotation = [];
+        let headRotate = [];
         if(this.props.HumanId){
             // position[0] = this.props.HumanPosition[0];
             // position[1] = this.props.HumanPosition[1];
@@ -87,21 +90,29 @@ export default class Human extends React.Component {
             // rotation[1] = this.props.HumanRotation[1];
             // rotation[2] = this.props.HumanRotation[2];
             headTran = this.props.HumanPosition.slice();
-            bodyTran = this.props.HumanPosition.slice();
-            headTran[1] -= 1;
-            bodyTran[1] -= 2;
-            rotation = this.props.HumanRotation.slice();
+            // bodyTran = this.props.HumanPosition.slice();
+            // headTran[1] -= 1;
+            // bodyTran[1] -= 2;
+            headRotate = this.props.HumanRotation.slice();
+            // console.log('headTran: ',headTran);
         }else{
-            headTran = this.state.headPosition.slice();
-            bodyTran = this.state.bodyPosition.slice();
-            rotation = this.state.headRotation.slice();
+            // headTran = this.state.headPosition.slice();
+            // bodyTran = this.state.bodyPosition.slice();
+            headTran = this.state.position.slice();
+            headRotate = this.state.rotation.slice();
         }
         // const position = this.state.position;
         // const rotation = this.state.rotation;
         // console.log(position);
         // console.log(VrHeadModel.rotation());
         return(
-            <View>
+            <View
+                style={{
+                    transform: [
+                        {translate: headTran}
+                    ]
+                }}
+            >
                 {/* head */}
                 <Model
                     source={{
@@ -110,11 +121,11 @@ export default class Human extends React.Component {
                       }}
                       style={{
                         transform: [
-                            { translate: headTran}, //初始化进入时的高度
-                            { rotateX: rotation[0] },         //矫正camera的视角
-                            { rotateY: rotation[1] },         //矫正camera的视角
-                            { rotateZ: rotation[2] },         //矫正camera的视角,
-                            {scale: 0.5}
+                            { translate: [0,0,0]}, //初始化进入时的高度
+                            { rotateX: headRotate[0] },         //矫正camera的视角
+                            { rotateY: headRotate[1] },         //矫正camera的视角
+                            { rotateZ: headRotate[2] },         //矫正camera的视角,
+                            {scale: 0.25}
                         ],
                       }}
                     //   lit={true}
@@ -128,11 +139,11 @@ export default class Human extends React.Component {
                       }}
                       style={{
                         transform: [
-                            { translate: bodyTran }, //初始化进入时的高度
-                            { rotateX: rotation[0] },         //矫正camera的视角
-                            { rotateY: rotation[1] },         //矫正camera的视角
-                            { rotateZ: rotation[2] },         //矫正camera的视角
-                            {scale: 0.5}
+                            { translate: [0,-0.5,0] }, //初始化进入时的高度
+                            //{ rotateX: rotation[0] },         //矫正camera的视角
+                            { rotateY: headRotate[1] },         //矫正camera的视角
+                            //{ rotateZ: rotation[2] },         //矫正camera的视角
+                            {scale: 0.25}
                         ],
                       }}
                     //   lit={true}
