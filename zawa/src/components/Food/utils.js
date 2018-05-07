@@ -30,7 +30,7 @@ const Food = {
 
 function getFoodUrl() {
   const FOOD_COUNT = Food.name.length;
-  const rand = console.log(Math.random() * FOOD_COUNT);
+  const rand = Math.random() * FOOD_COUNT;
   return {
     obj: `${Food.prefix}${Food.name[rand]}.obj`,
     mtl: `${Food.prefix}${Food.name[rand]}.mtl`,

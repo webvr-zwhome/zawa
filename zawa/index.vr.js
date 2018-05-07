@@ -10,6 +10,7 @@ import {
   Text,
   View,
   VrButton,
+  VrHeadModel
 } from 'react-vr';
 import App from './src/routes/App';
 import Chess from './src/routes/Chess';
@@ -23,6 +24,9 @@ importScripts('https://js.pusher.com/4.1/pusher.worker.min.js');
 export default class zawa extends React.Component {
   state = {
     mode: 'home',
+    headPosition:[0,0,0],
+    headRotation:[0,0,0],
+    memberId: ''
   }
 
   //pusher
@@ -70,26 +74,32 @@ export default class zawa extends React.Component {
 
     //事件绑定
     presenceChannel.bind('pusher:member_added', (member)=>{
-      console.log(member.id)
+      // console.log(member.id)
     })
     presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
-      console.log('sucessConnect')
+      // console.log('sucessConnect')
+      setInterval(()=>{
+        presenceChannel.trigger('client-headUpdate',{
+          position:VrHeadModel.position(),
+          rotation:VrHeadModel.rotation(),
+          memberId:presenceChannel.members.me.id,
+        })
+      },300)
     })
+
+    presenceChannel.bind('client-headUpdate',(data)=>{
+      // console.log('VRhead: ',data)
+      this.setState({
+        headPosition: data.position,
+        headRotation: data.rotation,
+        memberId: data.memberId,
+      })
+    })
+
+
     pusher.connection.bind('connected',() => {
       this.socketId = pusher.connection.socket_id
-      console.log('connected: ', this.socketId)
-
-      // fetch('http://127.0.0.1:5000/pusher/auth', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Accept': 'application/json',
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     socketId: this.socketId,
-      //     channelId: this.presenceChannelName,
-      //   })
-      // });
+      // console.log('connected: ', this.socketId);
     })    
   }
 
@@ -98,34 +108,44 @@ export default class zawa extends React.Component {
       mode: e.target.id,
     })
   }
+  
   render() {
     const mode = this.state.mode;
+    const Position = this.state.headPosition;
+    const Rotation = this.state.headRotation;
+    const MemberId = this.state.memberId;
     return (
-      <Router>
+      // <Router>
         <View>
           {
             mode !== "home" ? null : 
             <View>
               <VrButton id="home" onClick={e => this.handleClick(e)}></VrButton>
-              <Route exact path="/" component={App}></Route>
+              {/* {
+                this.state.memberId=='' ? <App /> : <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} />
+              } */}
+              <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} />
+              {/* <Route exact path="/" component={App}></Route> */}
             </View>
           }
           {
             mode !== 'game-chess' ? null :
             <View>
               <VrButton id="game-chess" onClick={e => this.handleClick(e)}></VrButton>
-              <Route exact path="/" component={Chess} />
+              <Chess />
+              {/* <Route exact path="/" component={Chess} /> */}
             </View>
           }
           {
             mode !== 'game-foodshot' ? null :
             <View>
               <VrButton id="game-foodshot" onClick={ e => this.handleClick(e) }></VrButton>
-              <Route exact path="/" component={FoodShot} />
+              <FoodShot />
+              {/* <Route exact path="/" component={FoodShot} /> */}
             </View>
           }
         </View>
-      </Router>
+      // </Router>
     );
   }
 };

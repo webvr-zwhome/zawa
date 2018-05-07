@@ -28,6 +28,17 @@ export default class World extends React.Component {
     hasTree: true,
   }
 
+  state = {
+    forest: [],
+  }
+
+  componentWillMount() {
+    this.setState({
+      forest: this.generateForest(this.props.size),
+    })
+  }
+
+
   randomPosition() {
     const THRESHOLD_CIRCLE = 50;    // 建筑区域阈值
     const THRESHOLD_RECT = 150;     // 地面长宽阈值
@@ -72,8 +83,8 @@ export default class World extends React.Component {
   
   render() {
     const { sky, size, hasTree } = this.props;
-    const test = 1;
-    const forest = this.generateForest(size);
+    // const forest = this.generateForest(size);
+    const forest = this.state.forest;
     return (
       <View>
         <AmbientLightAll />

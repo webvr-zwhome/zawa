@@ -116,7 +116,7 @@ function updateCurveMeshGeometry(controller, angle, direction) {
     // var curvePointMiddlePoint = middlePoint.sub()
   }
  
-  console.log(angle, direction);
+  // console.log(angle, direction);
   const spline = new THREE.CatmullRomCurve3([
     new THREE.Vector3(0, 0, 0),
     new THREE.Vector3(0, 0, -1),
