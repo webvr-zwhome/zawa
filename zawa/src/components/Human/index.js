@@ -2,7 +2,7 @@
  * @Author: penghuiwu 
  * @Date: 2018-05-01 13:54:51 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-07 11:33:17
+ * @Last Modified time: 2018-05-07 11:44:09
  */
 
 import React from 'react';
@@ -121,11 +121,11 @@ export default class Human extends React.Component {
                       }}
                       style={{
                         transform: [
-                            { translate: [0,0,0]}, //初始化进入时的高度
+                            { translate: [0,0,0.2]}, //初始化进入时的高度
                             { rotateX: headRotate[0] },         //矫正camera的视角
                             { rotateY: headRotate[1] },         //矫正camera的视角
                             { rotateZ: headRotate[2] },         //矫正camera的视角,
-                            {scale: 0.25}
+                            {scale: 0.1}
                         ],
                       }}
                     //   lit={true}
@@ -139,11 +139,11 @@ export default class Human extends React.Component {
                       }}
                       style={{
                         transform: [
-                            { translate: [0,-0.5,0] }, //初始化进入时的高度
+                            { translate: [0,-0.5,0.2] }, //初始化进入时的高度
                             //{ rotateX: rotation[0] },         //矫正camera的视角
                             { rotateY: headRotate[1] },         //矫正camera的视角
                             //{ rotateZ: rotation[2] },         //矫正camera的视角
-                            {scale: 0.25}
+                            {scale: 0.1}
                         ],
                       }}
                     //   lit={true}

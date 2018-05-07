@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-07 10:02:45
+ * @Last Modified time: 2018-05-07 11:35:05
  */
 import React from 'react';
 import {
@@ -37,11 +37,11 @@ export default class App extends React.Component{
     //   memberList : {}
     // }
     this.memberList = {}
-    this.AddMember = this.AddMember.bind(this);
-    this.UpdateMember = this.UpdateMember.bind(this)
+    this.addMember = this.addMember.bind(this);
+    this.updateMember = this.updateMember.bind(this)
   }
 
-  AddMember(memberId,position,rotation) {
+  addMember(memberId,position,rotation) {
     const member = {};
     member.position = position;
     member.rotation = rotation;
@@ -58,7 +58,7 @@ export default class App extends React.Component{
     
   }
   
-  UpdateMember(memberId,position,rotation){
+  updateMember(memberId,position,rotation){
     // const memberUpdate = Object.assign({},this.memberList);
     // memberUpdate[memberId]["position"] = position;
     // memberUpdate[memberId]["rotation"] = rotation;
@@ -73,17 +73,27 @@ export default class App extends React.Component{
   render() {
     let list = null;
     if(this.props.AppMemberId){
-      this.memberList.hasOwnProperty(this.props.AppMemberId)? 
-        this.UpdateMember(this.props.AppMemberId,this.props.AppPosition,this.props.AppRotation):
-        this.AddMember(this.props.AppMemberId,this.props.AppPosition,this.props.AppRotation);
-    const keyArr = Object.keys(this.memberList);
-    // console.log('memberList: ',this.memberList)
-    const newMemList = Object.assign({},this.memberList)
-    list = keyArr.map((memkey,index) => {
-      return <Human key={index} HumanId={memkey} HumanPosition={newMemList[memkey]["position"]} HumanRotation={newMemList[memkey]["rotation"]} />
-    })
-    }else{
-      list = null;
+      this.memberList.hasOwnProperty(this.props.AppMemberId) ? 
+      this.updateMember(
+        this.props.AppMemberId, 
+        this.props.AppPosition, 
+        this.props.AppRotation
+      ) :
+      this.addMember(
+        this.props.AppMemberId, 
+        this.props.AppPosition, 
+        this.props.AppRotation
+      );
+      const keyArr = Object.keys(this.memberList);
+      // console.log('memberList: ',this.memberList)
+      const newMemList = Object.assign({},this.memberList);
+      list = keyArr.map((memkey, index) => {
+        return <Human 
+          key={index}
+          HumanId={memkey} 
+          HumanPosition={newMemList[memkey]["position"]} 
+          HumanRotation={newMemList[memkey]["rotation"]} />
+      })
     }
     
     return (
