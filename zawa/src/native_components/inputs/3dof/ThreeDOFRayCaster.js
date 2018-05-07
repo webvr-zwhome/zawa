@@ -116,7 +116,7 @@ function updateCurveMeshGeometry(controller, angle, vector) {
     curvePoints.push(middlePoint);
     curvePoints.push(endPoint);  
   }
- 
+
   var pointsArray = curvePoints.length > 0 ? curvePoints : [
     new THREE.Vector3(0, 0, 0),
     new THREE.Vector3(0, 0, -1),
@@ -180,6 +180,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
     this._controllerQuaternion = new THREE.Quaternion();
     this._cameraQuaternion = new THREE.Quaternion();
     this._gamepadPosition = new THREE.Vector3();
+    this._cameraPosition = new THREE.Vector3();
 
     const initialGamepads = navigator.getGamepads();
     let i = 0;
@@ -223,6 +224,14 @@ export default class ThreeDOFRayCaster extends RayCaster {
       this._origin = RIGHT_ORIGIN;
       this._mesh.position.set(this._gamepadPosition[0], this._gamepadPosition[1] + GAMEPAD_HEIGHT, this._gamepadPosition[2]);
     }
+  }
+
+  _setUpCameraNewPosition(position) {
+    this._cameraPosition = position;
+  }
+
+  _getCameraNewPosition() {
+    return this._cameraPosition;
   }
 
   _createController() {
@@ -285,7 +294,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
   // 当button1按下时采用曲线光束，否则采用默认光束
   changeController(gamepad, angle) {
     if (gamepad && gamepad.pose) {
-      if (gamepad.buttons[1].pressed) {
+      if (gamepad.buttons[2].pressed) {
         const vector = this.getRayVector();
         const beamCurve = createBeamCurveMesh(this._mesh, angle, vector);
         const endPointPosition = beamCurve.geometry.vertices[beamCurve.geometry.vertices.length - 1];
@@ -299,6 +308,9 @@ export default class ThreeDOFRayCaster extends RayCaster {
         this._teleport.visible = true;
         // this._mesh.children[1] = beamCurve;
         // this._mesh.children[1].visible = true; 
+        if (gamepad.buttons[1].pressed) {
+          this._setUpCameraNewPosition(endPointPosition);
+        }
       } else {
         this._mesh.children[0].visible = true;
         this._teleport.visible = false;
@@ -385,6 +397,8 @@ export default class ThreeDOFRayCaster extends RayCaster {
       this._gamepadPosition = gamepadPosition;
     }
   }
+
+
 
   /**
    * Return an array containing the x,y,z coordinates of the controller, which

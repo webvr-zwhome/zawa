@@ -10,10 +10,12 @@ import ThreeDOFRayCaster from '../src/native_components/inputs/3dof/ThreeDOFRayC
 
 function init(bundle, parent, options) {
   const scene = new THREE.Scene();
+  const threeDOFRayCaster =  new ThreeDOFRayCaster(scene);
+  let cameraPosition = threeDOFRayCaster._getCameraNewPosition();
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
     raycasters: [
-      new ThreeDOFRayCaster(scene),
+      threeDOFRayCaster,
       new MouseRayCaster(),
     ],
     cursorVisibility: 'auto',
@@ -22,10 +24,31 @@ function init(bundle, parent, options) {
   });
   vr.render = function() {
     // Any custom behavior you want to perform on each frame goes here
+    const cameraNewPosition = threeDOFRayCaster._getCameraNewPosition();
+    if(cameraNewPosition != cameraPosition) {
+      // console.log(cameraNewPosition);
+     
+      vr.rootView.context.bridge._worker.postMessage({
+        type: "newPosition", 
+        position: cameraNewPosition,
+      });
+      cameraPosition = cameraNewPosition;
+    }
+
   };
-  // Begin the animation loop
+  // Begin the animation loop  
   vr.start();
   return vr;
 }
+
+// function onVRMessage(e) {
+//   switch (e.data.type) {
+//     case 'teleport':
+//       effectController.teleport = e.data.data;
+//       break;
+//     default:
+//     return;
+//   }
+// }
 
 window.ReactVR = {init};

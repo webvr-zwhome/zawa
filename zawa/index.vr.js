@@ -53,10 +53,18 @@ var Styles = StyleSheet.create({
     textAlignVertical: 'center',
   }
 });
+
+let x = 0;
 export default class zawa extends React.Component {
+  constructor() {
+    super();
+    // window.addEventListener('message', this.onWindowMessage);
+  }
   state = {
     mode: "home",
   }
+
+ 
   
   backHome() {
     this.setState({

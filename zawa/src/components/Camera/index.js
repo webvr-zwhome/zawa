@@ -22,6 +22,7 @@ import {
 import { cameraMove } from './move';
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
+
 export default class Camera extends React.Component {
 
   constructor() {
@@ -37,12 +38,11 @@ export default class Camera extends React.Component {
       rotate: 0,       // 左右旋转值 叠加计算
       isSecond: false, // 针对手柄，手柄摇杆的横纵向值不是同时检测
       vrHeadModelPosition: [0, 0, 0],
+      cameraPosition: [0, 0, 0],
     }
     let preAxes = [];
       
-    RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
-        
-        
+    RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {     
       // if (e.type !== 'MouseInputEvent' && e.type !== 'KeyboardInputEvent') 
       // {console.log('e1', e);}
       // 【mouse + shift】控制漫游
@@ -155,6 +155,22 @@ export default class Camera extends React.Component {
           //  });
       }
     });
+    window.addEventListener('message', this.onWindowMessage);
+  }
+
+  onWindowMessage = (e) => {
+    // if (x < 50) {
+    //   console.log('1', e.data);
+    //   x++;
+    // }
+    if (e.data.type == "newPosition") {
+      console.log('2');
+      console.log(e.data.position);
+      const position = e.data.position;
+      this.setState({
+        cameraPosition:  [position.x, 4, position.z],
+      })
+    }
   }
 
   render() {     
@@ -185,7 +201,8 @@ export default class Camera extends React.Component {
         <Scene 
           style={{
             transform: [
-              { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
+              { translate: this.state.cameraPosition},
+              // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
               { rotateY:  rotate },                           //camera的旋转
             ],
           }}
