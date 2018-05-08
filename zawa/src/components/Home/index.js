@@ -32,13 +32,16 @@ export default class Room extends React.Component {
       <View>
         <Model
           source={{
-            mtl: asset('models/main_room/room.mtl'),
-            obj: asset('models/main_room/room.obj'),
+            // mtl: asset('models/main_room/room.mtl'),
+            // obj: asset('models/main_room/room.obj'),
+            mtl: asset('models/main_room/newroom002.mtl'),
+            obj: asset('models/main_room/newroom002.obj'),
           }}
           style={{
             transform: [
                 { translate: [0, 0, 0]}, //初始化进入时的高度
                 // { rotateY: 0 },         //矫正camera的视角
+                { scale: [0.8, 0.8, 0.8]}
             ],
           }}
           lit={true}

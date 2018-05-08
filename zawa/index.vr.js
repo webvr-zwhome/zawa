@@ -10,6 +10,7 @@ import {
   Text,
   View,
   VrButton,
+  StyleSheet,
   VrHeadModel
 } from 'react-vr';
 import App from './src/routes/App';
@@ -21,7 +22,48 @@ import FoodShot from './src/routes/FoodShot';
 importScripts('https://js.pusher.com/4.1/pusher.worker.min.js');
 
 
+var Styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#777879',
+    borderRadius: 0.2,
+    borderWidth: 0.01,
+    borderColor: '#7b612f',
+    flex: 1,
+    flexDirection: 'column',
+    width: 2,
+    height: 0.5,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  getIntoChess: {
+    transform: [
+      {translate: [3, 6, -15]},
+    ],
+  },
+  getIntoFoodShot: {
+    transform: [
+      {translate: [-10, 6, 3]},
+      {rotateY: 90}
+    ],
+  },
+  backHome: {
+    transform: [
+      {translate: [4, 4, -3]}
+    ],
+  },
+  text: {
+    fontSize: 0.2, 
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  }
+});
+
+let x = 0;
 export default class zawa extends React.Component {
+  constructor() {
+    super();
+    // window.addEventListener('message', this.onWindowMessage);
+  }
   state = {
     mode: 'home',
     headPosition:[0,0,0],
@@ -84,7 +126,7 @@ export default class zawa extends React.Component {
           rotation:VrHeadModel.rotation(),
           memberId:presenceChannel.members.me.id,
         })
-      },300)
+      },100)
     })
 
     presenceChannel.bind('client-headUpdate',(data)=>{
@@ -105,7 +147,7 @@ export default class zawa extends React.Component {
 
   handleClick(e) {
     this.setState({
-      mode: e.target.id,
+      mode: 'home',
     })
   }
   

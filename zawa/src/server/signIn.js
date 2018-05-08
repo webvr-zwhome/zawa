@@ -33,7 +33,15 @@ function gotMedia(stream){
           });
           */
 
-        let peer1 = new Peer({host: '123.206.180.98', port: 9000, path: '/'});
+        let peer1 = new Peer({
+            host: '123.206.180.98', 
+            port: 9000, 
+            path: '/',
+            config: {'iceServers': [
+                        { url: 'stun:stun.l.google.com:19302' },
+                        // { url: 'turn:webrtcweb.com:7788', username:'muazkh',credential: 'muazkh' }
+                    ]}
+        });
 
         peer1.on('open',function(id){
             console.log('peer1 opening');
@@ -100,7 +108,15 @@ function gotMedia(stream){
             ]} // Sample servers, please use appropriate ones 
           });
           */
-        let peer2 = new Peer({host: '123.206.180.98', port: 9000, path: '/'});
+        let peer2 = new Peer({
+            host: '123.206.180.98', 
+            port: 9000, 
+            path: '/',
+            config: {'iceServers': [
+                { url: 'stun:stun.l.google.com:19302' },
+                // { url: 'turn:webrtcweb.com:7788', username:'muazkh',credential: 'muazkh' }
+            ]}
+        });
          
         peer2.on('open',function(id){
             console.log('peer2 opening');
