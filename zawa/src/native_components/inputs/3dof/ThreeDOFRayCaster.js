@@ -13,7 +13,7 @@
  */
 
 import * as THREE from 'three';
-import { MeshLine, MeshLineMaterial  } from 'three.meshline';
+// import { MeshLine, MeshLineMaterial  } from 'three.meshline';
 import { RayCaster } from 'ovrui';
 import { cameraMove } from '../../../components/Camera/move';
 
@@ -99,35 +99,67 @@ function createBeamLineMesh() {
 function updateCurveMeshGeometry(controller, angle, direction) {
 
   var curvePoints = [];
-  if(controller && angle && direction) {
-    var startPoint = new THREE.Vector3(0, 0, 0);
-    var unitDistance = 20;
-    var distance = angle * unitDistance;
-    var endPointInWorld = new THREE.Vector3(distance * Math.cos(direction), 1, distance * Math.sin(direction));
+  // if(controller && angle && direction) {
+  //   console.log('angle: ', angle);
+  //   console.log('dir: ', direction);
+  //   var startPoint = new THREE.Vector3(0, 0, 0);
+  //   var maxDistance = 20;
+
+  //   // if (angle >= -1 && angle <= 1) {
+  //     var distance = (angle + 2) / 3 * maxDistance;
+  //     // var endPointInWorld = new THREE.Vector3(distance * Math.cos(direction), 1, distance * Math.sin(direction));
+  //     var endPointInWorld = new THREE.Vector3(0, 1, distance);
 
 
-    var stratpointInWorld = new THREE.Vector3();
-    controller.getWorldPosition(stratpointInWorld);
+  //     var stratpointInWorld = new THREE.Vector3();
+  //     controller.getWorldPosition(stratpointInWorld);
 
-    var vecStartToEnd = endPointInWorld.sub(stratpointInWorld);
-    var endPoint = controller.children[1].worldToLocal(vecStartToEnd);
-    // console.log(endPoint);
+  //     var vecStartToEnd = endPointInWorld.sub(stratpointInWorld);
+  //     var endPoint = controller.children[1].worldToLocal(vecStartToEnd);
+  //     // console.log(startPoint);
 
-    curvePoints.push(startPoint);
-    curvePoints.push(new THREE.Vector3(endPoint.x, endPoint.y, endPoint.z));
+  //     console.log(endPoint);
+  //     // var rStartPoint = startPoint;
+  //     var middlePoint = startPoint.clone().add(endPoint).divideScalar(2);
+  //     // middlePoint.y += 0.5;
+  //     curvePoints.push(startPoint);
+  //     curvePoints.push(new THREE.Vector3(middlePoint.x, middlePoint.y * 2, middlePoint.z));
+  //     curvePoints.push(new THREE.Vector3(endPoint.x, endPoint.y, endPoint.z));
 
-    // console.log(curvePoints);
-    // var middlePoint = startPoint.add(endPoint).divideScalar(2);
-    // var p3 = projection = new THREE.Vector3(controller.position.x, 1, controller.position.z);
+  //     // console.log(curvePoints);
     
-    // var a = (p2.y - p1.y) * (p3.z - p1.z) - (p3.y - p1.y) * (p2.z - p1.z),
-    //     b = (p2.z - p1.z) * (p3.x - p1.x) - (p3.z - p1.z) * (p2.x - p1.x),
-    //     c = (p2.x - p1.x) * (p3.y - p1.y) - (p3.x - p1.x) * (p2.y - p1.y);
-    // var equation = function (x, y, z) {
-    //   return a * x + b * y + c * z;
+  //   // }
+  // }
+  if(controller && angle && direction) {
+    console.log('angle: ', angle);
+    console.log('dir: ', direction);
+    var startPoint = new THREE.Vector3(0, 0, 0);
+    var maxDistance = 20;
+
+    // if (angle >= -1 && angle <= 1) {
+      var distance = (angle + 2) / 3 * maxDistance;
+      // var endPointInWorld = new THREE.Vector3(distance * Math.cos(direction), 1, distance * Math.sin(direction));
+      var endPointInWorld = new THREE.Vector3(0, 1, -distance);
+
+
+      var stratpointInWorld = new THREE.Vector3();
+      controller.getWorldPosition(stratpointInWorld);
+
+      var vecStartToEnd = endPointInWorld.sub(stratpointInWorld);
+      var endPoint = controller.children[1].worldToLocal(vecStartToEnd);
+      // console.log(startPoint);
+
+      console.log(endPoint);
+      // var rStartPoint = startPoint;
+      var middlePoint = startPoint.clone().add(endPoint).divideScalar(3);
+      // middlePoint.y += 0.5;
+      curvePoints.push(startPoint);
+      curvePoints.push(new THREE.Vector3(middlePoint.x, middlePoint.y * 3, middlePoint.z));
+      curvePoints.push(new THREE.Vector3(endPoint.x, endPoint.y, endPoint.z));
+
+      // console.log(curvePoints);
+    
     // }
-    // var p1p2 = p2.sub(p1);
-    // var curvePointMiddlePoint = middlePoint.sub()
   }
  
   // console.log(angle, direction);
@@ -146,6 +178,8 @@ function updateCurveMeshGeometry(controller, angle, direction) {
   return geometry;
 }
 
+
+
 function createBeamCurveMesh(controller, angle, direction) {
   // const spline = new THREE.CatmullRomCurve3([
   //   new THREE.Vector3(0, 0, 0),
@@ -159,21 +193,20 @@ function createBeamCurveMesh(controller, angle, direction) {
 
   var geometry = updateCurveMeshGeometry(controller, angle, direction);
   // console.log(geometry);
-  // const material = new THREE.LineDashedMaterial( { 
-  //   color: 0xffff00,
-  //   linewidth: 50,
-  // } );
-  // const beam_curve = new THREE.Line(geometry, material);
-  var line = new MeshLine();
-  line.setGeometry( geometry );
-  var material = new MeshLineMaterial({
+  const material = new THREE.LineDashedMaterial( { 
     color: 0xffff00,
-    lineWidth: 10,
-    opacity: 0.8,
-  });
+  } );
+  // const beam_curve = new THREE.Line(geometry, material);
+  // var line = new MeshLine();
+  // line.setGeometry( geometry );
+  // var material = new MeshLineMaterial({
+  //   color: 0xffff00,
+  //   lineWidth: 10,
+  //   opacity: 0.8,
+  // });
 
-
-  const beam_curve = new THREE.Mesh( line.geometry, material ); 
+  const beam_curve = new THREE.Line( geometry, material ); 
+  // const beam_curve = new THREE.Mesh( line.geometry, material ); 
   return beam_curve;
 }
 
@@ -244,6 +277,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
 
     const beamLine = createBeamLineMesh();
     const beamCurve = createBeamCurveMesh();
+    beamCurve.rotateX = - Math.PI / 2;
     const wand = new THREE.Mesh(
       new THREE.CylinderGeometry(0.02, 0.03, 0.2, 16),
       new THREE.MeshBasicMaterial({color: '#000000'})
