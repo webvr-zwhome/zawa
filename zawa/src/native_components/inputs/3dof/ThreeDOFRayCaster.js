@@ -205,8 +205,8 @@ function createBeamCurveMesh(controller, angle, direction) {
   //   opacity: 0.8,
   // });
 
-  const beam_curve = new THREE.Line( geometry, material ); 
-  // const beam_curve = new THREE.Mesh( line.geometry, material ); 
+
+  const beam_curve = new THREE.Mesh( line.geometry, material ); 
   return beam_curve;
 }
 
