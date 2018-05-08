@@ -24,6 +24,9 @@ import Home from '../components/Home';
 import Tree from '../components/Tree';
 // import AmbientLightAll from '../components/Light/ambientLightAll'; 
 import World from '../components/World';
+import Human from '../components/Human';
+// import Hoster from '../components/Human/Hoster';
+
 
 export default class App extends React.Component{
   constructor(props) {
