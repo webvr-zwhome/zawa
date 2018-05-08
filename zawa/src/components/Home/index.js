@@ -32,8 +32,10 @@ export default class Room extends React.Component {
       <View>
         <Model
           source={{
-            mtl: asset('models/main_room/room.mtl'),
-            obj: asset('models/main_room/room.obj'),
+            // mtl: asset('models/main_room/room.mtl'),
+            // obj: asset('models/main_room/room.obj'),
+            mtl: asset('models/main_room/newroom002.mtl'),
+            obj: asset('models/main_room/newroom002.obj'),
           }}
           style={{
             transform: [
