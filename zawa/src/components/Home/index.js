@@ -39,6 +39,7 @@ export default class Room extends React.Component {
             transform: [
                 { translate: [0, 0, 0]}, //初始化进入时的高度
                 // { rotateY: 0 },         //矫正camera的视角
+                { scale: [0.8, 0.8, 0.8]}
             ],
           }}
           lit={true}
