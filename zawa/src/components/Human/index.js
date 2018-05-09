@@ -2,7 +2,7 @@
  * @Author: penghuiwu 
  * @Date: 2018-05-01 13:54:51 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-07 11:44:09
+ * @Last Modified time: 2018-05-09 22:53:31
  */
 
 import React from 'react';
@@ -116,8 +116,8 @@ export default class Human extends React.Component {
                 {/* head */}
                 <Model
                     source={{
-                        mtl: asset('models/human/head.mtl'),
-                        obj: asset('models/human/head.obj'),
+                        mtl: asset('models/human/head001.mtl'),
+                        obj: asset('models/human/head001.obj'),
                       }}
                       style={{
                         transform: [

@@ -39,7 +39,6 @@ function gotMedia(stream){
             path: '/',
             config: {'iceServers': [
                         { url: 'stun:stun.l.google.com:19302' },
-                        // { url: 'turn:webrtcweb.com:7788', username:'muazkh',credential: 'muazkh' }
                     ]}
         });
 
@@ -47,10 +46,23 @@ function gotMedia(stream){
             console.log('peer1 opening');
             console.log(id)
             idHost += id;
-            window.PeerId = id;
+            // window.PeerId = id;
             console.log(idHost)
             document.getElementById('MyID').textContent = idHost;
         });
+        //HOST 直接进入场景
+        document.getElementById('confirm').addEventListener('click',() => {
+            document.getElementById('SignTab').hidden = true;
+                    // Initialize the React VR application
+                    ReactVR.init(
+                        // When you're ready to deploy your app, update this line to point to
+                        // your compiled index.bundle.js
+                        '../index.vr.bundle?platform=vr&dev=true',
+                        // Attach it to the body tag
+                        document.body
+                    );
+        })
+
         peer1.on('call',function(call){
             call.answer(stream);
             console.log('peer1 resived');
