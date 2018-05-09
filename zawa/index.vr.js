@@ -119,14 +119,14 @@ export default class zawa extends React.Component {
       // console.log(member.id)
     })
     presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
-      // console.log('sucessConnect')
+      console.log('sucessConnect')
       setInterval(()=>{
         presenceChannel.trigger('client-headUpdate',{
           position:VrHeadModel.position(),
           rotation:VrHeadModel.rotation(),
           memberId:presenceChannel.members.me.id,
         })
-      },100)
+      },500)
     })
 
     presenceChannel.bind('client-headUpdate',(data)=>{
@@ -141,7 +141,7 @@ export default class zawa extends React.Component {
 
     pusher.connection.bind('connected',() => {
       this.socketId = pusher.connection.socket_id
-      // console.log('connected: ', this.socketId);
+      console.log('connected: ', this.socketId);
     })    
   }
 

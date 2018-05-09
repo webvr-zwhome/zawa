@@ -109,21 +109,22 @@ export default class Human extends React.Component {
             <View
                 style={{
                     transform: [
-                        {translate: headTran}
+                        {translate: [headTran[0], headTran[1]-0.25, headTran[2]+0.2]},
+                        {rotateY: headRotate[1]+90}
                     ]
                 }}
             >
                 {/* head */}
                 <Model
                     source={{
-                        mtl: asset('models/human/head001.mtl'),
-                        obj: asset('models/human/head001.obj'),
+                        mtl: asset('models/human/head002.mtl'),
+                        obj: asset('models/human/head002.obj'),
                       }}
                       style={{
                         transform: [
-                            { translate: [0, -0.25, 0.2]}, //初始化进入时的高度
+                            { translate: [0, 0, 0]}, //初始化进入时的高度
                             { rotateX: headRotate[0] },         //矫正camera的视角
-                            { rotateY: headRotate[1] },         //矫正camera的视角
+                            { rotateY: headRotate[1] + 90},         //矫正camera的视角
                             { rotateZ: headRotate[2] },         //矫正camera的视角,
                             {scale: 0.1}
                         ],
@@ -139,7 +140,7 @@ export default class Human extends React.Component {
                       }}
                       style={{
                         transform: [
-                            { translate: [0,-0.3,0.2] }, //初始化进入时的高度
+                            { translate: [0,-0.1,0] }, //初始化进入时的高度
                             //{ rotateX: rotation[0] },         //矫正camera的视角
                             { rotateY: headRotate[1] },         //矫正camera的视角
                             //{ rotateZ: rotation[2] },         //矫正camera的视角
