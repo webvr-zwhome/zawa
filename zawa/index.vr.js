@@ -66,9 +66,9 @@ export default class zawa extends React.Component {
   }
   state = {
     mode: 'home',
-    headPosition:[0,0,0],
-    headRotation:[0,0,0],
-    memberId: ''
+    // headPosition:[0,0,0],
+    // headRotation:[0,0,0],
+    // memberId: ''
   }
 
   //pusher
@@ -113,6 +113,7 @@ export default class zawa extends React.Component {
     // presence channel
     this.presenceChannelName = 'presence-1234'
     const presenceChannel = pusher.subscribe(this.presenceChannelName);
+    // presenceChannel = pusher.subscribe(this.presenceChannelName);
 
     //事件绑定
     presenceChannel.bind('pusher:member_added', (member)=>{
@@ -120,23 +121,25 @@ export default class zawa extends React.Component {
     })
     presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
       console.log('sucessConnect')
-      setInterval(()=>{
-        presenceChannel.trigger('client-headUpdate',{
-          position:VrHeadModel.position(),
-          rotation:VrHeadModel.rotation(),
-          memberId:presenceChannel.members.me.id,
-        })
-      },500)
+      // setInterval(()=>{
+      //   this.presenceChannel.trigger('client-headUpdate',{
+      //     position:VrHeadModel.position(),
+      //     rotation:VrHeadModel.rotation(),
+      //     memberId:presenceChannel.members.me.id,
+      //   })
+      // },500)
     })
+    this.preChannel = presenceChannel
+    
 
-    presenceChannel.bind('client-headUpdate',(data)=>{
-      // console.log('VRhead: ',data)
-      this.setState({
-        headPosition: data.position,
-        headRotation: data.rotation,
-        memberId: data.memberId,
-      })
-    })
+    // this.presenceChannel.bind('client-headUpdate',(data)=>{
+    //   // console.log('VRhead: ',data)
+    //   this.setState({
+    //     headPosition: data.position,
+    //     headRotation: data.rotation,
+    //     memberId: data.memberId,
+    //   })
+    // })
 
 
     pusher.connection.bind('connected',() => {
@@ -152,10 +155,11 @@ export default class zawa extends React.Component {
   }
   
   render() {
+    const Channel = this.preChannel;
     const mode = this.state.mode;
-    const Position = this.state.headPosition;
-    const Rotation = this.state.headRotation;
-    const MemberId = this.state.memberId;
+    // const Position = this.state.headPosition;
+    // const Rotation = this.state.headRotation;
+    // const MemberId = this.state.memberId;
     return (
       // <Router>
         <View>
@@ -166,7 +170,9 @@ export default class zawa extends React.Component {
               {/* {
                 this.state.memberId=='' ? <App /> : <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} />
               } */}
-              <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} />
+              {/* <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} AppChannel={preChannel} /> */}
+              <App AppChannel={Channel} />
+              
               {/* <Route exact path="/" component={App}></Route> */}
             </View>
           }

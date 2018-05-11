@@ -24,7 +24,7 @@ import Home from '../components/Home';
 import Tree from '../components/Tree';
 // import AmbientLightAll from '../components/Light/ambientLightAll'; 
 import World from '../components/World';
-import Human from '../components/Human';
+import {HumanList} from '../components/Human';
 // import Hoster from '../components/Human/Hoster';
 
 export default class App extends React.Component{
@@ -71,42 +71,45 @@ export default class App extends React.Component{
   }
 
   render() {
-    let list = null;
-    if(this.props.AppMemberId){
-      this.memberList.hasOwnProperty(this.props.AppMemberId) ? 
-      this.updateMember(
-        this.props.AppMemberId, 
-        this.props.AppPosition, 
-        this.props.AppRotation
-      ) :
-      this.addMember(
-        this.props.AppMemberId, 
-        this.props.AppPosition, 
-        this.props.AppRotation
-      );
-      const keyArr = Object.keys(this.memberList);
-      // console.log('memberList: ',this.memberList)
-      const newMemList = Object.assign({},this.memberList);
-      list = keyArr.map((memkey, index) => {
-        return <Human 
-          key={index}
-          HumanId={memkey} 
-          HumanPosition={newMemList[memkey]["position"]} 
-          HumanRotation={newMemList[memkey]["rotation"]} />
-      })
-    }
+    // let list = null;
+    // if(this.props.AppMemberId){
+    //   this.memberList.hasOwnProperty(this.props.AppMemberId) ? 
+    //   this.updateMember(
+    //     this.props.AppMemberId, 
+    //     this.props.AppPosition, 
+    //     this.props.AppRotation
+    //   ) :
+    //   this.addMember(
+    //     this.props.AppMemberId, 
+    //     this.props.AppPosition, 
+    //     this.props.AppRotation
+    //   );
+    //   const keyArr = Object.keys(this.memberList);
+    //   // console.log('memberList: ',this.memberList)
+    //   const newMemList = Object.assign({},this.memberList);
+    //   list = keyArr.map((memkey, index) => {
+    //     return <Human 
+    //       key={index}
+    //       HumanId={memkey} 
+    //       HumanPosition={newMemList[memkey]["position"]} 
+    //       HumanRotation={newMemList[memkey]["rotation"]} />
+    //   })
+    // }
+
+    const humanChannel = this.props.AppChannel;
     
     return (
       <View>
         {/* <AmbientLightAll /> */}
         <Camera />
-        <World  />
+        <World />
           
         {/* </World> */}
         <Home />
-        <Human />
+        {/* <Human /> */}
         {/* <Hoster /> */}
-        {list}
+        {/* {list} */}
+        <HumanList HumanChannel={humanChannel} />
       </View> 
     )
   }
