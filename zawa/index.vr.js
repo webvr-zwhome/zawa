@@ -116,17 +116,17 @@ export default class zawa extends React.Component {
 
     //事件绑定
     presenceChannel.bind('pusher:member_added', (member)=>{
-      // console.log(member.id)
+      console.log(member.id)
     })
     presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
-      // console.log('sucessConnect')
+      console.log('sucessConnect')
       setInterval(()=>{
         presenceChannel.trigger('client-headUpdate',{
           position:VrHeadModel.position(),
           rotation:VrHeadModel.rotation(),
           memberId:presenceChannel.members.me.id,
         })
-      },100)
+      },500)
     })
 
     presenceChannel.bind('client-headUpdate',(data)=>{

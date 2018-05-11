@@ -109,7 +109,8 @@ export default class Human extends React.Component {
             <View
                 style={{
                     transform: [
-                        {translate: headTran}
+                        {translate: headTran},
+                        {rotateY: headRotate[1]}                        
                     ]
                 }}
             >
@@ -122,7 +123,7 @@ export default class Human extends React.Component {
                       style={{
                         transform: [
                             { translate: [0, -0.25, 0.2]}, //初始化进入时的高度
-                            { rotateX: headRotate[0] },         //矫正camera的视角
+                            { rotateX: -headRotate[0] },         //矫正camera的视角
                             { rotateY: headRotate[1] },         //矫正camera的视角
                             { rotateZ: headRotate[2] },         //矫正camera的视角,
                             {scale: 0.1}
