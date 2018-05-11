@@ -141,7 +141,7 @@ export default class zawa extends React.Component {
 
     pusher.connection.bind('connected',() => {
       this.socketId = pusher.connection.socket_id
-      // console.log('connected: ', this.socketId);
+      console.log('connected: ', this.socketId);
     })    
   }
 
