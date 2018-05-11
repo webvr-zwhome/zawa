@@ -83,7 +83,7 @@ export default class  Human extends React.Component {
         let headTran = [];
         let headRotate = [];
         const userName = this.props.HumanId;
-        if(this.props.HumanId){
+        if(userName){
             // position[0] = this.props.HumanPosition[0];
             // position[1] = this.props.HumanPosition[1];
             // position[2] = this.props.HumanPosition[2];
@@ -116,7 +116,7 @@ export default class  Human extends React.Component {
                 }}
             >
                 {/* userName */}
-                <Text
+                {/* <Text
                     style={{
                         color: "#909090",
                         fontWeight: "bold",
@@ -125,7 +125,7 @@ export default class  Human extends React.Component {
                     }}
                 >
                     {userName}
-                </Text>
+                </Text> */}
                 {/* head */}
                 <Model
                     source={{
