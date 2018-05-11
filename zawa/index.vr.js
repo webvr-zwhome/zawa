@@ -116,19 +116,19 @@ export default class zawa extends React.Component {
     // presenceChannel = pusher.subscribe(this.presenceChannelName);
 
     //事件绑定
-    presenceChannel.bind('pusher:member_added', (member)=>{
-      console.log(member.id)
-    })
-    presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
-      console.log('sucessConnect')
-      // setInterval(()=>{
-      //   this.presenceChannel.trigger('client-headUpdate',{
-      //     position:VrHeadModel.position(),
-      //     rotation:VrHeadModel.rotation(),
-      //     memberId:presenceChannel.members.me.id,
-      //   })
-      // },500)
-    })
+    // presenceChannel.bind('pusher:member_added', (member)=>{
+    //   console.log(member.id)
+    // })
+    // presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
+    //   console.log('sucessConnect')
+    //   // setInterval(()=>{
+    //   //   this.presenceChannel.trigger('client-headUpdate',{
+    //   //     position:VrHeadModel.position(),
+    //   //     rotation:VrHeadModel.rotation(),
+    //   //     memberId:presenceChannel.members.me.id,
+    //   //   })
+    //   // },500)
+    // })
     this.preChannel = presenceChannel
     
 

@@ -33,22 +33,22 @@ export default class  HumanList extends React.Component {
         this.Channel.bind('pusher:subscription_succeeded',(members)=>{
             console.log('Render headmodel')
             setInterval(()=>{
-              this.Channel.trigger('client-headUpdate',{
+              this.Channel.trigger('client-headUpdated',{
                 position: VrHeadModel.position(),
                 rotation: VrHeadModel.rotation(),
                 memberId: this.Channel.members.me.id,
               })
-            },500)
+            },300)
           })
 
-          this.Channel.bind('client-headUpdate',(data)=>{
-            // console.log('VRhead: ',data)
-            this.setState({
-              headPosition: data.position,
-              headRotation: data.rotation,
-              memberId: data.memberId,
-            })
-          })
+        this.Channel.bind('client-headUpdated',(data)=>{
+        console.log('VRhead: ',data)
+        this.setState({
+            headPosition: data.position,
+            headRotation: data.rotation,
+            memberId: data.memberId,
+        })
+        })
     }
 
     addMember(memberId,position,rotation) {
@@ -85,7 +85,7 @@ export default class  HumanList extends React.Component {
         const rotation = this.state.headRotation;
         const userName = this.state.memberId;
         let list = null;
-
+        console.log('position: ',position)
         if(userName){
         this.memberList.hasOwnProperty(userName) ? 
         this.updateMember(

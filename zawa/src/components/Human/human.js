@@ -121,7 +121,7 @@ export default class  Human extends React.Component {
                         color: "#909090",
                         fontWeight: "bold",
                         textAlign: "center",
-                        fontSize: "30"
+                        fontSize: 30
                     }}
                 >
                     {userName}
