@@ -19,7 +19,7 @@ import {
   VrHeadModel,
 } from 'react-vr';
 
-export default class Chess extends React.Component{
+export default class Jumping extends React.Component{
   constructor(props) {
     super(props);
   }

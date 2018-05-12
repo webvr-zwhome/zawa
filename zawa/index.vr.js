@@ -1,6 +1,7 @@
 import React from 'react';
 // import { NativeRouter, Route, Link, Switch } from 'react-router-native';
 // import createBrowserHistory from 'history/createBrowserHistory';
+
 import { MemoryRouter as Router, Route, Link, Switch } from 'react-router';
 
 import {
@@ -13,8 +14,8 @@ import {
   StyleSheet,
 } from 'react-vr';
 import App from './src/routes/App';
-import Chess from './src/routes/Chess';
-import FoodShot from './src/routes/FoodShot';
+import Jumping from './src/routes/Jumping';
+import RollerCoaster from './src/routes/RollerCoaster';
 
 // const history = createBrowserHistory();
 
@@ -31,12 +32,12 @@ var Styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
   },
-  getIntoChess: {
+  getIntoJumping: {
     transform: [
       {translate: [3, 6, -15]},
     ],
   },
-  getIntoFoodShot: {
+  getIntoRollerCoaster: {
     transform: [
       {translate: [-10, 6, 3]},
       {rotateY: 90}
@@ -63,24 +64,21 @@ export default class zawa extends React.Component {
   state = {
     mode: "home",
   }
-
- 
-  
   backHome() {
     this.setState({
       mode: 'home',
     })
   }
 
-  getIntoChess() {
+  getIntoJumping() {
     this.setState({
-      mode: 'game-chess',
+      mode: 'game-jumping',
     });
   }
 
-  getIntoFoodShot() {
+  getIntoRollerCoaster() {
     this.setState({
-      mode: 'game-foodshot',
+      mode: 'game-rollercoaster',
     });
   }
   render() {
@@ -92,28 +90,28 @@ export default class zawa extends React.Component {
             mode !== "home" ? null : 
             <View>
               <VrButton 
-                class="game-foodshot" 
+                class="game-rollercoaster" 
                 style={[
                   Styles.button,
-                  Styles.getIntoFoodShot
+                  Styles.getIntoRollerCoaster
                 ]}
-                onClick={ () => this.getIntoFoodShot() }>
-                  <Text style={Styles.text}>FOODSHOT</Text>
+                onClick={ () => this.getIntoRollerCoaster() }>
+                  <Text style={Styles.text}>ROLLERCOASTER</Text>
               </VrButton>
               <VrButton 
-                class="game-chess" 
+                class="game-jumping" 
                 style={[
                   Styles.button,
-                  Styles.getIntoChess
+                  Styles.getIntoJumping
                 ]}
-                onClick={ () => this.getIntoChess() }>
-                  <Text style={Styles.text}>CHESS</Text>
+                onClick={ () => this.getIntoJumping() }>
+                  <Text style={Styles.text}>JUMPING</Text>
               </VrButton>
               <Route exact path="/" component={App}></Route>
             </View>
           }
           {
-            mode !== 'game-chess' ? null :
+            mode !== 'game-jumping' ? null :
             <View>
               <VrButton 
                 class="home" 
@@ -124,11 +122,11 @@ export default class zawa extends React.Component {
                 onClick={ () => this.backHome() }>
                 <Text style={Styles.text}>BACK</Text>
               </VrButton>
-              <Route exact path="/" component={Chess} />
+              <Route exact path="/" component={Jumping} />
             </View>
           }
           {
-            mode !== 'game-foodshot' ? null :
+            mode !== 'game-rollercoaster' ? null :
             <View>
               <VrButton 
                 class="home" 
@@ -139,7 +137,7 @@ export default class zawa extends React.Component {
                 onClick={ () => this.backHome() }>
                 <Text style={Styles.text}>BACK</Text>
               </VrButton>
-              <Route exact path="/" component={FoodShot} />
+              <Route exact path="/" component={RollerCoaster} />
             </View>
           }
         </View>
@@ -152,7 +150,7 @@ export default class zawa extends React.Component {
 //   render() {
 //     return (
 //       <View>
-//         <Pano source={asset('chess-world.jpg')}/>
+//         <Pano source={asset('jumping-world.jpg')}/>
 //         <Text
 //           style={{
 //             backgroundColor: '#777879',
