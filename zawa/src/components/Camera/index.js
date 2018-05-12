@@ -22,11 +22,14 @@ import {
 import { cameraMove } from './move';
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
+const rollerCaster = NativeModules.RollerCaster;
+
 
 export default class Camera extends React.Component {
 
   constructor() {
     super();
+    rollerCaster.init();
     const cameraPosition = VrHeadModel.position();
     this.state = {
       buttons: [],     // 手柄按键

@@ -7,10 +7,13 @@ import {VRInstance} from 'react-vr-web';
 import {MouseRayCaster} from 'ovrui';
 import * as THREE from 'three';
 import ThreeDOFRayCaster from '../src/native_components/inputs/3dof/ThreeDOFRayCaster';
+import RollerCoaster from '../src/native_components/RollerCoaster';
 
 function init(bundle, parent, options) {
   const scene = new THREE.Scene();
   const threeDOFRayCaster =  new ThreeDOFRayCaster(scene);
+  const rollerCoaster = new RollerCoaster(scene);
+
   let cameraPosition = threeDOFRayCaster._getCameraNewPosition();
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
@@ -18,10 +21,14 @@ function init(bundle, parent, options) {
       threeDOFRayCaster,
       new MouseRayCaster(),
     ],
+    nativeModules: [
+      rollerCoaster,
+    ],
     cursorVisibility: 'auto',
     scene: scene,
     ...options,
   });
+
   vr.render = function() {
     // Any custom behavior you want to perform on each frame goes here
     const cameraNewPosition = threeDOFRayCaster._getCameraNewPosition();
@@ -36,6 +43,8 @@ function init(bundle, parent, options) {
     }
 
   };
+
+
   // Begin the animation loop  
   vr.start();
   return vr;
