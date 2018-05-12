@@ -23,7 +23,7 @@ import Camera from '../components/Camera';
 // import AmbientLightAll from '../components/Light/ambientLightAll'; 
 import World from '../components/World';
 
-export default class FoodShot extends React.Component{
+export default class RollerCoaster extends React.Component{
   constructor(props) {
     super(props);
   }
