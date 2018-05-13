@@ -62,7 +62,7 @@ export default class zawa extends React.Component {
     // window.addEventListener('message', this.onWindowMessage);
   }
   state = {
-    mode: "home",
+    mode: "game-jumping",
   }
   backHome() {
     this.setState({
