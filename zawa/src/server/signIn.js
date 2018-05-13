@@ -41,6 +41,7 @@ function gotMedia(stream){
                         { url: 'stun:stun.l.google.com:19302' },
                     ]}
         });
+        
 
         peer1.on('open',function(id){
             console.log('peer1 opening');
