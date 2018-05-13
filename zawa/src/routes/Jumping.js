@@ -23,6 +23,7 @@ import {
 } from 'react-vr';
 
 import Camera from '../components/Camera';
+const fog = NativeModules.Fog;
 
 export default class Jumping extends React.Component{
   constructor(props) {
@@ -31,14 +32,14 @@ export default class Jumping extends React.Component{
   render() {
     return (
       <View>
-        {/* <Pano source={asset('chess-world.jpg')}/> */}
+        <Pano source={asset('chess-world.jpg')}/>
         {/* <Camera /> */}
         <AmbientLight 
           style={{
             transform: [
               {translate: [0, 1, 0]}  
             ],
-            color: "#D3E7B9"            
+            color: "#778899"            
           }}
           intensity={1}
         >
@@ -82,7 +83,7 @@ export default class Jumping extends React.Component{
         }}>
           hello
         </Text>
-        <Model
+        {/* <Model
           source={{
             obj: asset('models/jumping/land.obj'),
             mtl: asset('models/jumping/land.mtl')
@@ -96,12 +97,12 @@ export default class Jumping extends React.Component{
           lit={true}
           // wireframe={true}
         >
-        </Model>
+        </Model> */}
         {/* stones */}
         <View
           style={{
             transform: [
-              {translate: [0.8, 3, -3]},
+              {translate: [0.5, 3, -1]},
               {scale: 3}
             ]
           }}

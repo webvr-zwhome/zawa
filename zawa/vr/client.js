@@ -7,23 +7,29 @@ import {VRInstance} from 'react-vr-web';
 import {MouseRayCaster} from 'ovrui';
 import * as THREE from 'three';
 import ThreeDOFRayCaster from '../src/native_components/inputs/3dof/ThreeDOFRayCaster';
+import Fog from '../src/native_components/Fog'
 
 function init(bundle, parent, options) {
   const scene = new THREE.Scene();
   const threeDOFRayCaster =  new ThreeDOFRayCaster(scene);
   let cameraPosition = threeDOFRayCaster._getCameraNewPosition();
+  const fog = new Fog(scene);
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
     raycasters: [
       threeDOFRayCaster,
       new MouseRayCaster(),
     ],
+    nativeModules:[
+      fog,
+    ],
     cursorVisibility: 'auto',
     scene: scene,
     ...options,
   });
-  vr.render = function() {
+  vr.render = function(time) {
     // Any custom behavior you want to perform on each frame goes here
+    fog.frame(time);
     const cameraNewPosition = threeDOFRayCaster._getCameraNewPosition();
     if(cameraNewPosition != cameraPosition) {
       // console.log(cameraNewPosition);
