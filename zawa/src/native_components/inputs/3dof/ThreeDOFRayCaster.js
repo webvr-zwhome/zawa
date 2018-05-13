@@ -232,7 +232,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
       new THREE.CylinderGeometry(0.01, 0.01, 0.01, 16),
       new THREE.MeshBasicMaterial({color: blueButtonColor})
     );
-    button.position.y = 0.025;
+    button.position.y = 0.015;
     button.position.z = 0.04;
     this._controllerButton = button;
 
@@ -300,11 +300,11 @@ export default class ThreeDOFRayCaster extends RayCaster {
 
   _clickButton(gamepad) {
     if (gamepad.buttons[0] && typeof gamepad.buttons[0] === 'object') {
-      if (gamepad.buttons[0].pressed) {
-        this._controllerButton.position.y = 0.02;
+      if (gamepad.buttons[3].pressed) {
+        this._controllerButton.position.y = 0.01;
         this._controllerButton.material.color = yellowButtonColor;
       } else {
-        this._controllerButton.position.y = 0.025;
+        this._controllerButton.position.y = 0.015;
         this._controllerButton.material.color = blueButtonColor;
       }
     }
