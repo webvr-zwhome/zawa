@@ -1,8 +1,8 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
- * @Last Modified by:   zhaoxiaoqi 
- * @Last Modified time: 2018-04-12 23:18:16 
+ * @Last Modified by: zhaoxiaoqi
+ * @Last Modified time: 2018-05-13 16:49:06
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -22,14 +22,14 @@ import {
 import { cameraMove } from './move';
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
-const rollerCaster = NativeModules.RollerCaster;
+// const rollerCoaster = NativeModules.RollerCoaster;
 
 
 export default class Camera extends React.Component {
 
   constructor() {
     super();
-    rollerCaster.init();
+    // rollerCoaster.init();
     const cameraPosition = VrHeadModel.position();
     this.state = {
       buttons: [],     // 手柄按键
@@ -151,6 +151,8 @@ export default class Camera extends React.Component {
 
   componentWillMount() {
     this._isMounted = true;
+    // console.log(rollerCoaster.getPoints());
+
   }
 
   componentWillUnmount() {
@@ -159,11 +161,30 @@ export default class Camera extends React.Component {
 
   onWindowMessage = (e) => {
     // teleport to new position
-    if (this._isMounted && e.data.type == "newPosition") {
-      const position = e.data.position;
-      this.setState({
-        cameraPosition: [position.x, 4, position.z],
-      })
+    // if (this._isMounted && e.data.type == "newPosition") {
+    //   const position = e.data.position;
+    //   this.setState({
+    //     cameraPosition: [position.x, 4, position.z],
+    //   })
+    // }
+
+    if (this._isMounted) {
+      switch(e.data.type) {
+        case 'newPosition': {
+          const position = e.data.position;
+          this.setState({
+            cameraPosition: [position.x, 4, position.z],
+          });
+          break;
+        }
+        case 'rollerPosition': {
+          const position = e.data.position;
+          this.setState({
+            cameraPosition: [position.x, position.y, position.z],
+          });
+          break;
+        }; 
+      }
     }
   }
 

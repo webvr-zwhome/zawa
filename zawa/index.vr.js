@@ -15,7 +15,7 @@ import {
 } from 'react-vr';
 import App from './src/routes/App';
 import Jumping from './src/routes/Jumping';
-import RollerCoaster from './src/routes/RollerCoaster';
+import RollerCoasterGame from './src/routes/RollerCoaster';
 import Button from './src/components/Button';
 
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
@@ -86,7 +86,7 @@ export default class zawa extends React.Component {
     });
   }
   state = {
-    mode: "home",
+    mode: "game-rollercoaster",
   }
   backHome() {
     this.setState({
@@ -157,7 +157,7 @@ export default class zawa extends React.Component {
                   onEvent={() => this.backHome()}>
                   <Text style={Styles.text}>BACK</Text>
                 </Button>
-              <Route exact path="/" component={RollerCoaster} />
+              <Route exact path="/" component={RollerCoasterGame} />
             </View>
           }
         </View>

@@ -29,12 +29,14 @@ function init(bundle, parent, options) {
     ...options,
   });
 
-  vr.render = function() {
+  vr.render = function(time) { 
     // Any custom behavior you want to perform on each frame goes here
+    rollerCoaster.frame(time);    // start play roller coaster
     const cameraNewPosition = threeDOFRayCaster._getCameraNewPosition();
+    const cameraNewPositionInRoller = rollerCoaster.getPosition();
     if(cameraNewPosition != cameraPosition) {
       // console.log(cameraNewPosition);
-     
+      
       vr.rootView.context.bridge._worker.postMessage({
         type: "newPosition", 
         position: cameraNewPosition,
@@ -42,6 +44,14 @@ function init(bundle, parent, options) {
       cameraPosition = cameraNewPosition;
     }
 
+    if(rollerCoaster.getStatus() && cameraNewPositionInRoller != cameraPosition) {
+      // console.log(cameraNewPosition);
+      vr.rootView.context.bridge._worker.postMessage({
+        type: "rollerPosition", 
+        position: cameraNewPositionInRoller,
+      });
+      cameraPosition = cameraNewPositionInRoller;
+    }
   };
 
 
@@ -59,5 +69,6 @@ function init(bundle, parent, options) {
 //     return;
 //   }
 // }
+
 
 window.ReactVR = {init};
