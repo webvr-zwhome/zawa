@@ -89,7 +89,7 @@ export default class Jumping extends React.Component{
           }}
           style={{
             transform:[
-              {translate: [30, -53, -35]},
+              {translate: [30, -50, -35]},
               {scale: 100}
             ]
           }}
@@ -101,13 +101,13 @@ export default class Jumping extends React.Component{
         <View
           style={{
             transform: [
-              {translate: [5, -2, -6]},
-              {scale: 10}
+              {translate: [0.8, 3, -3]},
+              {scale: 3}
             ]
           }}
 
         >
-          <Model 
+          {/* <Model 
             source={{
               obj: asset('models/jumping/stones/stone001.obj'),
               mtl: asset('models/jumping/stones/stone001.mtl')
@@ -117,9 +117,9 @@ export default class Jumping extends React.Component{
                 {translate: [0, 0, 0]}
               ]
             }}
-            lit={true}
+            lit={false}
           >
-          </Model>
+          </Model> */}
           <Model 
             source={{
               obj: asset('models/jumping/stones/stone002.obj'),
@@ -127,7 +127,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-0.2, 0, -0.6]}
               ]
             }}
             lit={true}            
@@ -140,7 +140,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-1, 0, -1.4]}
               ]
             }}
             lit={true}
@@ -154,7 +154,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-1.5, 0, -2.2]}
               ]
             }}
             lit={true}
@@ -168,7 +168,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-2, 0, -3.0]}
               ]
             }}
             lit={true}
@@ -182,7 +182,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-2.5, 0, -4.0]}
               ]
             }}
             lit={true}
@@ -196,7 +196,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-3, 0, -5.2]}
               ]
             }}
             lit={true}
@@ -210,7 +210,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-3.5, 0, -6.4]}
               ]
             }}
             lit={true}
@@ -224,7 +224,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-4.0, 0, -7.6]}
               ]
             }}
             lit={true}
@@ -238,7 +238,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-5, 0, -8.8]}
               ]
             }}
             lit={true}
@@ -252,7 +252,7 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [0, 0, 0]}
+                {translate: [-5.5, 0, -10]}
               ]
             }}
             lit={true}            
