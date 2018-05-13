@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-13 11:07:17
+ * @Last Modified time: 2018-05-13 11:28:40
  */
 import React from 'react';
 import {
@@ -22,10 +22,9 @@ import {
   VrHeadModel,
 } from 'react-vr';
 
-// import World from '../components/World';
+import Camera from '../components/Camera';
 
-
-export default class Chess extends React.Component{
+export default class Jumping extends React.Component{
   constructor(props) {
     super(props);
   }
@@ -68,6 +67,7 @@ export default class Chess extends React.Component{
           source={asset('heaven.png')}
         >
         </Pano>
+        <Camera />
         <Text
             style={{
                 backgroundColor: '#777879',
