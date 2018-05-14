@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-13 22:29:55
+ * @Last Modified time: 2018-05-14 22:20:42
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
@@ -15,16 +15,19 @@ export default class RollerCoaster extends Module{
         this._rollerCoaster = new THREE.Object3D();
         this._tube = new THREE.Mesh();
         this._params = {
-            extrusionSegments: 100,
+            extrusionSegments: 1000,
             radius: 0.2,
             radiusSegments: 12,
-            closed: false,
+            closed: true,
         }
         this._start = false;
         this._path = new THREE.CatmullRomCurve3([]);
         this._points = [];
         this._position = new THREE.Vector3();
+        this._rotation = new THREE.Vector3();
         this._time = 0;
+        this._normal = new THREE.Vector3(); 
+        this._binormal = new THREE.Vector3();
         this.init();
     }
 
@@ -36,23 +39,26 @@ export default class RollerCoaster extends Module{
 
     _setPath() {
         const simplePath = new THREE.CatmullRomCurve3([
-            new THREE.Vector3( 4, 14, 4 ),
-			new THREE.Vector3( 14, 5, -4 ),
-			new THREE.Vector3( 5, 14, -14 ),
-			new THREE.Vector3( -10, 6, -14 ),
-            new THREE.Vector3( -4, 14, 1 ),
-            new THREE.Vector3( -14, 9, 14 ),
-            new THREE.Vector3( 1, 4, 4 ),
+            new THREE.Vector3( 11, 4, 14 ),
+			new THREE.Vector3( 14, 5, -14 ),
+			new THREE.Vector3( -14, 4, -14 ),
+			new THREE.Vector3( -18, 6, -14 ),
+            new THREE.Vector3( -14, 4, 11 ),
+            new THREE.Vector3( 0, 9, 14 ),
+            new THREE.Vector3( 11, 4, 14 ),
         ]);
-        const points = simplePath.getPoints(1000);
-        points.map(point => new THREE.Vector3(point.x, point.y, point.z));
-        this._path = new THREE.CatmullRomCurve3(points);
+        this._path = simplePath;
+        // const points = simplePath.getPoints(1000);
+        // points.map(point => new THREE.Vector3(point.x, point.y, point.z));
+        // this._path = new THREE.CatmullRomCurve3(points);
         // this._setPoints();
+        // console.log('path', this._path.getPointAt(0));
     }
 
     _setPoints() {
-       this._points = this._path.getPoints(1000);
-       console.log(this._points);
+    //    this._points = this._path.getPoints(1000);
+    //    console.log(this._points);
+        
     }
 
     createTube() {
@@ -74,19 +80,53 @@ export default class RollerCoaster extends Module{
         if(!this._start) {
             return;
         }
-        // if(Math.floor(time) - this._time > 30) {
-            this._setPosition(this._path.points[i++]);
-            this._time = Math.floor(time);
-            if(i > 1001) { i = 0; }
+        
+        const timeNow = Math.floor(time);
+        const loopTime = 10 * 1000;
+        const t = ( timeNow % loopTime ) / loopTime;
+
+        var pos = this._path.getPointAt(t);
+        var segments = this._tube.geometry.tangents.length;
+        var pickt = t * segments;
+        var pick = Math.floor( pickt );
+        var pickNext = ( pick + 1 ) % segments;
+        
+        this._binormal.subVectors(this._tube.geometry.binormals[pickNext], this._tube.geometry.binormals[pick]);
+        this._binormal.multiplyScalar( pickt - pick ).add(this._tube.geometry.binormals[pick]);
+
+        var dir = this._tube.geometry.parameters.path.getTangentAt(t);
+        var offset = -2;
+        this._normal.copy(this._binormal).cross(dir);
+        // this._normal = this._tube.geometry.normals[t];
+        // we move on a offset on its binormal
+        pos.add(this._normal.clone().multiplyScalar(offset));
+        this._setPosition(pos);
+
+        // var lookAt = this._tube.geometry.parameters.path.getPointAt(( t + 30 / this._tube.geometry.parameters.path.getLength()) % 1);
+        // if ( ! params.lookAhead ) {
+        // var loolAt = pos.add(dir);
+        // console.log(dir.projectOnPlane(new THREE.Vector3(0, 1, 1)));
+        // debugger;
+        var rotation = new THREE.Vector3(dir.x, 0, dir.z).angleTo(new THREE.Vector3(0, 0, -1));
+        this._setRotation(new THREE.Vector3(0, rotation, 0));
         // }
+        // console.log('look', lookAt);
     }
 
     _setPosition(position) {
         this._position = position;
     }
 
+    _setRotation(rotation) {
+        this._rotation = rotation;
+    }
+
     getPosition() {
         return this._position;
+    }
+
+    getRotation() {
+        return this._rotation;
     }
 
     start() {

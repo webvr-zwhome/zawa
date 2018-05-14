@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-13 16:49:06
+ * @Last Modified time: 2018-05-14 21:47:12
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -43,6 +43,7 @@ export default class Camera extends React.Component {
       isSecond: false, // 针对手柄，手柄摇杆的横纵向值不是同时检测
       vrHeadModelPosition: [0, 0, 0],
       cameraPosition: [cameraPosition[0], 4, cameraPosition[2]],
+      cameraRotation: [0, 0, 0],
     }
     let preAxes = [];
       
@@ -183,7 +184,15 @@ export default class Camera extends React.Component {
             cameraPosition: [position.x, position.y, position.z],
           });
           break;
-        }; 
+        }
+        case 'rollerRotation': {
+          const rotation = e.data.rotation;
+          // console.log('ro:', rotation);
+          this.setState({
+            cameraRotation: [rotation.x, rotation.y, rotation.z],
+          })
+          break;
+        }
       }
     }
   }
@@ -206,6 +215,7 @@ export default class Camera extends React.Component {
     //   rotate: this.state.rotate,
     // }
       // NativeModules.GetHeadModelModule.setHeadModelPosition(vrHeadModelPositionObj);
+      // console.log(this.state.cameraRotation[1]);
     return (
       <View>     
         <Scene 
@@ -213,7 +223,7 @@ export default class Camera extends React.Component {
             transform: [
               { translate: this.state.cameraPosition},
               // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
-              // { rotateY:  rotate },                           //camera的旋转
+              { rotateY:  this.state.cameraRotation[1] },                           //camera的旋转
             ],
           }}
         >                     

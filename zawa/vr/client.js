@@ -34,6 +34,9 @@ function init(bundle, parent, options) {
     rollerCoaster.frame(time);    // start play roller coaster
     const cameraNewPosition = threeDOFRayCaster._getCameraNewPosition();
     const cameraNewPositionInRoller = rollerCoaster.getPosition();
+    const cameraNewRotationInRoller = rollerCoaster.getRotation();
+    // console.log(cameraNewRotationInRoller);
+
     if(cameraNewPosition != cameraPosition) {
       // console.log(cameraNewPosition);
       
@@ -49,6 +52,11 @@ function init(bundle, parent, options) {
       vr.rootView.context.bridge._worker.postMessage({
         type: "rollerPosition", 
         position: cameraNewPositionInRoller,
+      });
+
+      vr.rootView.context.bridge._worker.postMessage({
+        type: "rollerRotation", 
+        rotation: cameraNewRotationInRoller,
       });
       cameraPosition = cameraNewPositionInRoller;
     }
