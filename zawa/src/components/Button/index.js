@@ -29,11 +29,13 @@ export default class Button extends React.Component{
         super();
         this.state = {
             hasFocus: false,
+            // needFocus: false,
         }
         RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
             if (e.type !== 'GamepadInputEvent') {
               return;
             }
+            // console.log(e.eventType);
             this.handleEvent(e);
             // console.log(e);
           });
@@ -46,7 +48,14 @@ export default class Button extends React.Component{
             && e.button === this.props.button 
             && e.eventType === this.props.eventType) {
             this.props.onEvent();
+        }else if(this.props.needFocus===false
+                && e.gamepad === this.props.index 
+                && e.button === this.props.button 
+                && e.eventType === this.props.eventType){
+            this.props.onEvent();
         }
+        
+        
     }
 
     handleEnter() {

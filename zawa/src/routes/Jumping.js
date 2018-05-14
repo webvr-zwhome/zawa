@@ -23,16 +23,107 @@ import {
 } from 'react-vr';
 
 import Camera from '../components/Camera';
-const fog = NativeModules.Fog;
+import Button from '../components/Button';
+import Mountain from '../components/Mountain';
+// const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+
 
 export default class Jumping extends React.Component{
   constructor(props) {
     super(props);
+    this.state={
+      jumpMove: 0
+    }
+    this.Styles = StyleSheet.create({
+      button: {
+      backgroundColor: '#777879',
+      borderRadius: 0.2,
+      borderWidth: 0.01,
+      borderColor: '#7b612f',
+      flex: 1,
+      flexDirection: 'column',
+      width: 2,
+      height: 0.5,
+      alignItems: 'stretch',
+      justifyContent: 'center',
+      },
+      getIntoJumping: {
+      transform: [
+      {translate: [3, 6, -15]},
+      ],
+      },
+      getIntoRollerCoaster: {
+      transform: [
+      {translate: [-10, 6, 3]},
+      {rotateY: 90}
+      ],
+      },
+      backHome: {
+      transform: [
+      {translate: [4, 4, -3]}
+      ],
+      },
+      text: {
+      fontSize: 0.2, 
+      textAlign: 'center',
+      textAlignVertical: 'center',
+      }
+      });
+      this.power = 0;
+
   }
+
+  Accumulation(){
+    this.power++;
+    console.log('power: ',this.power)
+  }
+
+  clearAccumulation(){
+    this.setState({
+      jumpMove: this.power
+    })
+    this.power = 0;
+    console.log('endPower: ',this.power)
+  }
+
   render() {
+    const move = this.state.jumpMove;
     return (
       <View>
-        <Pano source={asset('chess-world.jpg')}/>
+        {/* <Scene 
+          style={{
+            transform: [
+              { translate: [move/10, 0, 0]},
+              // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
+              // { rotateY:  rotate },                           //camera的旋转
+            ],
+          }}
+        >                     
+        </Scene>  */}
+        <Pano source={asset('heaven.jpg')}/>
+        <Button 
+          style={this.Styles.getIntoJumping}
+          needFocus={false}
+          index={1}
+          button={3}
+          eventType={'keydown'}
+          onEvent={() => this.Accumulation()}
+        >
+          {/* <Text style={Styles.text}>JUMPING</Text> */}
+        </Button>
+        <Button 
+          style={this.Styles.getIntoJumping}
+          needFocus={false}          
+          index={1}
+          button={3}
+          eventType={'keyup'}
+          onEvent={() => this.clearAccumulation()}
+        >
+          {/* <Text style={Styles.text}>JUMPING</Text> */}
+        </Button>
+
+
+        
         {/* <Camera /> */}
         <AmbientLight 
           style={{
@@ -57,7 +148,7 @@ export default class Jumping extends React.Component{
         <SpotLight
           style={{
             transform:[
-              {translate: [-1,50,0]}
+              {translate: [-1,70,0]}
             ]
           }}
           intensity={0.5}
@@ -69,7 +160,7 @@ export default class Jumping extends React.Component{
         >
         </Pano>
         <Camera />
-        <Text
+        {/* <Text
             style={{
                 backgroundColor: '#777879',
                 fontSize: 0.8,
@@ -82,184 +173,8 @@ export default class Jumping extends React.Component{
                 transform: [{translate: [0, 0, -3]}],
         }}>
           hello
-        </Text>
-        {/* <Model
-          source={{
-            obj: asset('models/jumping/land.obj'),
-            mtl: asset('models/jumping/land.mtl')
-          }}
-          style={{
-            transform:[
-              {translate: [30, -50, -35]},
-              {scale: 100}
-            ]
-          }}
-          lit={true}
-          // wireframe={true}
-        >
-        </Model> */}
-        {/* stones */}
-        <View
-          style={{
-            transform: [
-              {translate: [0.5, 3, -1]},
-              {scale: 3}
-            ]
-          }}
-
-        >
-          {/* <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone001.obj'),
-              mtl: asset('models/jumping/stones/stone001.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={false}
-          >
-          </Model> */}
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone002.obj'),
-              mtl: asset('models/jumping/stones/stone002.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-0.2, 0, -0.6]}
-              ]
-            }}
-            lit={true}            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone003.obj'),
-              mtl: asset('models/jumping/stones/stone003.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-1, 0, -1.4]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone004.obj'),
-              mtl: asset('models/jumping/stones/stone004.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-1.5, 0, -2.2]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone005.obj'),
-              mtl: asset('models/jumping/stones/stone005.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-2, 0, -3.0]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone006.obj'),
-              mtl: asset('models/jumping/stones/stone006.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-2.5, 0, -4.0]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone007.obj'),
-              mtl: asset('models/jumping/stones/stone007.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-3, 0, -5.2]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone007.obj'),
-              mtl: asset('models/jumping/stones/stone007.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-3.5, 0, -6.4]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone008.obj'),
-              mtl: asset('models/jumping/stones/stone008.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-4.0, 0, -7.6]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone009.obj'),
-              mtl: asset('models/jumping/stones/stone009.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-5, 0, -8.8]}
-              ]
-            }}
-            lit={true}
-          
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone010.obj'),
-              mtl: asset('models/jumping/stones/stone010.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [-5.5, 0, -10]}
-              ]
-            }}
-            lit={true}            
-          >
-          </Model>
-        </View>
+        </Text> */}
+        <Mountain />
       </View> 
     )
   }
