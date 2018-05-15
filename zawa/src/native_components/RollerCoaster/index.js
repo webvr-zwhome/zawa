@@ -2,12 +2,22 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-15 17:20:08
+ * @Last Modified time: 2018-05-15 23:12:17
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
 
-let i = 0;
+import { path } from './path';
+
+function box(position) {
+    var geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
+    var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+    var cube = new THREE.Mesh( geometry, material );
+    cube.position.set(position.x, position.y, position.z);
+    return cube;
+}
+
+// let i = 0;
 export default class RollerCoaster extends Module{
     constructor(scene) {
         super('RollerCoaster');
@@ -16,9 +26,9 @@ export default class RollerCoaster extends Module{
         this._tube = new THREE.Mesh();
         this._params = {
             extrusionSegments: 1000,
-            radius: 0.2,
-            radiusSegments: 12,
-            closed: true,
+            radius: 0.1,
+            radiusSegments: 16,
+            closed: false,
         }
         this._start = false;
         this._path = new THREE.CatmullRomCurve3([]);
@@ -29,6 +39,7 @@ export default class RollerCoaster extends Module{
         this._normal = new THREE.Vector3(); 
         this._binormal = new THREE.Vector3();
         this.init();
+        // console.log(box());
     }
 
     init() {
@@ -38,18 +49,12 @@ export default class RollerCoaster extends Module{
     }
 
     _setPath() {
-        const simplePath = new THREE.CatmullRomCurve3([
-            new THREE.Vector3( 20, 10, 0 ),
-			new THREE.Vector3( 20, 15, -20 ),
-			new THREE.Vector3( 0, 14, -20 ),
-			new THREE.Vector3( -20, 6, -20 ),
-            new THREE.Vector3( -20, 14, 0 ),
-            new THREE.Vector3( -20, 9, 20 ),
-            new THREE.Vector3( 0, 10, 20 ),
-            new THREE.Vector3( 20, 10,20 ),
-            new THREE.Vector3( 20, 10, 0 ),
+        const simplePath = new THREE.CatmullRomCurve3(path);
 
-        ]);
+        for (var i = 0; i < path.length; i++) {
+            console.log(path[i]);
+            this._scene.add(box(path[i]));
+        }
         this._path = simplePath;
         // const points = simplePath.getPoints(1000);
         // points.map(point => new THREE.Vector3(point.x, point.y, point.z));
@@ -85,7 +90,7 @@ export default class RollerCoaster extends Module{
         }
         
         const timeNow = Math.floor(time);
-        const loopTime = 10 * 1000;
+        const loopTime = 30 * 1000;
         const t = ( timeNow % loopTime ) / loopTime;
 
         var pos = this._path.getPointAt(t);
@@ -98,11 +103,11 @@ export default class RollerCoaster extends Module{
         this._binormal.multiplyScalar(pickt - pick).add(this._tube.geometry.binormals[pick]);
 
         var dir = this._path.getTangentAt(t);
-        var offset = 1.5;
+        var offset = -1.01;
         this._normal.copy(this._binormal).cross(dir);
 
         // we move on a offset on its binormal
-        pos.add(this._binormal.clone().multiplyScalar(offset));
+        pos.add(this._normal.clone().multiplyScalar(offset));
         this._setPosition(pos);
 
         var dirOnPlane = new THREE.Vector3(dir.x, 0, dir.z);
