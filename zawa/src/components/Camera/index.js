@@ -182,12 +182,16 @@ export default class Camera extends React.Component {
     //   rotate: this.state.rotate,
     // }
       // NativeModules.GetHeadModelModule.setHeadModelPosition(vrHeadModelPositionObj);
+      const { vrPosition=false, position, rotation } = this.props;
     return (
       <View>     
         <Scene 
           style={{
             transform: [
-              { translate: this.state.cameraPosition},
+              // {rotateX: rotation[0]},
+              // {rotateY: rotation[1]},
+              // {rotateZ: rotation[2]},
+              { translate: !vrPosition ? this.state.cameraPosition : position},
               // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
               // { rotateY:  rotate },                           //camera的旋转
             ],

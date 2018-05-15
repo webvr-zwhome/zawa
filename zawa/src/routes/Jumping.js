@@ -70,6 +70,7 @@ export default class Jumping extends React.Component{
       }
       });
       this.power = 0;
+      this.accuPower = 0;
 
   }
 
@@ -87,7 +88,10 @@ export default class Jumping extends React.Component{
   }
 
   render() {
-    const move = this.state.jumpMove;
+    this.accuPower += this.state.jumpMove;
+    const move = [0, this.accuPower/10, 0];
+    const rotate = VrHeadModel.rotation();
+    const cameraRotate = [0, rotate[1], 0];
     return (
       <View>
         {/* <Scene 
@@ -159,7 +163,7 @@ export default class Jumping extends React.Component{
           source={asset('heaven.png')}
         >
         </Pano>
-        <Camera />
+        <Camera vrPosition={ true }  position={move.slice()} rotation={cameraRotate} />
         {/* <Text
             style={{
                 backgroundColor: '#777879',
