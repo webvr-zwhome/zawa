@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-14 22:20:42
+ * @Last Modified time: 2018-05-15 17:20:08
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
@@ -39,13 +39,16 @@ export default class RollerCoaster extends Module{
 
     _setPath() {
         const simplePath = new THREE.CatmullRomCurve3([
-            new THREE.Vector3( 11, 4, 14 ),
-			new THREE.Vector3( 14, 5, -14 ),
-			new THREE.Vector3( -14, 4, -14 ),
-			new THREE.Vector3( -18, 6, -14 ),
-            new THREE.Vector3( -14, 4, 11 ),
-            new THREE.Vector3( 0, 9, 14 ),
-            new THREE.Vector3( 11, 4, 14 ),
+            new THREE.Vector3( 20, 10, 0 ),
+			new THREE.Vector3( 20, 15, -20 ),
+			new THREE.Vector3( 0, 14, -20 ),
+			new THREE.Vector3( -20, 6, -20 ),
+            new THREE.Vector3( -20, 14, 0 ),
+            new THREE.Vector3( -20, 9, 20 ),
+            new THREE.Vector3( 0, 10, 20 ),
+            new THREE.Vector3( 20, 10,20 ),
+            new THREE.Vector3( 20, 10, 0 ),
+
         ]);
         this._path = simplePath;
         // const points = simplePath.getPoints(1000);
@@ -88,29 +91,29 @@ export default class RollerCoaster extends Module{
         var pos = this._path.getPointAt(t);
         var segments = this._tube.geometry.tangents.length;
         var pickt = t * segments;
-        var pick = Math.floor( pickt );
-        var pickNext = ( pick + 1 ) % segments;
+        var pick = Math.floor(pickt);
+        var pickNext = (pick + 1) % segments;
         
         this._binormal.subVectors(this._tube.geometry.binormals[pickNext], this._tube.geometry.binormals[pick]);
-        this._binormal.multiplyScalar( pickt - pick ).add(this._tube.geometry.binormals[pick]);
+        this._binormal.multiplyScalar(pickt - pick).add(this._tube.geometry.binormals[pick]);
 
-        var dir = this._tube.geometry.parameters.path.getTangentAt(t);
-        var offset = -2;
+        var dir = this._path.getTangentAt(t);
+        var offset = 1.5;
         this._normal.copy(this._binormal).cross(dir);
-        // this._normal = this._tube.geometry.normals[t];
+
         // we move on a offset on its binormal
-        pos.add(this._normal.clone().multiplyScalar(offset));
+        pos.add(this._binormal.clone().multiplyScalar(offset));
         this._setPosition(pos);
 
-        // var lookAt = this._tube.geometry.parameters.path.getPointAt(( t + 30 / this._tube.geometry.parameters.path.getLength()) % 1);
-        // if ( ! params.lookAhead ) {
-        // var loolAt = pos.add(dir);
-        // console.log(dir.projectOnPlane(new THREE.Vector3(0, 1, 1)));
-        // debugger;
-        var rotation = new THREE.Vector3(dir.x, 0, dir.z).angleTo(new THREE.Vector3(0, 0, -1));
-        this._setRotation(new THREE.Vector3(0, rotation, 0));
-        // }
-        // console.log('look', lookAt);
+        var dirOnPlane = new THREE.Vector3(dir.x, 0, dir.z);
+        var condition = dirOnPlane.angleTo(new THREE.Vector3(1, 0, 0)) *360 / (2 * Math.PI);
+        var angle = dirOnPlane.angleTo(new THREE.Vector3(0, 0, -1)) * 360 / (2 * Math.PI);
+        if(condition <= 90) {
+            angle = 360 - angle;
+        }
+        var rotation = new THREE.Vector3(0, angle, 0);
+        this._setRotation(rotation);        
+        // console.log(rotation);        
     }
 
     _setPosition(position) {
