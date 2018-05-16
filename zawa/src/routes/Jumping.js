@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-13 14:50:57
+ * @Last Modified time: 2018-05-16 22:47:10
  */
 import React from 'react';
 import {
@@ -116,8 +116,12 @@ export default class Jumping extends React.Component{
     // console.log('vrPos: ', VrHeadModel.position());
     // console.log('vrRot: ', rotate);
     const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
-    // console.log('move: ', move);
+    const moveDir = [-1 * (accuPower + 3)* Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 *(accuPower + 3) * Math.cos(rotate[1] * Math.PI / 180)];
     
+    // console.log('move: ', move);
+    window.postMessage ( { type: "direction",  data: {
+      move : moveDir
+    }} ) ;
     // const cameraRotate = [0, rotate[1], 0];
     return (
       <View>
