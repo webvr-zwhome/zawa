@@ -25,8 +25,8 @@ const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 export default class Camera extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     const cameraPosition = VrHeadModel.position();
     this.state = {
       buttons: [],     // 手柄按键
@@ -144,6 +144,7 @@ export default class Camera extends React.Component {
     //   }
     // });
     window.addEventListener('message', this.onWindowMessage); // 监听瞬移事件
+    this.prePosition = this.state.cameraPosition;
   }
 
   componentWillMount() {
@@ -182,7 +183,12 @@ export default class Camera extends React.Component {
     //   rotate: this.state.rotate,
     // }
       // NativeModules.GetHeadModelModule.setHeadModelPosition(vrHeadModelPositionObj);
-      const { vrPosition=false, position, rotation } = this.props;
+    const { vrPosition = false, position = [0, 0, 0] } = this.props;
+    // console.log('prePos: ', this.prePosition);
+
+    const curPosition = [position[0] + this.prePosition[0], position[1], position[2] + this.prePosition[2]];
+    this.prePosition = curPosition;
+    // console.log('curPos: ', curPosition);
     return (
       <View>     
         <Scene 
@@ -191,7 +197,7 @@ export default class Camera extends React.Component {
               // {rotateX: rotation[0]},
               // {rotateY: rotation[1]},
               // {rotateZ: rotation[2]},
-              { translate: !vrPosition ? this.state.cameraPosition : position},
+              { translate: !vrPosition ? this.state.cameraPosition : curPosition},
               // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
               // { rotateY:  rotate },                           //camera的旋转
             ],

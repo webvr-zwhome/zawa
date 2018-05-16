@@ -28,70 +28,97 @@ import Mountain from '../components/Mountain';
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 
+const Styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#777879',
+    borderRadius: 0.2,
+    borderWidth: 0.01,
+    borderColor: '#7b612f',
+    flex: 1,
+    flexDirection: 'column',
+    width: 2,
+    height: 0.5,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  getIntoJumping: {
+    transform: [
+      {translate: [3, 6, -15]},
+    ],
+  },
+  getIntoRollerCoaster: {
+    transform: [
+      {translate: [-10, 6, 3]},
+      {rotateY: 90}
+    ],
+  },
+  backHome: {
+    transform: [
+      {translate: [4, 4, -3]}
+    ],
+  },
+  text: {
+    fontSize: 0.2, 
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  }
+});
+
 export default class Jumping extends React.Component{
   constructor(props) {
     super(props);
     this.state={
-      jumpMove: 0
+      jumpMove: 0,
+      jumpUp: 0
     }
-    this.Styles = StyleSheet.create({
-      button: {
-      backgroundColor: '#777879',
-      borderRadius: 0.2,
-      borderWidth: 0.01,
-      borderColor: '#7b612f',
-      flex: 1,
-      flexDirection: 'column',
-      width: 2,
-      height: 0.5,
-      alignItems: 'stretch',
-      justifyContent: 'center',
-      },
-      getIntoJumping: {
-      transform: [
-      {translate: [3, 6, -15]},
-      ],
-      },
-      getIntoRollerCoaster: {
-      transform: [
-      {translate: [-10, 6, 3]},
-      {rotateY: 90}
-      ],
-      },
-      backHome: {
-      transform: [
-      {translate: [4, 4, -3]}
-      ],
-      },
-      text: {
-      fontSize: 0.2, 
-      textAlign: 'center',
-      textAlignVertical: 'center',
-      }
-      });
+
       this.power = 0;
       this.accuPower = 0;
+  }
 
+  setjumpDistance(power){
+    let jumpTime = 0;
+    let defaultPower = 100;
+    const interval = setInterval(()=>{
+      let g = 9.98;
+      jumpTime+=0.01;
+      let jumpDis = power * defaultPower * jumpTime;
+      let upDis = power * defaultPower * jumpTime - g * Math.pow(jumpTime, 2);
+      this.setState({
+        jumpMove: jumpDis,
+        jumpUp: upDis
+      })
+
+      // if(VrHeadModel.position()[1]<-1){
+      //   clearInterval(interval)
+      // }
+    },300)
   }
 
   Accumulation(){
-    this.power++;
-    console.log('power: ',this.power)
+    this.power += 0.00001;
+    // console.log('power: ',this.power)
   }
 
   clearAccumulation(){
-    this.setState({
-      jumpMove: this.power
-    })
+    // this.setState({
+    //   jumpMove: this.power
+    // })
+    this.setjumpDistance(this.power)
     this.power = 0;
     console.log('endPower: ',this.power)
   }
 
   render() {
-    this.accuPower += this.state.jumpMove;
-    const move = [0, this.accuPower/10, 0];
+    const accuPower = this.state.jumpMove;
+    const upPower = this.state.jumpUp;
     const rotate = VrHeadModel.rotation();
-    const cameraRotate = [0, rotate[1], 0];
+    // console.log('vrPos: ', VrHeadModel.position());
+    // console.log('vrRot: ', rotate);
+    const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
+    // console.log('move: ', move);
+    
+    // const cameraRotate = [0, rotate[1], 0];
     return (
       <View>
         {/* <Scene 
@@ -106,20 +133,20 @@ export default class Jumping extends React.Component{
         </Scene>  */}
         <Pano source={asset('heaven.jpg')}/>
         <Button 
-          style={this.Styles.getIntoJumping}
+          style={Styles.getIntoJumping}
           needFocus={false}
           index={1}
-          button={3}
+          button={1}
           eventType={'keydown'}
           onEvent={() => this.Accumulation()}
         >
           {/* <Text style={Styles.text}>JUMPING</Text> */}
         </Button>
         <Button 
-          style={this.Styles.getIntoJumping}
+          style={Styles.getIntoJumping}
           needFocus={false}          
           index={1}
-          button={3}
+          button={1}
           eventType={'keyup'}
           onEvent={() => this.clearAccumulation()}
         >
@@ -163,7 +190,7 @@ export default class Jumping extends React.Component{
           source={asset('heaven.png')}
         >
         </Pano>
-        <Camera vrPosition={ true }  position={move.slice()} rotation={cameraRotate} />
+        <Camera vrPosition={ true }  position={move.slice()} />
         {/* <Text
             style={{
                 backgroundColor: '#777879',
