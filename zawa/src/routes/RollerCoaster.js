@@ -2,11 +2,13 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-13 23:11:50
+ * @Last Modified time: 2018-05-16 21:28:47
  */
 import React from 'react';
 import {
+  AmbientLight,
   AppRegistry,
+  DirectionalLight,
   NativeModules,
   StyleSheet,
   asset,
@@ -16,6 +18,7 @@ import {
   Model,
   Scene,
   Sphere,
+  SpotLight,
   VrHeadModel,
 } from 'react-vr';
 
@@ -46,8 +49,54 @@ export default class RollerCoasterGame extends React.Component{
   render() {
     return (
       <View>
+        {/* <AmbientLight
+          style={{
+            transform:[
+              {translate: [0, 100, 0]},
+              {rotateX: 30}
+            ]
+          }} 
+          intensity={0.1} 
+        ></AmbientLight> */}
+        {/* <DirectionalLight
+          style={{
+            transform:[
+              {translate: [100, 1000, 1000]},
+              {rotateX: 60}
+            ]
+          }} 
+          intensity={0.5}  
+        >
+        </DirectionalLight> */}
+        <DirectionalLight
+          style={{
+            transform:[
+              {translate: [0, 1000, 100]},
+              {rotateX: -30}
+            ]
+          }} 
+          intensity={1.0}  
+        >
+        </DirectionalLight>
+        {/* <SpotLight
+          angle={Math.PI/2}
+          decay={2}
+          // distance={500}
+          intensity={2.0}  
+          style={{
+            transform:[
+              {translate: [0, 10, 0]},
+              {rotateX: 60}
+            ]
+          }} 
+        ></SpotLight> */}
         <Camera />
-        <World hasTree={false}>
+        <World 
+          hasTree={false} 
+          plane={{
+            obj: asset('models/plane/plane_roller.obj'),
+            mtl: asset('models/plane/plane_roller.mtl'),
+        }}>
         <Button 
             style={Styles.startRollerCoaster}
             index={0}

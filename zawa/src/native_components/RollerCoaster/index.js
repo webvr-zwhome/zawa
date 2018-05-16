@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-15 23:12:17
+ * @Last Modified time: 2018-05-16 22:59:17
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
@@ -14,6 +14,7 @@ function box(position) {
     var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
     var cube = new THREE.Mesh( geometry, material );
     cube.position.set(position.x, position.y, position.z);
+    // console.log(position);
     return cube;
 }
 
@@ -24,9 +25,11 @@ export default class RollerCoaster extends Module{
         this._scene = scene;
         this._rollerCoaster = new THREE.Object3D();
         this._tube = new THREE.Mesh();
+        this._tubeLeft = new THREE.Mesh();
+        this._tubeRight = new THREE.Mesh();
         this._params = {
             extrusionSegments: 1000,
-            radius: 0.1,
+            radius: 0.05,
             radiusSegments: 16,
             closed: false,
         }
@@ -44,7 +47,13 @@ export default class RollerCoaster extends Module{
 
     init() {
         this.createTube();
+        this._tubeLeft = this._tube.clone();
+        this._tubeRight = this._tube.clone();
+        this._tubeLeft.position.set(-0.2, 0.1, 0);
+        this._tubeRight.position.set(0.2, 0.1, 0);
         this._rollerCoaster.add(this._tube);
+        this._rollerCoaster.add(this._tubeLeft);
+        this._rollerCoaster.add(this._tubeRight);
         this._scene.add(this._rollerCoaster);
     }
 
@@ -52,7 +61,7 @@ export default class RollerCoaster extends Module{
         const simplePath = new THREE.CatmullRomCurve3(path);
 
         for (var i = 0; i < path.length; i++) {
-            console.log(path[i]);
+            // console.log(path[i]);
             this._scene.add(box(path[i]));
         }
         this._path = simplePath;
@@ -71,7 +80,7 @@ export default class RollerCoaster extends Module{
 
     createTube() {
         this._setPath();
-        const material = new THREE.MeshLambertMaterial({color: '#719c2f'});
+        const material = new THREE.MeshLambertMaterial({color: '#9c712f'});
         const geometry = new THREE.TubeBufferGeometry(
             this._path, 
             this._params.extrusionSegments, 
@@ -90,7 +99,9 @@ export default class RollerCoaster extends Module{
         }
         
         const timeNow = Math.floor(time);
-        const loopTime = 30 * 1000;
+        // const loopTime = 30 * 1000;
+        const loopTime = 60 * 1000;
+        
         const t = ( timeNow % loopTime ) / loopTime;
 
         var pos = this._path.getPointAt(t);
@@ -111,7 +122,7 @@ export default class RollerCoaster extends Module{
         this._setPosition(pos);
 
         var dirOnPlane = new THREE.Vector3(dir.x, 0, dir.z);
-        var condition = dirOnPlane.angleTo(new THREE.Vector3(1, 0, 0)) *360 / (2 * Math.PI);
+        var condition = dirOnPlane.angleTo(new THREE.Vector3(1, 0, 0)) * 360 / (2 * Math.PI);
         var angle = dirOnPlane.angleTo(new THREE.Vector3(0, 0, -1)) * 360 / (2 * Math.PI);
         if(condition <= 90) {
             angle = 360 - angle;
