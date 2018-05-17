@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-16 22:47:10
+ * @Last Modified time: 2018-05-17 13:38:24
  */
 import React from 'react';
 import {
@@ -72,8 +72,12 @@ export default class Jumping extends React.Component{
       jumpUp: 0
     }
 
-      this.power = 0;
-      this.accuPower = 0;
+    this.power = 0;
+    this.accuPower = 0;
+    this.percent = {};
+    const mark = NativeModules.Mark;
+
+
   }
 
   setjumpDistance(power){
@@ -98,6 +102,8 @@ export default class Jumping extends React.Component{
   Accumulation(){
     this.power += 0.00001;
     // console.log('power: ',this.power)
+    
+
   }
 
   clearAccumulation(){
@@ -116,11 +122,12 @@ export default class Jumping extends React.Component{
     // console.log('vrPos: ', VrHeadModel.position());
     // console.log('vrRot: ', rotate);
     const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
-    const moveDir = [-1 * (accuPower + 3)* Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 *(accuPower + 3) * Math.cos(rotate[1] * Math.PI / 180)];
+    const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
+    const moveOrigin = [-1 * 2 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 2 * Math.cos(rotate[1] * Math.PI / 180)];
     
     // console.log('move: ', move);
     window.postMessage ( { type: "direction",  data: {
-      move : moveDir
+      move : [moveDir, moveOrigin]
     }} ) ;
     // const cameraRotate = [0, rotate[1], 0];
     return (

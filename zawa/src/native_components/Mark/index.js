@@ -9,7 +9,30 @@ export default class Mark extends Module {
         // this._fog = new THREE.Fog( 0xefd1b5, 0.005, 10);
         
         this.init();
-        this._direction = [0, 0, 0];
+
+        // this.length = 1;
+        // this.hex = 0xffff00;
+        // this.dir = new THREE.Vector3(1, 0, 0);
+        // this.dir.normalize();
+        // this.origin = new THREE.Vector3(0, 0, 0);
+        // this.arrowHelper = new THREE.ArrowHelper(this.dir, this.origin, this.length, this.hex);
+        // this._scene.add(this.arrowHelper);
+
+        this.dir = new THREE.Vector3( 1, 2, 0 );
+
+        //normalize the direction vector (convert to vector of length 1)
+        this.dir.normalize();
+
+        this.origin = new THREE.Vector3( 0, 0, 0 );
+        var length = 1;
+        var hex = 0xffff00;
+
+        var arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex );
+        arrowHelper.name = 'arrow';
+        this._scene.add( arrowHelper );
+
+        // this._move = [0, 0, 0];
+        // console.log('scene: ', this._scene);
         // console.log(this._fog);
     }
 
@@ -21,8 +44,20 @@ export default class Mark extends Module {
     }
 
     setup(pos) {
-        this._direction = pos.slice();
-        console.log('direction: ', this._direction)
+        var length = 1;
+        var hex = 0xffff00;
+        this._move = pos.slice();
+        this.dir = new THREE.Vector3( this._move[0][0]-this._move[1][0], this._move[0][1]-this._move[1][1], this._move[0][2]-this._move[1][2] );
+        this.dir = this.dir.normalize();
+        this.origin = this._move[1].slice();
+        arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex );
+        arrowHelper.name = "arr"
+        this._scene.add( arrowHelper );
+        // arrowHelper.parent = this._scene;
+        // console.log('direction: ', this._direction)
+        // this.arrowHelper = new THREE.arrowHelper(this.dir, this.origin, this.length, this.hex)
+        console.log('scene: ', this._scene);
+        
     }
 
     // generateHeight( width, height ) {
@@ -52,6 +87,7 @@ export default class Mark extends Module {
 
     frame(time){
         // console.log(time)
+        
         
     }
 }

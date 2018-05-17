@@ -15,7 +15,7 @@ function init(bundle, parent, options) {
   const threeDOFRayCaster =  new ThreeDOFRayCaster(scene);
   let cameraPosition = threeDOFRayCaster._getCameraNewPosition();
   const fog = new Fog(scene);
-  const mark = new Mark();
+  const mark = new Mark(scene);
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
     raycasters: [
