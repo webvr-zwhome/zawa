@@ -18,18 +18,18 @@ export default class Mark extends Module {
         // this.arrowHelper = new THREE.ArrowHelper(this.dir, this.origin, this.length, this.hex);
         // this._scene.add(this.arrowHelper);
 
-        this.dir = new THREE.Vector3( 1, 2, 0 );
+        // this.dir = new THREE.Vector3( 1, 2, 0 );
 
-        //normalize the direction vector (convert to vector of length 1)
-        this.dir.normalize();
+        // //normalize the direction vector (convert to vector of length 1)
+        // this.dir.normalize();
 
-        this.origin = new THREE.Vector3( 0, 0, 0 );
-        var length = 1;
-        var hex = 0xffff00;
+        // this.origin = new THREE.Vector3( 0, 0, 0 );
+        // var length = 2;
+        // var hex = 0xffff00;
 
-        var arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex );
-        arrowHelper.name = 'arrow';
-        this._scene.add( arrowHelper );
+        // var arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex, 1 ,3);
+        // arrowHelper.name = 'arrow';
+        // this._scene.add( arrowHelper );
 
         // this._move = [0, 0, 0];
         // console.log('scene: ', this._scene);
@@ -44,14 +44,21 @@ export default class Mark extends Module {
     }
 
     setup(pos) {
-        var length = 1;
+        var length = 2;
         var hex = 0xffff00;
         this._move = pos.slice();
         this.dir = new THREE.Vector3( this._move[0][0]-this._move[1][0], this._move[0][1]-this._move[1][1], this._move[0][2]-this._move[1][2] );
-        this.dir = this.dir.normalize();
+        this.dir.normalize();
         this.origin = this._move[1].slice();
-        arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex );
-        arrowHelper.name = "arr"
+        var arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex, 1 ,3);
+        arrowHelper.name = 'arrow';
+        if(this._scene.children[2].name==='arrow'){
+            this._scene.remove(this._scene.children[2])
+        }
+        this._scene.add( arrowHelper );
+        
+        // arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex );
+        // arrowHelper.name = "arr"
         // this._scene.add( arrowHelper );
         // arrowHelper.parent = this._scene;
         // console.log('direction: ', this._direction)

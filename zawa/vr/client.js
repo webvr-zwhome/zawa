@@ -9,6 +9,7 @@ import * as THREE from 'three';
 import ThreeDOFRayCaster from '../src/native_components/inputs/3dof/ThreeDOFRayCaster';
 import Fog from '../src/native_components/Fog';
 import Mark from '../src/native_components/Mark';
+// import GamePad from '../src/native_components/GamePad'
 
 function init(bundle, parent, options) {
   const scene = new THREE.Scene();
@@ -16,6 +17,7 @@ function init(bundle, parent, options) {
   let cameraPosition = threeDOFRayCaster._getCameraNewPosition();
   const fog = new Fog(scene);
   const mark = new Mark(scene);
+  // const gamePad = new GamePad()
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
     raycasters: [
@@ -34,6 +36,7 @@ function init(bundle, parent, options) {
     // Any custom behavior you want to perform on each frame goes here
     fog.frame(time);
     mark.frame();
+    // gamePad.frame();
     const cameraNewPosition = threeDOFRayCaster._getCameraNewPosition();
     if(cameraNewPosition != cameraPosition) {
       // console.log(cameraNewPosition);

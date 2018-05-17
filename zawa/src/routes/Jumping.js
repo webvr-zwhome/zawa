@@ -2,15 +2,17 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-17 13:38:24
+ * @Last Modified time: 2018-05-17 22:41:17
  */
 import React from 'react';
 import {
   AmbientLight,
   AppRegistry,
   DirectionalLight,
+  MediaPlayerState,
   NativeModules,
   StyleSheet,
+  Sound,
   asset,
   Pano,
   Text,
@@ -69,13 +71,19 @@ export default class Jumping extends React.Component{
     super(props);
     this.state={
       jumpMove: 0,
-      jumpUp: 0
+      jumpUp: 0,
+      percent: '',
+      pulse: 0,
+      play:'stop',
     }
 
     this.power = 0;
     this.accuPower = 0;
-    this.percent = {};
+    // const gamePad = window.navigator.getGamepads();
+    // this.HapticActuators  = gamePad[1].hapticActuators;
+    // this.percent = {};
     const mark = NativeModules.Mark;
+    // this.sound = {sound: asset('sound/add.mp3'), playerState:new MediaPlayerState({})}
 
 
   }
@@ -99,24 +107,42 @@ export default class Jumping extends React.Component{
     },100)
   }
 
-  Accumulation(){
+  Accumulation(moveDir, moveOrigin){
+    // this.sound.playerState.play();
+    
     if(this.power < 1){
       this.power += 0.01;
     }else{
       this.power = 1;
     }
-   
+    // this.hapticActuators.pulse(this.power);
+    this.setState({
+      percent: `${this.power * 100}%`,
+      pulse: this.power,
+      play: 'play'
+    })
+    window.postMessage ( { type: "direction",  data: {
+      move : [moveDir, moveOrigin]
+    }} ) ;
+    console.log('moveDir: ',moveDir)
     console.log('power: ',this.power)
-    
-
   }
 
   clearAccumulation(){
     // this.setState({
     //   jumpMove: this.power
     // })
+    // this.hapticActuators.pulse(0);
     this.setjumpDistance(this.power)
+    this.setState({
+      percent: '',
+      pulse: 0,
+      play: 'stop',
+    })
     this.power = 0;
+    window.postMessage ( { type: "direction",  data: {
+      move : [null, null]
+    }} ) ;
     console.log('endPower: ',this.power)
   }
 
@@ -131,9 +157,7 @@ export default class Jumping extends React.Component{
     const moveOrigin = [-1 * 2 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 2 * Math.cos(rotate[1] * Math.PI / 180)];
     
     // console.log('move: ', move);
-    window.postMessage ( { type: "direction",  data: {
-      move : [moveDir, moveOrigin]
-    }} ) ;
+    
     // const cameraRotate = [0, rotate[1], 0];
     return (
       <View>
@@ -148,13 +172,30 @@ export default class Jumping extends React.Component{
         >                     
         </Scene>  */}
         <Pano source={asset('heaven.jpg')}/>
+        <Text
+          style={{
+            fontSize: 0.05,
+            color: 'green',
+            transform:[
+              {translate: [VrHeadModel.position()[0]-0.2, VrHeadModel.position()[1]+4.5, VrHeadModel.position()[2]-0.2]}
+            ]
+          }}
+        >
+          {this.state.percent}==null
+        </Text>
+        <Sound
+          source = {asset('sound/add.mp3')}
+          autoPlay = {false}
+          playControl = {this.state.play}
+        ></Sound>
         <Button 
           style={Styles.getIntoJumping}
           needFocus={false}
           index={1}
           button={1}
           eventType={'keydown'}
-          onEvent={() => this.Accumulation()}
+          pulse={this.state.pulse}
+          onEvent={() => this.Accumulation(moveDir,moveOrigin)}
         >
           {/* <Text style={Styles.text}>JUMPING</Text> */}
         </Button>
@@ -164,6 +205,7 @@ export default class Jumping extends React.Component{
           index={1}
           button={1}
           eventType={'keyup'}
+          pulse={this.state.pulse}
           onEvent={() => this.clearAccumulation()}
         >
           {/* <Text style={Styles.text}>JUMPING</Text> */}

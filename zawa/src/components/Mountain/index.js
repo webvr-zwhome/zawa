@@ -28,7 +28,7 @@ export default class Mountain extends React.Component{
 
     static defaultProps = {
       stonePosition: [
-        [0.2, 1, -1.6],
+        [-0.2, 0, -0.6],
         [-1, 0, -1.4],
         [-1.5, 0, -2.2],
         [-2, 0, -3.0],
@@ -47,8 +47,8 @@ export default class Mountain extends React.Component{
           <Model 
             key={index}
             source={{
-              obj: asset(`${prefix}stone00${index + 1}.obj`),
-              mtl: asset(`${prefix}stone00${index + 1}.mtl`)
+              obj: asset(`${prefix}stone00${index + 2}.obj`),
+              mtl: asset(`${prefix}stone00${index + 2}.mtl`)
             }}
             style={{
               transform: [

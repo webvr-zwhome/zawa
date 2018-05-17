@@ -52,6 +52,7 @@ export default class Button extends React.Component{
                 && e.gamepad === this.props.index 
                 && e.button === this.props.button 
                 && e.eventType === this.props.eventType){
+            e.gamepad.hapticActuators.pulse(this.props.pulse)
             this.props.onEvent();
         }
         
