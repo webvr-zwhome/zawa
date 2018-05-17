@@ -52,9 +52,9 @@ export default class Mark extends Module {
         this.origin = this._move[1].slice();
         var arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex, 1 ,3);
         arrowHelper.name = 'arrow';
-        if(this._scene.children[2].name==='arrow'){
-            this._scene.remove(this._scene.children[2])
-        }
+        // if(this._scene.children[2].name==='arrow'){
+        //     this._scene.remove(this._scene.children[2])
+        // }
         this._scene.add( arrowHelper );
         
         // arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex );

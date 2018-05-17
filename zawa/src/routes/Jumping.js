@@ -103,6 +103,7 @@ export default class Jumping extends React.Component{
 
       if(VrHeadModel.position()[1]<1){
         clearInterval(interval)
+        console.log('clear')
       }
     },100)
   }
@@ -117,6 +118,8 @@ export default class Jumping extends React.Component{
     }
     // this.hapticActuators.pulse(this.power);
     this.setState({
+      jumpMove: 0,
+      jumpUp: 0,
       percent: `${this.power * 100}%`,
       pulse: this.power,
       play: 'play'
@@ -124,7 +127,7 @@ export default class Jumping extends React.Component{
     window.postMessage ( { type: "direction",  data: {
       move : [moveDir, moveOrigin]
     }} ) ;
-    console.log('moveDir: ',moveDir)
+    // console.log('moveDir: ',moveDir)
     console.log('power: ',this.power)
   }
 
@@ -187,6 +190,7 @@ export default class Jumping extends React.Component{
           source = {asset('sound/add.mp3')}
           autoPlay = {false}
           playControl = {this.state.play}
+          volume={3.0}
         ></Sound>
         <Button 
           style={Styles.getIntoJumping}
