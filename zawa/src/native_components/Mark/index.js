@@ -52,11 +52,11 @@ export default class Mark extends Module {
         this.origin = this._move[1].slice();
         arrowHelper = new THREE.ArrowHelper( this.dir, this.origin, length, hex );
         arrowHelper.name = "arr"
-        this._scene.add( arrowHelper );
+        // this._scene.add( arrowHelper );
         // arrowHelper.parent = this._scene;
         // console.log('direction: ', this._direction)
         // this.arrowHelper = new THREE.arrowHelper(this.dir, this.origin, this.length, this.hex)
-        console.log('scene: ', this._scene);
+        // console.log('scene: ', this._scene);
         
     }
 

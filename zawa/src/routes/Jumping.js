@@ -82,26 +82,31 @@ export default class Jumping extends React.Component{
 
   setjumpDistance(power){
     let jumpTime = 0;
-    let defaultPower = 100;
+    let defaultPower = 5;
     const interval = setInterval(()=>{
-      let g = 9.98;
+      let g = 50;
       jumpTime+=0.01;
-      let jumpDis = power * defaultPower * jumpTime;
-      let upDis = power * defaultPower * jumpTime - g * Math.pow(jumpTime, 2);
+      let jumpDis = power/10 * defaultPower * jumpTime;
+      let upDis = power * defaultPower * jumpTime - g * Math.pow(jumpTime, 2)/2;
       this.setState({
         jumpMove: jumpDis,
         jumpUp: upDis
       })
 
-      // if(VrHeadModel.position()[1]<-1){
-      //   clearInterval(interval)
-      // }
-    },300)
+      if(VrHeadModel.position()[1]<1){
+        clearInterval(interval)
+      }
+    },100)
   }
 
   Accumulation(){
-    this.power += 0.00001;
-    // console.log('power: ',this.power)
+    if(this.power < 1){
+      this.power += 0.01;
+    }else{
+      this.power = 1;
+    }
+   
+    console.log('power: ',this.power)
     
 
   }
@@ -121,7 +126,7 @@ export default class Jumping extends React.Component{
     const rotate = VrHeadModel.rotation();
     // console.log('vrPos: ', VrHeadModel.position());
     // console.log('vrRot: ', rotate);
-    const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
+    const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower + 4, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
     const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
     const moveOrigin = [-1 * 2 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 2 * Math.cos(rotate[1] * Math.PI / 180)];
     
