@@ -42,7 +42,6 @@ export default class  HumanList extends React.Component {
           })
 
         this.Channel.bind('client-headUpdated',(data)=>{
-        // console.log('VRhead: ',data)
         this.setState({
             headPosition: data.position,
             headRotation: data.rotation,
@@ -57,25 +56,11 @@ export default class  HumanList extends React.Component {
         member.rotation = rotation;
         const memberAdd = {};
         memberAdd[memberId] = member;
-        // const memberAdd = {
-        //   memberId: member
-        // };
-        // const newMemberList =  Object.assign({},this.memberList,memberAdd);
-        // this.setState({
-        //   memberList: Object.assign({},newMemberList) 
-        // })
         this.memberList =  Object.assign({},this.memberList,memberAdd);
         
     }
       
     updateMember(memberId,position,rotation){
-        // const memberUpdate = Object.assign({},this.memberList);
-        // memberUpdate[memberId]["position"] = position;
-        // memberUpdate[memberId]["rotation"] = rotation;
-        // this.setState({
-        //   memberList: Object.assign({},memberUpdate)
-        // })
-        // this.memberList = Object.assign({},memberUpdate)
         this.memberList[memberId]["position"] = position;
         this.memberList[memberId]["rotation"] = rotation;
     }
