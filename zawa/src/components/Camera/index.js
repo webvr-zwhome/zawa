@@ -160,7 +160,7 @@ export default class Camera extends React.Component {
     if (this._isMounted && e.data.type == "newPosition") {
       const position = e.data.position;
       this.setState({
-        cameraPosition: [position.x, 4, position.z],
+        cameraPosition: [position.x, VrHeadModel.position()[1], position.z],
       })
     }
   }
@@ -186,7 +186,7 @@ export default class Camera extends React.Component {
     const { vrPosition = false, position = [0, 0, 0] } = this.props;
     // console.log('prePos: ', this.prePosition);
 
-    const curPosition = [position[0] + this.prePosition[0], this.prePosition[1]+position[1], position[2] + this.prePosition[2]];
+    const curPosition = [position[0] + this.prePosition[0], VrHeadModel.position()[1]+position[1], position[2] + this.prePosition[2]];
     this.prePosition = curPosition;
     // console.log('curPos: ', curPosition);
     return (

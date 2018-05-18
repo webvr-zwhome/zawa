@@ -23,7 +23,7 @@ import {
 export default class Mountain extends React.Component{
     constructor(props){
         super(props);
-        const fog = NativeModules.Fog;
+        // const fog = NativeModules.Fog;
     }
 
     static defaultProps = {

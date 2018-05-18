@@ -92,7 +92,7 @@ export default class Jumping extends React.Component{
     let jumpTime = 0;
     let defaultPower = 5;
     const interval = setInterval(()=>{
-      let g = 50;
+      let g = 90;
       jumpTime+=0.01;
       let jumpDis = power/10 * defaultPower * jumpTime;
       let upDis = power * defaultPower * jumpTime - g * Math.pow(jumpTime, 2)/2;
@@ -118,8 +118,6 @@ export default class Jumping extends React.Component{
     }
     // this.hapticActuators.pulse(this.power);
     this.setState({
-      jumpMove: 0,
-      jumpUp: 0,
       percent: `${this.power * 100}%`,
       pulse: this.power,
       play: 'play'
