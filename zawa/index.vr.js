@@ -12,6 +12,7 @@ import {
   View,
   VrButton,
   StyleSheet,
+  VrHeadModel
 } from 'react-vr';
 import App from './src/routes/App';
 import Jumping from './src/routes/Jumping';
@@ -21,6 +22,9 @@ import Button from './src/components/Button';
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 // const history = createBrowserHistory();
+//pusher
+importScripts('https://js.pusher.com/4.1/pusher.worker.min.js');
+
 
 var Styles = StyleSheet.create({
   button: {
@@ -63,13 +67,13 @@ export default class zawa extends React.Component {
     super();
     // window.addEventListener('message', this.onWindowMessage);
     RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
-      if (e.type !== 'GamepadInputEvent') {
-        return;
-      }
-      // console.log(e);
-      if (e.gamepad === 0 && e.button === 1 && e.eventType === 'keydown') {
+      // if (e.type !== 'GamepadInputEvent') {
+      //   return;
+      // }
+      // // console.log(e);
+      // if (e.gamepad === 0 && e.button === 1 && e.eventType === 'keydown') {
 
-      }
+      // }
       // if (e.eventType === 'keydown') {
       //   const buttons = this.state.buttons.concat([]);
       //   buttons[e.button] = true;
@@ -86,8 +90,89 @@ export default class zawa extends React.Component {
     });
   }
   state = {
-    mode: "game-jumping",
+    mode: 'game-jumping',
+    // headPosition:[0,0,0],
+    // headRotation:[0,0,0],
+    // memberId: ''
   }
+
+  //pusher
+  componentWillMount(){
+    const pusher = new Pusher('0b6e86e935ef11ade5df',{
+      authEndpoint:'http://123.206.180.98:5000/pusher/auth',
+      auth: {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers':'Content-Type, Authorization'
+        }
+      },
+      cluster: 'ap1',
+      encrypted: true
+    })
+
+    this.socketId = null;
+    
+    //   fetch('http://127.0.0.1:5000/pusher/trigger', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     socketId: this.socketId,
+    //     channelId: this.channelId,
+    //   })
+    // });
+    // })
+
+    // this.channelId ='channel-' + document.getElementById('MyID').value
+    // this.channelId = 'channel-1234';
+    // console.log('channelId: ',this.channelId)
+    // const channel = pusher.subscribe(this.channelId)
+
+    // channel.bind('my-event',(data) => {
+    //   console.log('data: ',data)
+    //   alert(data.message)
+    // })
+
+    // presence channel
+    this.presenceChannelName = 'presence-1234'
+    const presenceChannel = pusher.subscribe(this.presenceChannelName);
+    // presenceChannel = pusher.subscribe(this.presenceChannelName);
+
+    //事件绑定
+    // presenceChannel.bind('pusher:member_added', (member)=>{
+    //   console.log(member.id)
+    // })
+    // presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
+    //   console.log('sucessConnect')
+    //   // setInterval(()=>{
+    //   //   this.presenceChannel.trigger('client-headUpdate',{
+    //   //     position:VrHeadModel.position(),
+    //   //     rotation:VrHeadModel.rotation(),
+    //   //     memberId:presenceChannel.members.me.id,
+    //   //   })
+    //   // },500)
+    // })
+    this.preChannel = presenceChannel
+    
+
+    // this.presenceChannel.bind('client-headUpdate',(data)=>{
+    //   // console.log('VRhead: ',data)
+    //   this.setState({
+    //     headPosition: data.position,
+    //     headRotation: data.rotation,
+    //     memberId: data.memberId,
+    //   })
+    // })
+
+
+    pusher.connection.bind('connected',() => {
+      this.socketId = pusher.connection.socket_id
+      console.log('connected: ', this.socketId);
+    })    
+  }
+
   backHome() {
     this.setState({
       mode: 'home',
@@ -105,14 +190,23 @@ export default class zawa extends React.Component {
       mode: 'game-rollercoaster',
     });
   }
+  
   render() {
+    const Channel = this.preChannel;
     const mode = this.state.mode;
+    // const Position = this.state.headPosition;
+    // const Rotation = this.state.headRotation;
+    // const MemberId = this.state.memberId;
     return (
-      <Router>
+      // <Router>
         <View>
           {
             mode !== "home" ? null : 
             <View>
+              {/* {
+                this.state.memberId=='' ? <App /> : <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} />
+              } */}
+              {/* <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} AppChannel={preChannel} /> */}              
               <Button 
                 style={Styles.getIntoRollerCoaster}
                 index={0}
@@ -129,7 +223,7 @@ export default class zawa extends React.Component {
                 onEvent={() => this.getIntoJumping()}>
                 <Text style={Styles.text}>JUMPING</Text>
               </Button>
-              <Route exact path="/" component={App}></Route>
+              <App AppChannel={Channel} />
             </View>
           }
           {
@@ -143,25 +237,25 @@ export default class zawa extends React.Component {
                 onEvent={() => this.backHome()}>
                 <Text style={Styles.text}>BACK</Text>
               </Button>
-              <Route exact path="/" component={Jumping} />
+              <Jumping />
             </View>
           }
           {
             mode !== 'game-rollercoaster' ? null :
             <View>
-                <Button 
-                  style={Styles.backHome}
-                  index={0}
-                  button={3}
-                  eventType={'keydown'}
-                  onEvent={() => this.backHome()}>
-                  <Text style={Styles.text}>BACK</Text>
-                </Button>
-              <Route exact path="/" component={RollerCoaster} />
+              <Button 
+                style={Styles.backHome}
+                index={0}
+                button={3}
+                eventType={'keydown'}
+                onEvent={() => this.backHome()}>
+                <Text style={Styles.text}>BACK</Text>
+              </Button>
+              <RollerCoaster />
             </View>
           }
         </View>
-      </Router>
+      // </Router>
     );
   }
 };

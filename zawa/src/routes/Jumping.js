@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-17 22:41:17
+ * @Last Modified time: 2018-05-19 01:33:21
  */
 import React from 'react';
 import {
@@ -79,33 +79,71 @@ export default class Jumping extends React.Component{
 
     this.power = 0;
     this.accuPower = 0;
+    this.isCollision = false;
     // const gamePad = window.navigator.getGamepads();
     // this.HapticActuators  = gamePad[1].hapticActuators;
     // this.percent = {};
     const mark = NativeModules.Mark;
     // this.sound = {sound: asset('sound/add.mp3'), playerState:new MediaPlayerState({})}
-
-
+    window.addEventListener('message', (e)=>{
+      switch (e.type) {
+        case 'jumpPosition':
+          this.setDis(e.jumpDis, e.upDis);
+          break;
+        case 'isCollision':
+          this.isCollision = e.isCollision;
+        default:
+        return;
+      }
+    });
   }
 
-  setjumpDistance(power){
-    let jumpTime = 0;
-    let defaultPower = 5;
-    const interval = setInterval(()=>{
-      let g = 90;
-      jumpTime+=0.01;
-      let jumpDis = power/10 * defaultPower * jumpTime;
-      let upDis = power * defaultPower * jumpTime - g * Math.pow(jumpTime, 2)/2;
-      this.setState({
-        jumpMove: jumpDis,
-        jumpUp: upDis
+  setDis(jumpDis,upDis){
+    this.setState({
+      jumpMove: e.jumpDis,
+      jumpUp: e.upDis
+    })
+    if(VrHeadModel.position()[1]<-10 || this.isCollision){
+      window.postMessage({
+        type:'postPower',
+        data:{
+          power: 0
+        }
       })
+    }
+  }
 
-      if(VrHeadModel.position()[1]<1){
-        clearInterval(interval)
-        console.log('clear')
+
+  setjumpDistance(power){
+    // let jumpTime = 0;
+    // let defaultPower = 5;
+    // const interval = setInterval(()=>{
+    //   let g = 98;
+    //   jumpTime+=0.01;
+    //   let jumpDis = power/10 * defaultPower * jumpTime;
+    //   let upDis = power * defaultPower * jumpTime - g * Math.pow(jumpTime, 2)/2;
+    //   this.setState({
+    //     jumpMove: jumpDis,
+    //     jumpUp: upDis
+    //   })
+
+    //   if(VrHeadModel.position()[1]<1){
+    //     clearInterval(interval)
+    //     this.setState({
+    //       jumpMove: 0,
+    //       jumpUp: 0,
+    //     })
+    //     console.log('clear')
+    //   }
+    // },100)
+
+    //向client发送蓄力值信息
+    window.postMessage({
+      type:'postPower',
+      data:{
+        power: power
       }
-    },100)
+    })
   }
 
   Accumulation(moveDir, moveOrigin){
@@ -118,7 +156,7 @@ export default class Jumping extends React.Component{
     }
     // this.hapticActuators.pulse(this.power);
     this.setState({
-      percent: `${this.power * 100}%`,
+      percent: `${(this.power * 100).toFixed()}%`,
       pulse: this.power,
       play: 'play'
     })
@@ -141,9 +179,9 @@ export default class Jumping extends React.Component{
       play: 'stop',
     })
     this.power = 0;
-    window.postMessage ( { type: "direction",  data: {
-      move : [null, null]
-    }} ) ;
+    // window.postMessage ( { type: "direction",  data: {
+    //   move : [null, null]
+    // }} ) ;
     console.log('endPower: ',this.power)
   }
 
@@ -153,10 +191,16 @@ export default class Jumping extends React.Component{
     const rotate = VrHeadModel.rotation();
     // console.log('vrPos: ', VrHeadModel.position());
     // console.log('vrRot: ', rotate);
-    const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower + 4, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
+    const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
     const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
     const moveOrigin = [-1 * 2 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 2 * Math.cos(rotate[1] * Math.PI / 180)];
     
+    window.postMessage({
+      type:'postVrHeadModel',
+      data:{
+        HmPosition: VrHeadModel.position()
+      }
+    })
     // console.log('move: ', move);
     
     // const cameraRotate = [0, rotate[1], 0];
