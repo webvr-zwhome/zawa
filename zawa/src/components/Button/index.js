@@ -37,7 +37,7 @@ export default class Button extends React.Component{
             }
             // console.log(e.eventType);
             this.handleEvent(e);
-            // console.log(e);
+            console.log(RCTDeviceEventEmitter);
           });
     }
 

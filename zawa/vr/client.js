@@ -10,7 +10,7 @@ import ThreeDOFRayCaster from '../src/native_components/inputs/3dof/ThreeDOFRayC
 import Fog from '../src/native_components/Fog';
 import Mark from '../src/native_components/Mark';
 import Collision from '../src/native_components/Collision';
-// import GamePad from '../src/native_components/GamePad'
+import GamePad from '../src/native_components/GamePad'
 
 function init(bundle, parent, options) {
   const scene = new THREE.Scene();
@@ -22,7 +22,7 @@ function init(bundle, parent, options) {
   let jumpPower = 0;
   let jumpTime = 0;
   const g = 98;
-  // const gamePad = new GamePad()
+  const gamePad = new GamePad()
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
     raycasters: [
@@ -32,7 +32,8 @@ function init(bundle, parent, options) {
     nativeModules:[
       fog,
       mark,
-      collision
+      collision,
+      gamePad,
     ],
     cursorVisibility: 'auto',
     scene: scene,
