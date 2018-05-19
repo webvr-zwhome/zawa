@@ -86,12 +86,12 @@ export default class Jumping extends React.Component{
     const mark = NativeModules.Mark;
     // this.sound = {sound: asset('sound/add.mp3'), playerState:new MediaPlayerState({})}
     window.addEventListener('message', (e)=>{
-      switch (e.type) {
+      switch (e.data.type) {
         case 'jumpPosition':
-          this.setDis(e.jumpDis, e.upDis);
+          this.setDis(e.data.jumpDis, e.data.upDis);
           break;
         case 'isCollision':
-          this.isCollision = e.isCollision;
+          this.isCollision = e.data.isCollision;
         default:
         return;
       }
@@ -99,16 +99,25 @@ export default class Jumping extends React.Component{
   }
 
   setDis(jumpDis,upDis){
-    this.setState({
-      jumpMove: e.jumpDis,
-      jumpUp: e.upDis
-    })
-    if(VrHeadModel.position()[1]<-10 || this.isCollision){
+    
+    console.log('jumpDis: ',jumpDis)
+    console.log('jumpUp: ',upDis)
+    if(upDis < 0 && (VrHeadModel.position()[1]<4 || this.isCollision)){
+      this.setState({
+        jumMove: 0,
+        jumpUp: -upDis
+      })
+      console.log('VRheadModel: ',VrHeadModel.position())
       window.postMessage({
-        type:'postPower',
+        type:'endPower',
         data:{
           power: 0
         }
+      })
+    }else{
+      this.setState({
+        jumpMove: jumpDis,
+        jumpUp: upDis
       })
     }
   }
@@ -136,7 +145,7 @@ export default class Jumping extends React.Component{
     //     console.log('clear')
     //   }
     // },100)
-
+    console.log('power: ',power)
     //向client发送蓄力值信息
     window.postMessage({
       type:'postPower',
@@ -146,7 +155,7 @@ export default class Jumping extends React.Component{
     })
   }
 
-  Accumulation(moveDir, moveOrigin){
+  Accumulation(){
     // this.sound.playerState.play();
     
     if(this.power < 1){
@@ -156,15 +165,17 @@ export default class Jumping extends React.Component{
     }
     // this.hapticActuators.pulse(this.power);
     this.setState({
+      jumpMove:0,
+      jumpUp: 0,
       percent: `${(this.power * 100).toFixed()}%`,
       pulse: this.power,
       play: 'play'
     })
-    window.postMessage ( { type: "direction",  data: {
-      move : [moveDir, moveOrigin]
-    }} ) ;
+    // window.postMessage ( { type: "direction",  data: {
+    //   move : [moveDir, moveOrigin]
+    // }} ) ;
     // console.log('moveDir: ',moveDir)
-    console.log('power: ',this.power)
+    // console.log('power: ',this.power)
   }
 
   clearAccumulation(){
@@ -172,12 +183,13 @@ export default class Jumping extends React.Component{
     //   jumpMove: this.power
     // })
     // this.hapticActuators.pulse(0);
-    this.setjumpDistance(this.power)
     this.setState({
       percent: '',
       pulse: 0,
       play: 'stop',
     })
+    this.setjumpDistance(this.power)
+    
     this.power = 0;
     // window.postMessage ( { type: "direction",  data: {
     //   move : [null, null]
@@ -189,7 +201,8 @@ export default class Jumping extends React.Component{
     const accuPower = this.state.jumpMove;
     const upPower = this.state.jumpUp;
     const rotate = VrHeadModel.rotation();
-    // console.log('vrPos: ', VrHeadModel.position());
+    console.log('vrPos: ', VrHeadModel.position());
+    console.log('upPower: ',upPower)
     // console.log('vrRot: ', rotate);
     const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
     const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
@@ -232,7 +245,7 @@ export default class Jumping extends React.Component{
           source = {asset('sound/add.mp3')}
           autoPlay = {false}
           playControl = {this.state.play}
-          volume={3.0}
+          volume={10.0}
         ></Sound>
         <Button 
           style={Styles.getIntoJumping}
@@ -241,7 +254,7 @@ export default class Jumping extends React.Component{
           button={1}
           eventType={'keydown'}
           pulse={this.state.pulse}
-          onEvent={() => this.Accumulation(moveDir,moveOrigin)}
+          onEvent={() => this.Accumulation()}
         >
           {/* <Text style={Styles.text}>JUMPING</Text> */}
         </Button>

@@ -21,6 +21,7 @@ function init(bundle, parent, options) {
   const collision = new Collision();
   let jumpPower = 0;
   let jumpTime = 0;
+  const g = 98;
   // const gamePad = new GamePad()
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
@@ -43,7 +44,7 @@ function init(bundle, parent, options) {
     mark.frame();
     // gamePad.frame();
     const cameraNewPosition = threeDOFRayCaster._getCameraNewPosition();
-    const defaultPower = 5;
+    const defaultPower = 10;
 
     if(cameraNewPosition != cameraPosition) {
       // console.log(cameraNewPosition);
@@ -65,6 +66,8 @@ function init(bundle, parent, options) {
         jumpDis: jumpDis,
         upDis: upDis 
       })
+    }else{
+      jumpTime = 0;
     }
 
   };
@@ -85,6 +88,9 @@ function init(bundle, parent, options) {
           type: 'isCollision',
           isCollision: collision.detect(e.data.data.HmPosition)
         });
+        break;
+      case 'endPower':
+        jumpPower = 0;
         break;
       default:
       return;
