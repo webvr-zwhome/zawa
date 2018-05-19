@@ -12,11 +12,15 @@ import {
   View,
   VrButton,
   StyleSheet,
+  NativeModules,
 } from 'react-vr';
 import App from './src/routes/App';
 import Jumping from './src/routes/Jumping';
 import RollerCoasterGame from './src/routes/RollerCoaster';
 import Button from './src/components/Button';
+import Panel from './src/components/Panel';
+const rollerCoaster = NativeModules.RollerCoaster;
+
 
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
@@ -105,15 +109,16 @@ export default class zawa extends React.Component {
       mode: 'game-rollercoaster',
     });
   }
+
   render() {
     const mode = this.state.mode;
     return (
-      <Router>
+      // <Router>
         <View>
           {
             mode !== "home" ? null : 
             <View>
-              <Button 
+              {/* <Button 
                 style={Styles.getIntoRollerCoaster}
                 index={0}
                 button={3}
@@ -128,40 +133,55 @@ export default class zawa extends React.Component {
                 eventType={'keydown'}
                 onEvent={() => this.getIntoJumping()}>
                 <Text style={Styles.text}>JUMPING</Text>
-              </Button>
-              <Route exact path="/" component={App}></Route>
+              </Button> */}
+              <App 
+                  onEnterJumping={() => this.getIntoJumping()}
+                  onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                  onBackHome={() => this.backHome()}
+              />
+              {/* <Route exact path="/" component={App}></Route> */}
             </View>
           }
           {
             mode !== 'game-jumping' ? null :
             <View>
-              <Button 
+              {/* <Button 
                 style={Styles.backHome}
                 index={0}
                 button={3}
                 eventType={'keydown'}
                 onEvent={() => this.backHome()}>
                 <Text style={Styles.text}>BACK</Text>
-              </Button>
-              <Route exact path="/" component={Jumping} />
+              </Button> */}
+              <Jumping 
+                  onEnterJumping={() => this.getIntoJumping()}
+                  onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                  onBackHome={() => this.backHome()}
+              />
+              {/* <Route exact path="/" component={Jumping} /> */}
             </View>
           }
           {
             mode !== 'game-rollercoaster' ? null :
             <View>
-                <Button 
-                  style={Styles.backHome}
-                  index={0}
-                  button={3}
-                  eventType={'keydown'}
-                  onEvent={() => this.backHome()}>
-                  <Text style={Styles.text}>BACK</Text>
-                </Button>
-              <Route exact path="/" component={RollerCoasterGame} />
+              {/* <Button 
+                style={Styles.backHome}
+                index={0}
+                button={3}
+                eventType={'keydown'}
+                onEvent={() => this.backHome()}>
+                <Text style={Styles.text}>BACK</Text>
+              </Button> */}
+              <RollerCoasterGame 
+                onEnterJumping={() => this.getIntoJumping()}
+                onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                onBackHome={() => this.backHome()}
+              />
+              {/* <Route exact path="/" component={RollerCoasterGame} /> */}
             </View>
           }
         </View>
-      </Router>
+      // </Router>
     );
   }
 };
