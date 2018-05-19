@@ -69,7 +69,6 @@ function init(bundle, parent, options) {
     }else{
       jumpTime = 0;
     }
-
   };
   // vr.rootView.context.bridge._worker.addEventListener({'message', onVRMessage });
   vr.rootView.context.bridge._worker.addEventListener('message', (e)=>{

@@ -19,7 +19,7 @@ export default class Collision extends Module {
             [-2.5, 3, -6.2],
             [-3.0, 3, -7.4],
             [-3.5, 3, -8.6],
-            [-4.5, 0, -9.8],
+            [-4.5, 3, -9.8],
             [-5.0, 3, -11]
         ]
     }
@@ -27,7 +27,10 @@ export default class Collision extends Module {
     detect(position){
         let isCollision = false;
         this.collisionList.map((colPos)=>{
-            if((Math.pow(colPos[0]-position[0], 2) + Math.pow(colPos[1]-position[1], 2) + Math.pow(colPos[2]-position[2], 4)) <= 2 ){
+            // if((colPos[1]+1 > position[1]) && (Math.pow(colPos[0]-position[0], 2) + Math.pow(colPos[1]-position[1], 2) + Math.pow(colPos[2]-position[2], 4)) <= 2 ){
+            //     isCollision = true;
+            // }
+            if((colPos[1]+1 > position[1]) && (colPos[0]-0.5 < position[0] < colPos[0]+0.5) && (colPos[2] - 0.5 < position[2] < colPos[2]+0.5)){
                 isCollision = true;
             }
         })

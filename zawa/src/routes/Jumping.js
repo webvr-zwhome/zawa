@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-19 01:33:21
+ * @Last Modified time: 2018-05-19 22:33:20
  */
 import React from 'react';
 import {
@@ -156,14 +156,11 @@ export default class Jumping extends React.Component{
   }
 
   Accumulation(){
-    // this.sound.playerState.play();
-    
     if(this.power < 1){
       this.power += 0.01;
     }else{
       this.power = 1;
     }
-    // this.hapticActuators.pulse(this.power);
     this.setState({
       jumpMove:0,
       jumpUp: 0,
@@ -171,9 +168,9 @@ export default class Jumping extends React.Component{
       pulse: this.power,
       play: 'play'
     })
-    // window.postMessage ( { type: "direction",  data: {
-    //   move : [moveDir, moveOrigin]
-    // }} ) ;
+    window.postMessage ( { type: "direction",  data: {
+      move : [moveDir, moveOrigin]
+    }} ) ;
     // console.log('moveDir: ',moveDir)
     // console.log('power: ',this.power)
   }
@@ -229,7 +226,7 @@ export default class Jumping extends React.Component{
           }}
         >                     
         </Scene>  */}
-        <Pano source={asset('heaven.jpg')}/>
+        <Pano source={asset('heaven.jpg')} />
         <Text
           style={{
             fontSize: 0.05,
@@ -323,7 +320,7 @@ export default class Jumping extends React.Component{
           hello
         </Text> */}
         <Mountain />
-      </View> 
+      </View>
     )
   }
 }
