@@ -23,6 +23,7 @@ function init(bundle, parent, options) {
   let jumpTime = 0;
   const g = 98;
   const gamePad = new GamePad()
+  // let moveText = new THREE.Vector3(-0.2, 0.5, -0.4);
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
     raycasters: [
@@ -91,6 +92,17 @@ function init(bundle, parent, options) {
         break;
       case 'endPower':
         jumpPower = 0;
+        break;
+      case 'rotateText':
+        console.log('postVrheadpos: ',e.data.data.HmPos)
+        const moveText = new THREE.Vector3(-0.2, 0.5, -0.4);
+        const moveHY = new THREE.Vector3(0,1,0);
+        const moveAngle = e.data.data.HmPos * Math.PI / 180;
+        moveText.applyAxisAngle(moveHY, moveAngle)
+        vr.rootView.context.bridge._worker.postMessage({
+          type: 'moveText',
+          moveText: [moveText.x, moveText.y, moveText.z]
+        });
         break;
       default:
       return;

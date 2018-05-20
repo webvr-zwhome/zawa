@@ -75,6 +75,7 @@ export default class Jumping extends React.Component{
       percent: '',
       pulse: 0,
       play:'stop',
+      textMove: [-0.2, 0.5, -0.4]
     }
 
     this.power = 0;
@@ -92,6 +93,12 @@ export default class Jumping extends React.Component{
           break;
         case 'isCollision':
           this.isCollision = e.data.isCollision;
+          break;
+        case 'moveText':
+          this.setState({
+            textMove: e.data.moveText.slice()
+          })
+          break;
         default:
         return;
       }
@@ -168,9 +175,15 @@ export default class Jumping extends React.Component{
       pulse: this.power,
       play: 'play'
     })
-    window.postMessage ( { type: "direction",  data: {
-      move : [moveDir, moveOrigin]
-    }} ) ;
+    // window.postMessage ( { type: "direction",  data: {
+    //   move : [moveDir, moveOrigin]
+    // }} ) ;
+    window.postMessage({
+      type: "rotateText",
+      data:{
+        HmPos: VrHeadModel.rotation()[1]
+      }
+    })
     // console.log('moveDir: ',moveDir)
     // console.log('power: ',this.power)
   }
@@ -199,6 +212,7 @@ export default class Jumping extends React.Component{
     const upPower = this.state.jumpUp;
     const rotate = VrHeadModel.rotation();
     console.log('vrPos: ', VrHeadModel.position());
+    console.log('vrRot: ', VrHeadModel.rotation());
     console.log('upPower: ',upPower)
     // console.log('vrRot: ', rotate);
     const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
@@ -227,17 +241,24 @@ export default class Jumping extends React.Component{
         >                     
         </Scene>  */}
         <Pano source={asset('heaven.jpg')} />
-        <Text
+        {/* <Text
           style={{
             fontSize: 0.05,
             color: 'green',
             transform:[
-              {translate: [VrHeadModel.position()[0]-0.2, VrHeadModel.position()[1]+4.5, VrHeadModel.position()[2]-0.2]}
+              // {translate: [VrHeadModel.position()[0]+this.state.textMove[0], VrHeadModel.position()[1]+this.state.textMove[1], VrHeadModel.position()[2]+this.state.textMove[2]]},
+              // {rotateY: (VrHeadModel.rotation()[1])  * Math.PI / 180},
+              {translate: [VrHeadModel.position()[0]+this.state.textMove[0], 4, VrHeadModel.position()[2]+this.state.textMove[2]]},
+
+              // {rotateY: VrHeadModel.rotation()[1]}
+              // {translate:[0, 4, -0.6]}
             ]
           }}
         >
-          {this.state.percent}==null
-        </Text>
+          {this.state.percent}
+       
+
+        </Text> */}
         <Sound
           source = {asset('sound/add.mp3')}
           autoPlay = {false}
@@ -304,7 +325,6 @@ export default class Jumping extends React.Component{
           source={asset('heaven.png')}
         >
         </Pano>
-        <Camera vrPosition={ true }  position={move.slice()} />
         {/* <Text
             style={{
                 backgroundColor: '#777879',
@@ -319,6 +339,7 @@ export default class Jumping extends React.Component{
         }}>
           hello
         </Text> */}
+        <Camera vrPosition={ true }  position={move.slice()} />
         <Mountain />
       </View>
     )
