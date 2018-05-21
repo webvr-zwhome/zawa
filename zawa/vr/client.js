@@ -104,6 +104,13 @@ function init(bundle, parent, options) {
           moveText: [moveText.x, moveText.y, moveText.z]
         });
         break;
+      case 'getGamePad':
+        // vr.rootView.context.bridge._worker.postMessage({
+        //   type: 'gamePad',
+        //   Touch: gamePad.setAct()
+        // });
+        gamePad.setAct(e.data.data.pre);
+        console.log('pre: ',e.data.data.pre);
       default:
       return;
     }

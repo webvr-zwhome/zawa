@@ -24,8 +24,12 @@ export default class GamePad extends Module {
         // parent.add(this._fog);
         // this._scene.fog = this._fog;
     }
-    setAct(per){
-        this.hapticActuators.pulse(per);
+    setAct(pre){
+        const gamePad = navigator.getGamepads();
+        const HapticActuators = gamePad[1].hapticActuators;
+        HapticActuators[0].pulse(pre, 1000);
+        // this.hapticActuators.pulse(per);
+        console.log('setAct')
     }
     frame(time){
         // console.log(time)

@@ -27,6 +27,8 @@ import {
 import Camera from '../components/Camera';
 import Button from '../components/Button';
 import Mountain from '../components/Mountain';
+const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 
@@ -99,9 +101,26 @@ export default class Jumping extends React.Component{
             textMove: e.data.moveText.slice()
           })
           break;
+        case 'gamePad':
+          this.gamePad = e.data.Touch;
+          console.log('gamePad: ',this.gamePad)
         default:
         return;
       }
+    });
+    RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
+      if (e.type !== 'GamepadInputEvent') {
+        return;
+      }
+      // console.log(e.eventType);
+      // this.handleEvent(e);
+      // console.log(RCTDeviceEventEmitter);
+      window.postMessage({
+        type:'getGamePad',
+        data:{
+          pre:this.power
+        }
+      })
     });
   }
 
