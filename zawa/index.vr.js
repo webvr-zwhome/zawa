@@ -90,7 +90,7 @@ export default class zawa extends React.Component {
     });
   }
   state = {
-    mode: "game-rollercoaster",
+    mode: "home",
   }
   backHome() {
     this.setState({

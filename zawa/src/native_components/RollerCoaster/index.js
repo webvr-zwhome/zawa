@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-18 22:50:58
+ * @Last Modified time: 2018-05-20 23:13:48
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
@@ -16,6 +16,7 @@ function box(position, color) {
     var cube = new THREE.Mesh( geometry, material );
     cube.position.set(position.x, position.y, position.z);
     // console.log(position);
+    cube.name = 'box';
     return cube;
 }
 
@@ -25,6 +26,7 @@ function cylinder(height, position, quaternion) {
     var cylinder = new THREE.Mesh( geometry, material );
     cylinder.position.set(position.x, position.y, position.z);
     // cylinder.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+    cylinder.name = 'cylinder';
     return cylinder;
 }
 
@@ -52,7 +54,7 @@ export default class RollerCoaster extends Module{
 
         this._start = false;
         this._startTime = Date.now();
-        console.log(this._startTime);
+        // console.log(this._startTime);
         this._loopTime = 100 * 1000;
         this._preT = 0;   // used by getting point at path
         this._position = new THREE.Vector3();
@@ -86,7 +88,7 @@ export default class RollerCoaster extends Module{
         this._path = simplePath;
 
         for (let i = 0; i < path.length; i++) {
-            this._scene.add(box(path[i], 0x00ff00));              // for debug
+            this._rollerCoaster.add(box(path[i], 0x00ff00));              // for debug
             // points[i] = this._path.getPointAt(i / (path.length - 1));
             points[i] = path[i];
             // tangents[i] = this._path.getTangentAt(i / (path.length - 1));
@@ -96,10 +98,10 @@ export default class RollerCoaster extends Module{
             const Forward = new THREE.Vector3(0, 0, -1);
             const Right = new THREE.Vector3(1, 0, 0);
             const binormal = tangent.clone().cross(Up).normalize();
-            console.log('nextPoint: ', nextPoint);
-            console.log('point: ', points[i]);
-            console.log('tar: ', tangent);
-            console.log('bin: ', binormal);
+            // console.log('nextPoint: ', nextPoint);
+            // console.log('point: ', points[i]);
+            // console.log('tar: ', tangent);
+            // console.log('bin: ', binormal);
          
             binormal.multiplyScalar(offsetSide / Math.abs(binormal.x || 1));
             // binormal.applyQuaternion(quaternion);
@@ -123,10 +125,10 @@ export default class RollerCoaster extends Module{
 
             leftPath[i] = path[i].clone().add(new THREE.Vector3(-binormal.x, offsetUp, -binormal.z));
             rightPath[i] = path[i].clone().add(new THREE.Vector3(binormal.x, offsetUp, binormal.z));
-            this._scene.add(box(leftPath[i], 0xff0000));              // for debug
-            this._scene.add(box(rightPath[i], 0x0000ff));              // for debug
+            this._rollerCoaster.add(box(leftPath[i], 0xff0000));              // for debug
+            this._rollerCoaster.add(box(rightPath[i], 0x0000ff));              // for debug
 
-            // console.log('left: ', leftPath[i]);
+            console.log('left: ', box(leftPath[i], 0xff0000));
             // console.log('right: ', rightPath[i]);
             // console.log(i, '---------------');
         }
@@ -178,15 +180,13 @@ export default class RollerCoaster extends Module{
             var pointRight = this._pathRight.getPointAt(i / (segments - 1));
             const height = point.y + 40;
             
-            this._scene.add(cylinder(height, new THREE.Vector3(point.x, point.y - height / 2 , point.z), new THREE.Quaternion(0, 0, 0, 0)));  
-            this._scene.add(cylinder(height, new THREE.Vector3(pointLeft.x, pointLeft.y - height / 2 , pointLeft.z), new THREE.Quaternion(0, 0, 0, 0)));              // for debug
-            this._scene.add(cylinder(height, new THREE.Vector3(pointRight.x, pointRight.y - height / 2 , pointRight.z), new THREE.Quaternion(0, 0, 0, 0)));              // for debug
+            this._rollerCoaster.add(cylinder(height, new THREE.Vector3(point.x, point.y - height / 2 , point.z), new THREE.Quaternion(0, 0, 0, 0)));  
+            this._rollerCoaster.add(cylinder(height, new THREE.Vector3(pointLeft.x, pointLeft.y - height / 2 , pointLeft.z), new THREE.Quaternion(0, 0, 0, 0)));              // for debug
+            this._rollerCoaster.add(cylinder(height, new THREE.Vector3(pointRight.x, pointRight.y - height / 2 , pointRight.z), new THREE.Quaternion(0, 0, 0, 0)));              // for debug
             // for debug
 
-            console.log(point);
+            // console.log(point);
         }
-
-        // console.log()
     }
 
     createTube() {
@@ -293,6 +293,11 @@ export default class RollerCoaster extends Module{
     start() {
         this._start = true;
         this._startTime = Date.now();
+    }
+
+    hide(visible) {
+        console.log(this._rollerCoaster);
+        this._rollerCoaster.visible = visible;
     }
 
     getStatus() {

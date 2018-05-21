@@ -23,7 +23,7 @@ const Styles = StyleSheet.create({
         backgroundColor: '#9c712f',
         borderColor: '#9c712f',
         // opacity: 1,
-        // borderWidth: 0.01,
+        borderWidth: 0.02,
 
     }
 });

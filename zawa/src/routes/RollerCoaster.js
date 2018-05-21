@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-19 11:59:59
+ * @Last Modified time: 2018-05-20 22:58:23
  */
 import React from 'react';
 import {
@@ -70,6 +70,7 @@ const Styles = StyleSheet.create({
 export default class RollerCoasterGame extends React.Component{
   constructor(props) {
     super(props);
+    rollerCoaster.hide(true);
   }
 
   render() {

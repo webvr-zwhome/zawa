@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-18 23:08:16 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-19 12:44:45
+ * @Last Modified time: 2018-05-21 05:57:43
  */
 import React from 'react';
 import {
@@ -11,6 +11,7 @@ import {
     Image,
     asset,
     StyleSheet,
+    VrHeadModel,
 } from 'react-vr';
 import Button from '../Button';
 
@@ -67,7 +68,7 @@ const Styles = StyleSheet.create({
     },
     image: {
         // width: 4.2,
-        height: 2,
+        height: '100%',
     },
     button: {
         height: 0.4,
@@ -88,6 +89,8 @@ export default class Panel extends React.Component{
         this.state = {
             mode: props.mode || 'home', // ['home', 'game-jumping', 'game-rollercoaster']
             display: false,
+            rotation: VrHeadModel.rotation()[1],
+            position: VrHeadModel.position(),
         }
 
         RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
@@ -96,9 +99,14 @@ export default class Panel extends React.Component{
             }
             // display planel
             if (e.gamepad === 1 && e.button === 1) {
+                var position = VrHeadModel.position();
+                var rotation = VrHeadModel.rotation()[1];
+                console.log('rotation', rotation);
                 if(e.eventType === 'keydown') {
                     this.setState({
                         display: true,
+                        rotation: rotation,
+                        position: [ position[0], position[1], position[2] - 5],
                     })
                 }
                 if(e.eventType === 'keyup') {
@@ -118,16 +126,27 @@ export default class Panel extends React.Component{
                 onEnterJumping, 
                 onEnterRollerCoaster, 
                 onBackHome, 
-                // onCancel = () => {},
                 onStartJumping,
                 onStartRollerCoaster, 
             } = this.props;
-        const mode = this.state.mode;
+        const {
+            mode,
+            display,
+            position,
+            rotation,
+        } = this.state;
         return (
-             !this.state.display ? null : <View
+             !display ? null : 
+            <View
                 style={[
                     Styles.wrapper,
                     this.props.style,
+                    {
+                        transform: [
+                            { translate: position },
+                            { rotateY: rotation },
+                        ]
+                    }
                 ]}>
                 <View style={[Styles.row, Styles.titleWrapper]}>                
                     <Text style={[
