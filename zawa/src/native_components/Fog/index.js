@@ -5,9 +5,9 @@ export default class Fog extends Module {
     constructor(scene){
         super('Fog');
         this._scene = scene;
-        this._fog = new THREE.FogExp2( 0xefd1b5, 0.04);
-        this._geometry = new THREE.PlaneBufferGeometry(100, 100, 100, 100);
-        this._geometry.rotateX( - Math.PI / 2 );
+        this._fog = new THREE.FogExp2( 0xC4E1FF, 0.015);
+        this._geometry = new THREE.PlaneBufferGeometry(2200, 2200, 14, 14);
+        this._geometry.rotateX( -Math.PI/2 );
         this._position = this._geometry.attributes.position;
         this._position.dynamic = true;
         // this._fog = new THREE.Fog( 0xefd1b5, 0.005, 10);
@@ -15,7 +15,7 @@ export default class Fog extends Module {
         this._texture = new THREE.TextureLoader().load( '../../../static_assets/water.jpg' );
         this._texture.wrapS =  THREE.RepeatWrapping;
         this._texture.wrapT =  THREE.RepeatWrapping;
-		this._texture.repeat.set( 5, 5 );
+		this._texture.repeat.set( 10, 10 );
 		this._material = new THREE.MeshBasicMaterial( { color: 0x0044ff, map: this._texture } );
 		this._mesh = new THREE.Mesh( this._geometry, this._material );
         this.init();

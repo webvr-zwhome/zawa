@@ -363,7 +363,7 @@ export default class Jumping extends React.Component{
         }}>
           hello
         </Text> */}
-        <Camera vrPosition={ true }  position={move.slice()} reset={this.state.resetCame} />
+        <Camera vrPosition={ false }  position={move.slice()} reset={this.state.resetCame} />
         <Mountain move={upPower} moveIndex={this.mouIndex} />
       </View>
     )
