@@ -42,22 +42,44 @@ export default class Mountain extends React.Component{
     } 
    
     render() {
+      // console.log('3333333333333333333333333333');
         const prefix = 'models/jumping/stones/';
-        const stoneList = this.props.stonePosition.map((position, index) => (
-          <Model 
-            key={index}
-            source={{
-              obj: asset(`${prefix}stone00${index + 2}.obj`),
-              mtl: asset(`${prefix}stone00${index + 2}.mtl`)
-            }}
-            style={{
-              transform: [
-                { translate: position }
-              ]
-            }}
-            lit={true}
-          />
-        ))
+        const stoneList = this.props.stonePosition.map((position, index) => {
+          if(index===this.props.moveIndex){
+            return (
+              <Model 
+                key={index}
+                source={{
+                  obj: asset(`${prefix}stone00${index + 2}.obj`),
+                  mtl: asset(`${prefix}stone00${index + 2}.mtl`)
+                }}
+                style={{
+                  transform: [
+                    { translate: [position[0], position[1]+this.props.move, position[2]] }
+                  ]
+                }}
+                lit={true}
+              />
+            )
+          }else{
+            return (
+              <Model 
+                key={index}
+                source={{
+                  obj: asset(`${prefix}stone00${index + 2}.obj`),
+                  mtl: asset(`${prefix}stone00${index + 2}.mtl`)
+                }}
+                style={{
+                  transform: [
+                    { translate: position }
+                  ]
+                }}
+                lit={true}
+              />
+            )
+          }
+          
+        })
         return(
             <View>
               <Model

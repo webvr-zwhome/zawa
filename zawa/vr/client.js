@@ -22,7 +22,7 @@ function init(bundle, parent, options) {
   let jumpPower = 0;
   let jumpTime = 0;
   const g = 98;
-  const gamePad = new GamePad()
+  const gamePad = new GamePad();
   // let moveText = new THREE.Vector3(-0.2, 0.5, -0.4);
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
@@ -87,7 +87,7 @@ function init(bundle, parent, options) {
       case 'postVrHeadModel':
         vr.rootView.context.bridge._worker.postMessage({
           type: 'isCollision',
-          isCollision: collision.detect(e.data.data.HmPosition)
+          Collision: collision.detect(e.data.data.HmPosition)
         });
         break;
       case 'endPower':

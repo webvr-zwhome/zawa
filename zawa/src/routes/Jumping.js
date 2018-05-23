@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-19 22:33:20
+ * @Last Modified time: 2018-05-23 14:22:51
  */
 import React from 'react';
 import {
@@ -77,7 +77,9 @@ export default class Jumping extends React.Component{
       percent: '',
       pulse: 0,
       play:'stop',
-      textMove: [-0.2, 0.5, -0.4]
+      textMove: [-0.2, 0.5, -0.4],
+      mouUp: 0,
+      resetCame: false,
     }
 
     this.power = 0;
@@ -94,7 +96,8 @@ export default class Jumping extends React.Component{
           this.setDis(e.data.jumpDis, e.data.upDis);
           break;
         case 'isCollision':
-          this.isCollision = e.data.isCollision;
+          this.Collision = e.data.Collision;
+          this.mouIndex = e.data.indexCol
           break;
         case 'moveText':
           this.setState({
@@ -125,23 +128,28 @@ export default class Jumping extends React.Component{
   }
 
   setDis(jumpDis,upDis){
-    
     console.log('jumpDis: ',jumpDis)
     console.log('jumpUp: ',upDis)
-    if(upDis < 0 && (VrHeadModel.position()[1]<4 || this.isCollision)){
+    if(upDis < 0 && this.Collision.isCollision){
       this.setState({
+        resetCame: false,
         jumMove: 0,
-        jumpUp: -upDis
+        jumpUp: -upDis,
       })
-      console.log('VRheadModel: ',VrHeadModel.position())
+      // console.log('VRheadModel: ',VrHeadModel.position())
       window.postMessage({
         type:'endPower',
         data:{
           power: 0
         }
       })
+    }else if(upDis < 0 && VrHeadModel.position()[1] < 1 && this.Collision.isCollision===false){
+      this.setState({
+        resetCame: true
+      })
     }else{
       this.setState({
+        resetCame: false,
         jumpMove: jumpDis,
         jumpUp: upDis
       })
@@ -232,7 +240,7 @@ export default class Jumping extends React.Component{
     const rotate = VrHeadModel.rotation();
     console.log('vrPos: ', VrHeadModel.position());
     console.log('vrRot: ', VrHeadModel.rotation());
-    console.log('upPower: ',upPower)
+    console.log('upPower: ',upPower);
     // console.log('vrRot: ', rotate);
     const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
     const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
@@ -306,20 +314,17 @@ export default class Jumping extends React.Component{
         >
           {/* <Text style={Styles.text}>JUMPING</Text> */}
         </Button>
-
-
-        
         {/* <Camera /> */}
         <AmbientLight 
           style={{
             transform: [
               {translate: [0, 1, 0]}  
             ],
-            color: "#778899"            
+            color: "#778899"
           }}
           intensity={1}
         >
-         </AmbientLight>
+        </AmbientLight>
         <DirectionalLight
           style={{
             transform: [
@@ -358,8 +363,8 @@ export default class Jumping extends React.Component{
         }}>
           hello
         </Text> */}
-        <Camera vrPosition={ true }  position={move.slice()} />
-        <Mountain />
+        <Camera vrPosition={ true }  position={move.slice()} reset={this.state.resetCame} />
+        <Mountain move={upPower} moveIndex={this.mouIndex} />
       </View>
     )
   }

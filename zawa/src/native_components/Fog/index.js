@@ -6,8 +6,18 @@ export default class Fog extends Module {
         super('Fog');
         this._scene = scene;
         this._fog = new THREE.FogExp2( 0xefd1b5, 0.04);
+        this._geometry = new THREE.PlaneBufferGeometry(100, 100, 100, 100);
+        this._geometry.rotateX( - Math.PI / 2 );
+        this._position = this._geometry.attributes.position;
+        this._position.dynamic = true;
         // this._fog = new THREE.Fog( 0xefd1b5, 0.005, 10);
-        
+        this.changePosition();
+        this._texture = new THREE.TextureLoader().load( '../../../static_assets/water.jpg' );
+        this._texture.wrapS =  THREE.RepeatWrapping;
+        this._texture.wrapT =  THREE.RepeatWrapping;
+		this._texture.repeat.set( 5, 5 );
+		this._material = new THREE.MeshBasicMaterial( { color: 0x0044ff, map: this._texture } );
+		this._mesh = new THREE.Mesh( this._geometry, this._material );
         this.init();
         console.log(this._fog);
     }
@@ -16,6 +26,7 @@ export default class Fog extends Module {
         // const parent = new THREE.Object3D();
         // parent.add(this._fog);
         this._scene.fog = this._fog;
+        this._scene.add(this._mesh)
     }
 
     // generateHeight( width, height ) {
@@ -43,6 +54,12 @@ export default class Fog extends Module {
     //     return data;
     // }
 
+    changePosition(){
+        for ( var i = 0; i < this._position.count; i ++ ) {
+            var y = 35 * Math.sin( i / 2 );
+            this._position.setY( i, y );
+        }
+    }
     frame(time){
         // console.log(time)
     }

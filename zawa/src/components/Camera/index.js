@@ -1,8 +1,8 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
- * @Last Modified by:   zhaoxiaoqi 
- * @Last Modified time: 2018-04-12 23:18:16 
+ * @Last Modified by: penghuiwu
+ * @Last Modified time: 2018-05-23 13:47:23
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -183,10 +183,10 @@ export default class Camera extends React.Component {
     //   rotate: this.state.rotate,
     // }
       // NativeModules.GetHeadModelModule.setHeadModelPosition(vrHeadModelPositionObj);
-    const { vrPosition = false, position = [0, 0, 0] } = this.props;
+    const { vrPosition = false, position = [0, 0, 0], reset = false } = this.props;
     // console.log('prePos: ', this.prePosition);
 
-    const curPosition = [position[0] + this.prePosition[0], this.prePosition[1]+position[1], position[2] + this.prePosition[2]];
+    const curPosition = reset ? position.slice() : [position[0] + this.prePosition[0], this.prePosition[1]+position[1], position[2] + this.prePosition[2]];
     this.prePosition = curPosition;
     // console.log('curPos: ', curPosition);
     return (
