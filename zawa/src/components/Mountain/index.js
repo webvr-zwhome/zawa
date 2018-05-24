@@ -28,21 +28,20 @@ export default class Mountain extends React.Component{
 
     static defaultProps = {
       stonePosition: [
-        [-0.2, 0, -0.6],
-        [-1, 0, -1.4],
-        [-1.5, 0, -2.2],
-        [-2, 0, -3.0],
-        [-2.5, 0, -4.0],
-        [-3, 0, -5.2],
-        [-3.5, 0, -6.4],
-        [-4.0, 0, -7.6],
-        [-5, 0, -8.8],
-        [-5.5, 0, -10],
+        [-0, 0, -0.1],
+        [-0.5, 0, -1],
+        [-1.4, 0, -1.5],
+        [-2.0, 0, -3],
+        [-2.5, 0, -3.8],
+        [-3, 0, -5.4],
+        [-3.5, 0, -7.2],
+        [-4.0, 0, -7.9],
+        [-5, 0, -9.0],
+        [-6, 0, -10],
       ],
     } 
    
     render() {
-      // console.log('3333333333333333333333333333');
         const prefix = 'models/jumping/stones/';
         const stoneList = this.props.stonePosition.map((position, index) => {
           if(index===this.props.moveIndex){
@@ -78,7 +77,6 @@ export default class Mountain extends React.Component{
               />
             )
           }
-          
         })
         return(
             <View>
@@ -89,7 +87,7 @@ export default class Mountain extends React.Component{
                 }}
                 style={{
                   transform:[
-                    {translate: [30, -49, -35]},
+                    {translate: [29, -49, -35]},
                     {scale: 100}
                   ]
                 }}

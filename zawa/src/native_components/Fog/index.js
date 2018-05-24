@@ -62,5 +62,10 @@ export default class Fog extends Module {
     }
     frame(time){
         // console.log(time)
+        for ( var i = 0; i < this._position.count; i ++ ) {
+            var y = 1 * Math.sin( i / 10 + ( time + i ) / (10 * i))+ Math.cos( time / (i * 6) + 2) - 30 ;
+            this._position.setY( i, y);
+        }
+        this._position.needsUpdate = true;
     }
 }

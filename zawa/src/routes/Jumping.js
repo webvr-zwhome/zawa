@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-23 14:22:51
+ * @Last Modified time: 2018-05-24 22:28:22
  */
 import React from 'react';
 import {
@@ -35,13 +35,13 @@ const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 const Styles = StyleSheet.create({
   button: {
     backgroundColor: '#777879',
-    borderRadius: 0.2,
-    borderWidth: 0.01,
+    borderRadius: 0,
+    borderWidth: 0,
     borderColor: '#7b612f',
     flex: 1,
     flexDirection: 'column',
-    width: 2,
-    height: 0.5,
+    width: 0,
+    height: 0,
     alignItems: 'stretch',
     justifyContent: 'center',
   },
@@ -65,6 +65,10 @@ const Styles = StyleSheet.create({
     fontSize: 0.2, 
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  jumping: {
+    width: 0,
+    height: 0
   }
 });
 
