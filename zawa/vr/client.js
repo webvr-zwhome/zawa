@@ -10,7 +10,7 @@ import ThreeDOFRayCaster from '../src/native_components/inputs/3dof/ThreeDOFRayC
 import Fog from '../src/native_components/Fog';
 import Mark from '../src/native_components/Mark';
 import Collision from '../src/native_components/Collision';
-import GamePad from '../src/native_components/GamePad'
+// import GamePad from '../src/native_components/GamePad'
 
 function init(bundle, parent, options) {
   const scene = new THREE.Scene();
@@ -22,7 +22,7 @@ function init(bundle, parent, options) {
   let jumpPower = 0;
   let jumpTime = 0;
   const g = 98;
-  const gamePad = new GamePad();
+  // const gamePad = new GamePad();
   // let moveText = new THREE.Vector3(-0.2, 0.5, -0.4);
   const vr = new VRInstance(bundle, 'zawa', parent, {
     // Add custom options here
@@ -34,7 +34,7 @@ function init(bundle, parent, options) {
       fog,
       mark,
       collision,
-      gamePad,
+      // gamePad,
     ],
     cursorVisibility: 'auto',
     scene: scene,
@@ -104,13 +104,13 @@ function init(bundle, parent, options) {
           moveText: [moveText.x, moveText.y, moveText.z]
         });
         break;
-      case 'getGamePad':
-        // vr.rootView.context.bridge._worker.postMessage({
-        //   type: 'gamePad',
-        //   Touch: gamePad.setAct()
-        // });
-        gamePad.setAct(e.data.data.pre);
-        console.log('pre: ',e.data.data.pre);
+      // case 'getGamePad':
+      //   // vr.rootView.context.bridge._worker.postMessage({
+      //   //   type: 'gamePad',
+      //   //   Touch: gamePad.setAct()
+      //   // });
+      //   gamePad.setAct(e.data.data.pre);
+      //   console.log('pre: ',e.data.data.pre);
       default:
       return;
     }
