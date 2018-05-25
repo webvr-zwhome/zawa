@@ -1,8 +1,13 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
+<<<<<<< HEAD
  * @Last Modified by: penghuiwu
  * @Last Modified time: 2018-05-07 11:35:05
+=======
+ * @Last Modified by: zhaoxiaoqi
+ * @Last Modified time: 2018-05-24 19:47:18
+>>>>>>> 9de3809a04223af56cebe163759da0017e75a96e
  */
 import React from 'react';
 import {
@@ -17,15 +22,21 @@ import {
   Scene,
   Sphere,
   VrHeadModel,
+  DirectionalLight,
+  AmbientLight,
 } from 'react-vr';
 
 import Camera from '../components/Camera';
 import Home from '../components/Home';
 import Tree from '../components/Tree';
-// import AmbientLightAll from '../components/Light/ambientLightAll'; 
+import AmbientLightAll from '../components/Light/ambientLightAll'; 
 import World from '../components/World';
 import {HumanList} from '../components/Human';
 // import Hoster from '../components/Human/Hoster';
+import Human from '../components/Human';
+import Panel from '../components/Panel';
+// import Hoster from '../components/Human/Hoster';
+const rollerCoaster = NativeModules.RollerCoaster;
 
 export default class App extends React.Component{
   constructor(props) {
@@ -38,7 +49,8 @@ export default class App extends React.Component{
     // }
     this.memberList = {}
     this.addMember = this.addMember.bind(this);
-    this.updateMember = this.updateMember.bind(this)
+    this.updateMember = this.updateMember.bind(this);
+    rollerCoaster.hide(false);
   }
 
   addMember(memberId,position,rotation) {
@@ -98,9 +110,40 @@ export default class App extends React.Component{
 
     const humanChannel = this.props.AppChannel;
     
+    const { 
+      onEnterJumping,
+      onEnterRollerCoaster,
+      onBackHome,
+    } = this.props;
     return (
       <View>
-        {/* <AmbientLightAll /> */}
+      <AmbientLight 
+        intensity={ 1 }
+        style={{
+          transform: [
+            {translate: [0, 0, 0]}
+          ],
+          color: "#fff",
+        }} 
+      />        
+      {/* <DirectionalLight
+          style={{
+            transform:[
+              {translate: [0, 1000, 100]},
+              {rotateX: -45}
+            ]
+          }} 
+          intensity={1.0}  
+        >
+        </DirectionalLight> */}
+        <Panel 
+            mode={'home'}
+            onEnterJumping={() => onEnterJumping()}
+            onEnterRollerCoaster={() => onEnterRollerCoaster()}
+            onBackHome={() => onBackHome()}
+            onStartJumping={() => {}}
+            onStartRollerCoaster={() => {}}
+        />
         <Camera />
         <World />
           

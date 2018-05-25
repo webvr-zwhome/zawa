@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:17:33 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-04-14 14:46:52
+ * @Last Modified time: 2018-05-23 14:52:15
  */
 import React from 'react';
 import {
@@ -37,18 +37,18 @@ export default class Tree extends React.Component{
       >
         <Model
           source={{ 
-            obj: asset('models/tree/tree-crown.obj'), 
-            mtl: asset('models/tree/tree-crown.mtl') 
+            obj: asset('models/tree/tree.obj'), 
+            mtl: asset('models/tree/tree.mtl') 
           }}
           lit={true}
           style={{ 
             transform: [
               // {scale: [scale, scale, scale + height]},
-              {translate:[0, 2, 0]}
+              {translate:[0, 0, 0]}
             ] 
           }}
         />
-        <Model
+        {/* <Model
           source={{ 
             obj: asset('models/tree/tree-trunk.obj'), 
             mtl: asset('models/tree/tree-trunk.mtl') 
@@ -60,7 +60,7 @@ export default class Tree extends React.Component{
               {translate:[0, 0, 0]}
             ] 
           }}
-        />
+        /> */}
         
       </View>
     )

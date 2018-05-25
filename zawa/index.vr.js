@@ -1,6 +1,7 @@
 import React from 'react';
 // import { NativeRouter, Route, Link, Switch } from 'react-router-native';
 // import createBrowserHistory from 'history/createBrowserHistory';
+
 import { MemoryRouter as Router, Route, Link, Switch } from 'react-router';
 
 import {
@@ -11,11 +12,18 @@ import {
   View,
   VrButton,
   StyleSheet,
-  VrHeadModel
+  VrHeadModel,
+  NativeModules,
 } from 'react-vr';
 import App from './src/routes/App';
-import Chess from './src/routes/Chess';
-import FoodShot from './src/routes/FoodShot';
+import Jumping from './src/routes/Jumping';
+import RollerCoasterGame from './src/routes/RollerCoaster';
+import Button from './src/components/Button';
+import Panel from './src/components/Panel';
+const rollerCoaster = NativeModules.RollerCoaster;
+
+
+const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 // const history = createBrowserHistory();
 //pusher
@@ -35,12 +43,12 @@ var Styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
   },
-  getIntoChess: {
+  getIntoJumping: {
     transform: [
       {translate: [3, 6, -15]},
     ],
   },
-  getIntoFoodShot: {
+  getIntoRollerCoaster: {
     transform: [
       {translate: [-10, 6, 3]},
       {rotateY: 90}
@@ -58,11 +66,32 @@ var Styles = StyleSheet.create({
   }
 });
 
-let x = 0;
 export default class zawa extends React.Component {
   constructor() {
     super();
     // window.addEventListener('message', this.onWindowMessage);
+    RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
+      if (e.type !== 'GamepadInputEvent') {
+        return;
+      }
+      // console.log(e);
+      if (e.gamepad === 0 && e.button === 1 && e.eventType === 'keydown') {
+
+      }
+      // if (e.eventType === 'keydown') {
+      //   const buttons = this.state.buttons.concat([]);
+      //   buttons[e.button] = true;
+      //   this.setState({buttons});
+      // } else if (e.eventType === 'keyup') {
+      //   const buttons = this.state.buttons.concat([]);
+      //   buttons[e.button] = false;
+      //   this.setState({buttons});
+      // } else if (e.eventType === 'axismove') {
+      //   const axes = this.state.axes.concat([]);
+      //   axes[e.axis] = e.value;
+      //   this.setState({axes});
+      // }
+    });
   }
   state = {
     mode: 'home',
@@ -148,12 +177,30 @@ export default class zawa extends React.Component {
     })    
   }
 
-  handleClick(e) {
+  // handleClick(e) {
+  //   this.setState({
+  //     mode: 'home',
+  //   })
+  // }
+  
+  backHome() {
     this.setState({
       mode: 'home',
-    })
+    });
   }
-  
+
+  getIntoJumping() {
+    this.setState({
+      mode: 'game-jumping',
+    });
+  }
+
+  getIntoRollerCoaster() {
+    this.setState({
+      mode: 'game-rollercoaster',
+    });
+  }
+
   render() {
     const Channel = this.preChannel;
     const mode = this.state.mode;
@@ -166,30 +213,40 @@ export default class zawa extends React.Component {
           {
             mode !== "home" ? null : 
             <View>
-              <VrButton id="home" onClick={e => this.handleClick(e)}></VrButton>
-              {/* {
-                this.state.memberId=='' ? <App /> : <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} />
-              } */}
-              {/* <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} AppChannel={preChannel} /> */}
-              <App AppChannel={Channel} />
-              
+              {/* <VrButton id="home" onClick={e => this.handleClick(e)}></VrButton> */}
+              {/* <App AppChannel={Channel} /> */}
+              <App 
+                AppChannel={Channel}
+                onEnterJumping={() => this.getIntoJumping()}
+                onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                onBackHome={() => this.backHome()}
+              />
               {/* <Route exact path="/" component={App}></Route> */}
             </View>
           }
           {
-            mode !== 'game-chess' ? null :
+            mode !== 'game-jumping' ? null :
             <View>
-              <VrButton id="game-chess" onClick={e => this.handleClick(e)}></VrButton>
-              <Chess />
-              {/* <Route exact path="/" component={Chess} /> */}
+              {/* <VrButton id="game-chess" onClick={e => this.handleClick(e)}></VrButton> */}
+              {/* <Chess /> */}
+              <Jumping 
+                  onEnterJumping={() => this.getIntoJumping()}
+                  onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                  onBackHome={() => this.backHome()}
+              />
             </View>
           }
           {
-            mode !== 'game-foodshot' ? null :
+            mode !== 'game-rollercoaster' ? null :
             <View>
-              <VrButton id="game-foodshot" onClick={ e => this.handleClick(e) }></VrButton>
-              <FoodShot />
-              {/* <Route exact path="/" component={FoodShot} /> */}
+              {/* <VrButton id="game-foodshot" onClick={ e => this.handleClick(e) }></VrButton> */}
+              {/* <FoodShot /> */}
+              <RollerCoasterGame 
+                onEnterJumping={() => this.getIntoJumping()}
+                onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                onBackHome={() => this.backHome()}
+              />
+              {/* <Route exact path="/" component={RollerCoasterGame} /> */}
             </View>
           }
         </View>
@@ -202,7 +259,7 @@ export default class zawa extends React.Component {
 //   render() {
 //     return (
 //       <View>
-//         <Pano source={asset('chess-world.jpg')}/>
+//         <Pano source={asset('jumping-world.jpg')}/>
 //         <Text
 //           style={{
 //             backgroundColor: '#777879',

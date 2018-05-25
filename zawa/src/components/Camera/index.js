@@ -1,8 +1,8 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
- * @Last Modified by:   zhaoxiaoqi 
- * @Last Modified time: 2018-04-12 23:18:16 
+ * @Last Modified by: zhaoxiaoqi
+ * @Last Modified time: 2018-05-17 21:35:22
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -22,11 +22,15 @@ import {
 import { cameraMove } from './move';
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
+// const rollerCoaster = NativeModules.RollerCoaster;
+
 
 export default class Camera extends React.Component {
 
   constructor() {
     super();
+    // rollerCoaster.init();
+    const cameraPosition = VrHeadModel.position();
     this.state = {
       buttons: [],     // 手柄按键
       axes: [],        // 手柄遥杆
@@ -38,7 +42,8 @@ export default class Camera extends React.Component {
       rotate: 0,       // 左右旋转值 叠加计算
       isSecond: false, // 针对手柄，手柄摇杆的横纵向值不是同时检测
       vrHeadModelPosition: [0, 0, 0],
-      cameraPosition: [0, 4, 0],
+      cameraPosition: [cameraPosition[0], 4, cameraPosition[2]],
+      cameraRotation: [0, 0, 0],
     }
     let preAxes = [];
       
@@ -145,34 +150,72 @@ export default class Camera extends React.Component {
     window.addEventListener('message', this.onWindowMessage); // 监听瞬移事件
   }
 
+  componentWillMount() {
+    this._isMounted = true;
+    // console.log(rollerCoaster.getPoints());
+
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   onWindowMessage = (e) => {
     // teleport to new position
-    if (e.data.type == "newPosition") {
-      const position = e.data.position;
-      this.setState({
-        cameraPosition:  [position.x, 4, position.z],
-      })
+    // if (this._isMounted && e.data.type == "newPosition") {
+    //   const position = e.data.position;
+    //   this.setState({
+    //     cameraPosition: [position.x, 4, position.z],
+    //   })
+    // }
+
+    if (this._isMounted) {
+      switch(e.data.type) {
+        case 'newPosition': {
+          const position = e.data.position;
+          this.setState({
+            cameraPosition: [position.x, 4, position.z],
+          });
+          break;
+        }
+        case 'rollerPosition': {
+          const position = e.data.position;
+          this.setState({
+            cameraPosition: [position.x, position.y, position.z],
+          });
+          break;
+        }
+        case 'rollerRotation': {
+          const rotation = e.data.rotation;
+          // console.log('ro:', rotation);
+          this.setState({
+            cameraRotation: [rotation.x, rotation.y, rotation.z],
+          })
+          break;
+        }
+      }
     }
   }
 
   render() {     
     //camera的初始位置、方向、高度
-    const INITIAL_X = 0;  
-    const INITIAL_Z = 0;
-    const INITIAL_ROTATION = 0;
-    const CAMERA_HEIGHT = 4;
+    // const INITIAL_X = 0;  
+    // const INITIAL_Z = 0;
+    // const INITIAL_ROTATION = 0;
+    // const CAMERA_HEIGHT = 4;
 
-    const moveX = this.state.moveX;
-    const moveZ = this.state.moveZ;
-    const rotate = this.state.rotate;
+    // const moveX = this.state.moveX;
+    // const moveZ = this.state.moveZ;
+    // const rotate = this.state.rotate;
 
-    let vrHeadModelPositionObj = {
-      x: this.state.vrHeadModelPosition[0],
-      y: this.state.vrHeadModelPosition[1],
-      z: this.state.vrHeadModelPosition[2],
-      rotate: this.state.rotate,
-    }
+    // let vrHeadModelPositionObj = {
+    //   x: this.state.vrHeadModelPosition[0],
+    //   y: this.state.vrHeadModelPosition[1],
+    //   z: this.state.vrHeadModelPosition[2],
+    //   rotate: this.state.rotate,
+    // }
       // NativeModules.GetHeadModelModule.setHeadModelPosition(vrHeadModelPositionObj);
+      // console.log(this.state.cameraRotation[1]);
     return (
       <View>     
         <Scene 
@@ -180,7 +223,7 @@ export default class Camera extends React.Component {
             transform: [
               { translate: this.state.cameraPosition},
               // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
-              // { rotateY:  rotate },                           //camera的旋转
+              { rotateY:  this.state.cameraRotation[1] },                           //camera的旋转
             ],
           }}
         >                     
