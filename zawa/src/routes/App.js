@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-21 04:04:51
+ * @Last Modified time: 2018-05-24 19:47:18
  */
 import React from 'react';
 import {
@@ -45,11 +45,11 @@ export default class App extends React.Component{
     return (
       <View>
       <AmbientLight 
-        intensity={ 0.8 }
+        intensity={ 1 }
         style={{
-          // transform: [
-          //   {translate: [0, 4, 0]}
-          // ],
+          transform: [
+            {translate: [0, 0, 0]}
+          ],
           color: "#fff",
         }} 
       />        
@@ -57,7 +57,7 @@ export default class App extends React.Component{
           style={{
             transform:[
               {translate: [0, 1000, 100]},
-              {rotateX: -30}
+              {rotateX: -45}
             ]
           }} 
           intensity={1.0}  

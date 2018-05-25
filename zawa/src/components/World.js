@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 22:54:45 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-16 21:10:24
+ * @Last Modified time: 2018-05-23 15:01:19
  */
 import React from 'react';
 import {
@@ -24,7 +24,7 @@ export default class World extends React.Component {
 
   static defaultProps = {
     sky: asset('heaven.png'),
-    size: 100,  // 树的数量
+    size: 20,  // 树的数量
     hasTree: true,
   }
 
@@ -47,11 +47,11 @@ export default class World extends React.Component {
   }
 
   randomScale() {
-    return (Math.random() * 5);
+    return (Math.random() * 2 + 1);
   }
 
   randomHeight() {
-    return (Math.random() + 0.5);
+    return (Math.random() + 0.2);
   }
 
   generateForest(size) {
