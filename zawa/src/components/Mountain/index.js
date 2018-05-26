@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AmbientLight,
+  Animated,
   AppRegistry,
   DirectionalLight,
   NativeModules,
@@ -16,13 +17,10 @@ import {
   VrHeadModel,
 } from 'react-vr';
 
-
-
-
-
 export default class Mountain extends React.Component{
     constructor(props){
         super(props);
+        Animated.Model = Animated.createAnimatedComponent(Model)
         // const fog = NativeModules.Fog;
     }
 
@@ -46,7 +44,7 @@ export default class Mountain extends React.Component{
         const stoneList = this.props.stonePosition.map((position, index) => {
           if(index===this.props.moveIndex){
             return (
-              <Model 
+              <Animated.Model
                 key={index}
                 source={{
                   obj: asset(`${prefix}stone00${index + 2}.obj`),

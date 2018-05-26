@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-26 16:38:18
+ * @Last Modified time: 2018-05-26 17:54:42
  */
 import React from 'react';
 import {
@@ -385,7 +385,7 @@ export default class Jumping extends React.Component{
           hello
         </Text> */}
         <Camera vrPosition={ true }  position={move.slice()} reset={this.state.resetCame} />
-        <Mountain move={upPower} moveIndex={this.Collsion[1]} />
+        <Mountain move={ upPower }  moveIndex={ this.state.mouIndex } />
       </View>
     )
   }
