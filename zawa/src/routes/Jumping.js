@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-26 15:25:37
+ * @Last Modified time: 2018-05-26 16:38:18
  */
 import React from 'react';
 import {
@@ -89,7 +89,7 @@ export default class Jumping extends React.Component{
 
     this.power = 0;
     this.accuPower = 0;
-    this.isCollision = false;
+    this.Collsion = {};
     // const gamePad = window.navigator.getGamepads();
     // this.HapticActuators  = gamePad[1].hapticActuators;
     // this.percent = {};
@@ -109,9 +109,9 @@ export default class Jumping extends React.Component{
             textMove: e.data.moveText.slice()
           })
           break;
-        case 'gamePad':
-          this.gamePad = e.data.Touch;
-          console.log('gamePad: ',this.gamePad)
+        // case 'gamePad':
+        //   this.gamePad = e.data.Touch;
+        //   console.log('gamePad: ',this.gamePad)
         default:
         return;
       }
@@ -123,12 +123,12 @@ export default class Jumping extends React.Component{
       // console.log(e.eventType);
       // this.handleEvent(e);
       // console.log(RCTDeviceEventEmitter);
-      window.postMessage({
-        type:'getGamePad',
-        data:{
-          pre:this.power
-        }
-      })
+      // window.postMessage({
+      //   type:'getGamePad',
+      //   data:{
+      //     pre:this.power
+      //   }
+      // })
     });
   }
 
@@ -149,17 +149,27 @@ export default class Jumping extends React.Component{
           power: 0
         }
       })
-    }else if(upDis < 0 && VrHeadModel.position()[1] < 1 && this.Collision.isCollision===false){
+      console.log('collision: ',this.Collision.isCollision)
+    }else if(upDis < 0 && VrHeadModel.position()[1] < -1 && this.Collision.isCollision===false){
       this.setState({
         resetCame: true
       })
+      window.postMessage({
+        type:'endPower',
+        data:{
+          power: 0
+        }
+      })
+      console.log('collision: ',this.Collision.isCollision)      
     }else{
       this.setState({
         resetCame: false,
         jumpMove: jumpDis,
         jumpUp: upDis
       })
+      console.log('powerr')
     }
+    console.log('collision: ',this.Collision.isCollision)
   }
 
 
@@ -226,13 +236,16 @@ export default class Jumping extends React.Component{
     //   jumpMove: this.power
     // })
     // this.hapticActuators.pulse(0);
+    console.log('001');
     this.setState({
       percent: '',
       pulse: 0,
       play: 'stop',
     })
+    console.log('002')
     this.setjumpDistance(this.power)
-    
+    debugger;
+    console.log('003')
     this.power = 0;
     // window.postMessage ( { type: "direction",  data: {
     //   move : [null, null]
@@ -247,10 +260,12 @@ export default class Jumping extends React.Component{
     console.log('vrPos: ', VrHeadModel.position());
     console.log('vrRot: ', VrHeadModel.rotation());
     console.log('upPower: ',upPower);
+    console.log('reset: ', this.state.resetCame)
     // console.log('vrRot: ', rotate);
     const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
     const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
     const moveOrigin = [-1 * 2 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 2 * Math.cos(rotate[1] * Math.PI / 180)];
+    // const originPos = [0, 4, 0];
     
     window.postMessage({
       type:'postVrHeadModel',
@@ -369,8 +384,8 @@ export default class Jumping extends React.Component{
         }}>
           hello
         </Text> */}
-        <Camera vrPosition={ false }  position={move.slice()} reset={this.state.resetCame} />
-        <Mountain move={upPower} moveIndex={this.mouIndex} />
+        <Camera vrPosition={ true }  position={move.slice()} reset={this.state.resetCame} />
+        <Mountain move={upPower} moveIndex={this.Collsion[1]} />
       </View>
     )
   }
