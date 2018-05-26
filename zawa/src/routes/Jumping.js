@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-24 22:28:22
+ * @Last Modified time: 2018-05-26 15:25:37
  */
 import React from 'react';
 import {
@@ -84,6 +84,7 @@ export default class Jumping extends React.Component{
       textMove: [-0.2, 0.5, -0.4],
       mouUp: 0,
       resetCame: false,
+      mouIndex:null
     }
 
     this.power = 0;
@@ -101,7 +102,7 @@ export default class Jumping extends React.Component{
           break;
         case 'isCollision':
           this.Collision = e.data.Collision;
-          this.mouIndex = e.data.indexCol
+          // this.mouIndex = e.data.indexCol
           break;
         case 'moveText':
           this.setState({
@@ -139,6 +140,7 @@ export default class Jumping extends React.Component{
         resetCame: false,
         jumMove: 0,
         jumpUp: -upDis,
+        mouIndex: this.Collision.indexCol
       })
       // console.log('VRheadModel: ',VrHeadModel.position())
       window.postMessage({

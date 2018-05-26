@@ -31,14 +31,15 @@ export default class Collision extends Module {
             // if((colPos[1]+1 > position[1]) && (Math.pow(colPos[0]-position[0], 2) + Math.pow(colPos[1]-position[1], 2) + Math.pow(colPos[2]-position[2], 4)) <= 2 ){
             //     isCollision = true;
             // }
-            if((colPos[1]+1 < position[1]) && (colPos[0]-0.5 < position[0] < colPos[0]+0.5) && (colPos[2] - 0.5 < position[2] < colPos[2]+0.5)){
+            if((colPos[1] + 1  > position[1]) && (colPos[0]-0.5 < position[0]) && (position[0] < colPos[0]+0.5) && (colPos[2] - 0.5 < position[2]) && (position[2] < colPos[2] + 0.5)){
                 isCollision = true;
                 indexCol = index;
-            }else{
-                isCollision = false;
             }
         })
-        return {isCollision, indexCol}
+        return {
+            isCollision: isCollision, 
+            indexCol: indexCol
+        }
     }
 
     frame(time){
