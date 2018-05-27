@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-26 17:54:42
+ * @Last Modified time: 2018-05-27 11:05:55
  */
 import React from 'react';
 import {
@@ -289,7 +289,7 @@ export default class Jumping extends React.Component{
         >                     
         </Scene>  */}
         <Pano source={asset('heaven.jpg')} />
-        {/* <Text
+        <Text
           style={{
             fontSize: 0.05,
             color: 'green',
@@ -303,10 +303,8 @@ export default class Jumping extends React.Component{
             ]
           }}
         >
-          {this.state.percent}
-       
-
-        </Text> */}
+          {this.state.percent} percent
+        </Text>
         <Sound
           source = {asset('sound/add.mp3')}
           autoPlay = {false}
