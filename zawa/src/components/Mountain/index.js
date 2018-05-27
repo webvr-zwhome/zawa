@@ -46,9 +46,9 @@ export default class Mountain extends React.Component{
         Animated.timing(                            // Animate value over time
           this.state.animaValue,                      // The value to drive
           {
-            toValue: 1,                             // Animate to final value of 1
-            duration: 2000,
-            easing: Easing.ease
+            toValue: 3,                             // Animate to final value of 1
+            // duration: 2000,
+            // easing: Easing.ease
           }
         ).start(); 
       }
@@ -69,7 +69,8 @@ export default class Mountain extends React.Component{
                   transform: [
                     // { translate: [position[0], position[1]+this.props.move, position[2]] }
                     { translate: [position[0], position[1]+this.state.animaValue, position[2]] } 
-                  ]
+                  ],
+                  color: 'red'
                 }}
                 lit={true}
               />

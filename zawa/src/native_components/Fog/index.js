@@ -6,7 +6,7 @@ export default class Fog extends Module {
         super('Fog');
         this._scene = scene;
         this._fog = new THREE.FogExp2( 0xC4E1FF, 0.015);
-        this._geometry = new THREE.PlaneBufferGeometry(2200, 2200, 14, 14);
+        this._geometry = new THREE.PlaneBufferGeometry(2500, 2500, 14, 14);
         this._geometry.rotateX( -Math.PI/2 );
         this._position = this._geometry.attributes.position;
         this._position.dynamic = true;

@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-27 11:30:15
+ * @Last Modified time: 2018-05-27 15:12:39
  */
 import React from 'react';
 import {
@@ -27,7 +27,7 @@ import {
 import Camera from '../components/Camera';
 import Button from '../components/Button';
 import Mountain from '../components/Mountain';
-const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+// const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
@@ -68,8 +68,9 @@ const Styles = StyleSheet.create({
   },
   jumping: {
     width: 0,
-    height: 0
-  }
+    height: 0,
+    display: "none"
+  },
 });
 
 export default class Jumping extends React.Component{
@@ -82,7 +83,6 @@ export default class Jumping extends React.Component{
       pulse: 0,
       play:'stop',
       textMove: [-0.2, 0.5, -0.4],
-      mouUp: 0,
       resetCame: false,
       mouIndex:null
     }
@@ -90,9 +90,6 @@ export default class Jumping extends React.Component{
     this.power = 0;
     this.accuPower = 0;
     this.Collsion = {};
-    // const gamePad = window.navigator.getGamepads();
-    // this.HapticActuators  = gamePad[1].hapticActuators;
-    // this.percent = {};
     const mark = NativeModules.Mark;
     // this.sound = {sound: asset('sound/add.mp3'), playerState:new MediaPlayerState({})}
     window.addEventListener('message', (e)=>{
@@ -116,20 +113,20 @@ export default class Jumping extends React.Component{
         return;
       }
     });
-    RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
-      if (e.type !== 'GamepadInputEvent') {
-        return;
-      }
-      // console.log(e.eventType);
-      // this.handleEvent(e);
-      // console.log(RCTDeviceEventEmitter);
-      // window.postMessage({
-      //   type:'getGamePad',
-      //   data:{
-      //     pre:this.power
-      //   }
-      // })
-    });
+    // RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
+    //   if (e.type !== 'GamepadInputEvent') {
+    //     return;
+    //   }
+    //   // console.log(e.eventType);
+    //   // this.handleEvent(e);
+    //   // console.log(RCTDeviceEventEmitter);
+    //   // window.postMessage({
+    //   //   type:'getGamePad',
+    //   //   data:{
+    //   //     pre:this.power
+    //   //   }
+    //   // })
+    // });
   }
 
   setDis(jumpDis,upDis){
@@ -139,7 +136,7 @@ export default class Jumping extends React.Component{
       this.setState({
         resetCame: false,
         jumMove: 0,
-        jumpUp: -upDis,
+        jumpUp: 0,
         mouIndex: this.Collision.indexCol
       })
       // console.log('VRheadModel: ',VrHeadModel.position())
@@ -167,35 +164,14 @@ export default class Jumping extends React.Component{
         jumpMove: jumpDis,
         jumpUp: upDis
       })
-      console.log('powerr')
+      console.log('power')
     }
     console.log('collision: ',this.Collision.isCollision)
   }
 
 
-  setjumpDistance(power){
-    // let jumpTime = 0;
-    // let defaultPower = 5;
-    // const interval = setInterval(()=>{
-    //   let g = 98;
-    //   jumpTime+=0.01;
-    //   let jumpDis = power/10 * defaultPower * jumpTime;
-    //   let upDis = power * defaultPower * jumpTime - g * Math.pow(jumpTime, 2)/2;
-    //   this.setState({
-    //     jumpMove: jumpDis,
-    //     jumpUp: upDis
-    //   })
-
-    //   if(VrHeadModel.position()[1]<1){
-    //     clearInterval(interval)
-    //     this.setState({
-    //       jumpMove: 0,
-    //       jumpUp: 0,
-    //     })
-    //     console.log('clear')
-    //   }
-    // },100)
-    console.log('power: ',power)
+  setJumpDistance(power){
+    // console.log('power: ',power)
     //向client发送蓄力值信息
     window.postMessage({
       type:'postPower',
@@ -207,7 +183,7 @@ export default class Jumping extends React.Component{
 
   Accumulation(){
     if(this.power < 1){
-      this.power += 0.01;
+      this.power += 0.001;
     }else{
       this.power = 1;
     }
@@ -227,25 +203,15 @@ export default class Jumping extends React.Component{
         HmPos: VrHeadModel.rotation()[1]
       }
     })
-    // console.log('moveDir: ',moveDir)
-    // console.log('power: ',this.power)
   }
 
   clearAccumulation(){
-    // this.setState({
-    //   jumpMove: this.power
-    // })
-    // this.hapticActuators.pulse(0);
-    console.log('001');
     this.setState({
       percent: '',
       pulse: 0,
       play: 'stop',
     })
-    console.log('002')
-    this.setjumpDistance(this.power)
-    debugger;
-    console.log('003')
+    this.setJumpDistance(this.power)
     this.power = 0;
     // window.postMessage ( { type: "direction",  data: {
     //   move : [null, null]
@@ -261,10 +227,9 @@ export default class Jumping extends React.Component{
     console.log('vrRot: ', VrHeadModel.rotation());
     console.log('upPower: ',upPower);
     console.log('reset: ', this.state.resetCame);
-    // console.log('vrRot: ', rotate);
     const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
-    const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
-    const moveOrigin = [-1 * 2 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 2 * Math.cos(rotate[1] * Math.PI / 180)];
+    // const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
+    // const moveOrigin = [-1 * 2 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 2 * Math.cos(rotate[1] * Math.PI / 180)];
     // const originPos = [0, 4, 0];
     
     window.postMessage({
@@ -273,33 +238,44 @@ export default class Jumping extends React.Component{
         HmPosition: VrHeadModel.position()
       }
     })
-    // console.log('move: ', move);
     
     // const cameraRotate = [0, rotate[1], 0];
     return (
       <View>
-        {/* <Scene 
+        <AmbientLight 
           style={{
             transform: [
-              { translate: [move/10, 0, 0]},
-              // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
-              // { rotateY:  rotate },                           //camera的旋转
+              {translate: [0, 1, 0]}  
             ],
+            color: "#778899"
           }}
-        >                     
-        </Scene>  */}
+          intensity={1}
+        ></AmbientLight>
+        <DirectionalLight
+          style={{
+            transform: [
+              {translate: [1,8,1]}
+            ],
+            color: "#606060"
+          }}
+          intensity={1}
+        ></DirectionalLight>
+        <SpotLight
+          style={{
+            transform:[
+              {translate: [-1,70,0]}
+            ]
+          }}
+          intensity={0.5}
+        ></SpotLight>
+
         <Pano source={asset('heaven.jpg')} />
         <Text
           style={{
             fontSize: 0.05,
             color: 'green',
             transform:[
-              // {translate: [VrHeadModel.position()[0]+this.state.textMove[0], VrHeadModel.position()[1]+this.state.textMove[1], VrHeadModel.position()[2]+this.state.textMove[2]]},
-              // {rotateY: (VrHeadModel.rotation()[1])  * Math.PI / 180},
               {translate: [VrHeadModel.position()[0]+this.state.textMove[0], 4, VrHeadModel.position()[2]+this.state.textMove[2]]},
-
-              // {rotateY: VrHeadModel.rotation()[1]}
-              // {translate:[0, 4, -0.6]}
             ]
           }}
         >
@@ -311,79 +287,28 @@ export default class Jumping extends React.Component{
           playControl = {this.state.play}
           volume={10.0}
         ></Sound>
+        
         <Button 
-          style={Styles.getIntoJumping}
+          style={Styles.jumping}
           needFocus={false}
           index={1}
           button={1}
           eventType={'keydown'}
           pulse={this.state.pulse}
           onEvent={() => this.Accumulation()}
-        >
-          {/* <Text style={Styles.text}>JUMPING</Text> */}
-        </Button>
+        ></Button>
         <Button 
-          style={Styles.getIntoJumping}
+          style={Styles.jumping}
           needFocus={false}          
           index={1}
           button={1}
           eventType={'keyup'}
           pulse={this.state.pulse}
           onEvent={() => this.clearAccumulation()}
-        >
-          {/* <Text style={Styles.text}>JUMPING</Text> */}
-        </Button>
-        {/* <Camera /> */}
-        <AmbientLight 
-          style={{
-            transform: [
-              {translate: [0, 1, 0]}  
-            ],
-            color: "#778899"
-          }}
-          intensity={1}
-        >
-        </AmbientLight>
-        <DirectionalLight
-          style={{
-            transform: [
-              {translate: [1,8,1]}
-            ],
-            color: "#606060"
-          }}
-          intensity={1}
-        >
-        </DirectionalLight>
-        <SpotLight
-          style={{
-            transform:[
-              {translate: [-1,70,0]}
-            ]
-          }}
-          intensity={0.5}
-        >
-        </SpotLight>
-        {/* <World /> */}
-        <Pano 
-          source={asset('heaven.png')}
-        >
-        </Pano>
-        {/* <Text
-            style={{
-                backgroundColor: '#777879',
-                fontSize: 0.8,
-                fontWeight: '400',
-                layoutOrigin: [0.5, 0.5],
-                paddingLeft: 0.2,
-                paddingRight: 0.2,
-                textAlign: 'center',
-                textAlignVertical: 'center',
-                transform: [{translate: [0, 0, -3]}],
-        }}>
-          hello
-        </Text> */}
+        ></Button>
+
         <Camera vrPosition={ true }  position={move.slice()} reset={this.state.resetCame} />
-        <Mountain move={ upPower }  moveIndex={ this.state.mouIndex } />
+        <Mountain moveIndex={ this.state.mouIndex } />
       </View>
     )
   }

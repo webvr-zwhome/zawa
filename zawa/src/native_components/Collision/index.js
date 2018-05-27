@@ -43,7 +43,6 @@ export default class Collision extends Module {
             indexCol: indexCol,
         }
     }
-
     frame(time){
         // console.log(time)
     }
