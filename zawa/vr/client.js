@@ -8,11 +8,13 @@ import {MouseRayCaster} from 'ovrui';
 import * as THREE from 'three';
 import ThreeDOFRayCaster from '../src/native_components/inputs/3dof/ThreeDOFRayCaster';
 import RollerCoaster from '../src/native_components/RollerCoaster';
+import Fog from '../src/native_components/Fog';
 
 function init(bundle, parent, options) {
   const scene = new THREE.Scene();
   const threeDOFRayCaster =  new ThreeDOFRayCaster(scene);
   const rollerCoaster = new RollerCoaster(scene);
+  const fog = new Fog(scene);
 
   let cameraPosition = threeDOFRayCaster._getCameraNewPosition();
   const vr = new VRInstance(bundle, 'zawa', parent, {
@@ -23,6 +25,7 @@ function init(bundle, parent, options) {
     ],
     nativeModules: [
       rollerCoaster,
+      fog,
     ],
     cursorVisibility: 'auto',
     scene: scene,

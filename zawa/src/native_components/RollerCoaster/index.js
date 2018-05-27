@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-20 23:13:48
+ * @Last Modified time: 2018-05-27 23:34:55
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
@@ -132,7 +132,7 @@ export default class RollerCoaster extends Module{
             // console.log('right: ', rightPath[i]);
             // console.log(i, '---------------');
         }
-
+        
        
 
         // for (let i = 0, segments = this._params.extrusionSegments; i < segments - 1; i += 5) {
@@ -238,6 +238,7 @@ export default class RollerCoaster extends Module{
             return;
         }
         const timeNow = Date.now();
+        const g = 10;
         
         const t = ( (timeNow - this._startTime) % this._loopTime ) / this._loopTime;
         var prePos = this._path.getPointAt(this._preT);
