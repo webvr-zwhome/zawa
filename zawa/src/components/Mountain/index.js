@@ -21,6 +21,9 @@ export default class Mountain extends React.Component{
     constructor(props){
         super(props);
         Animated.Model = Animated.createAnimatedComponent(Model)
+        this.state={
+          animaValue: 0
+        }
         // const fog = NativeModules.Fog;
     }
 
@@ -38,6 +41,18 @@ export default class Mountain extends React.Component{
         [-6, 0, -10],
       ],
     } 
+    componentWillReceiveProps(){
+      if(this.props.moveIndex !== null){
+        Animated.timing(                            // Animate value over time
+          this.state.animaValue,                      // The value to drive
+          {
+            toValue: 1,                             // Animate to final value of 1
+            duration: 2000,
+            easing: Easing.ease
+          }
+        ).start(); 
+      }
+    }
    
     render() {
         const prefix = 'models/jumping/stones/';
@@ -52,7 +67,8 @@ export default class Mountain extends React.Component{
                 }}
                 style={{
                   transform: [
-                    { translate: [position[0], position[1]+this.props.move, position[2]] }
+                    // { translate: [position[0], position[1]+this.props.move, position[2]] }
+                    { translate: [position[0], position[1]+this.state.animaValue, position[2]] } 
                   ]
                 }}
                 lit={true}
@@ -76,6 +92,7 @@ export default class Mountain extends React.Component{
             )
           }
         })
+        
         return(
             <View>
               <Model
