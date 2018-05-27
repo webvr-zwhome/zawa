@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-27 11:05:55
+ * @Last Modified time: 2018-05-27 11:30:15
  */
 import React from 'react';
 import {
@@ -260,7 +260,7 @@ export default class Jumping extends React.Component{
     console.log('vrPos: ', VrHeadModel.position());
     console.log('vrRot: ', VrHeadModel.rotation());
     console.log('upPower: ',upPower);
-    console.log('reset: ', this.state.resetCame)
+    console.log('reset: ', this.state.resetCame);
     // console.log('vrRot: ', rotate);
     const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
     const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
