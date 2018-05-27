@@ -128,7 +128,7 @@ export default class RollerCoaster extends Module{
             this._rollerCoaster.add(box(leftPath[i], 0xff0000));              // for debug
             this._rollerCoaster.add(box(rightPath[i], 0x0000ff));              // for debug
 
-            console.log('left: ', box(leftPath[i], 0xff0000));
+            // console.log('left: ', box(leftPath[i], 0xff0000));
             // console.log('right: ', rightPath[i]);
             // console.log(i, '---------------');
         }

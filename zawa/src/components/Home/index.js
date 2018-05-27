@@ -30,7 +30,7 @@ export default class Room extends React.Component {
   render() {
     return (
       <View>
-        <Model
+        {/* <Model
           source={{
             mtl: asset('models/tree/sakura.mtl'),
             obj: asset('models/tree/sakura.obj'),
@@ -43,7 +43,7 @@ export default class Room extends React.Component {
             ],
           }}
           lit={true}
-        ></Model>
+        ></Model> */}
         <Model
           source={{
             mtl: asset('models/main_room/room525.mtl'),

@@ -24,9 +24,20 @@ export default class World extends React.Component {
 
   static defaultProps = {
     sky: asset('heaven.png'),
-    size: 20,  // 树的数量
+    size: 0,  // 树的数量
     hasTree: true,
   }
+
+  state = {
+    forest: [],
+  }
+
+  componentWillMount() {
+    this.setState({
+      forest: this.generateForest(this.props.size),
+    })
+  }
+
 
   randomPosition() {
     const THRESHOLD_CIRCLE = 50;    // 建筑区域阈值
@@ -72,7 +83,7 @@ export default class World extends React.Component {
   
   render() {
     const { sky, size, hasTree, plane } = this.props;
-    const test = 1;
+    // const test = 1;
     const forest = this.generateForest(size);
     return (
       <View>

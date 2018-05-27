@@ -12,6 +12,7 @@ import {
   View,
   VrButton,
   StyleSheet,
+  VrHeadModel,
   NativeModules,
 } from 'react-vr';
 import App from './src/routes/App';
@@ -25,6 +26,9 @@ const rollerCoaster = NativeModules.RollerCoaster;
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 // const history = createBrowserHistory();
+//pusher
+importScripts('https://js.pusher.com/4.1/pusher.worker.min.js');
+
 
 var Styles = StyleSheet.create({
   button: {
@@ -90,8 +94,95 @@ export default class zawa extends React.Component {
     });
   }
   state = {
-    mode: "game-rollercoaster",
+    mode: 'game-rollercoaster',
+    // headPosition:[0,0,0],
+    // headRotation:[0,0,0],
+    // memberId: ''
   }
+
+  //pusher
+  componentWillMount(){
+    const pusher = new Pusher('0b6e86e935ef11ade5df',{
+      authEndpoint:'http://123.206.180.98:5000/pusher/auth',
+      auth: {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers':'Content-Type, Authorization'
+        }
+      },
+      cluster: 'ap1',
+      encrypted: true
+    })
+
+    this.socketId = null;
+    
+    //   fetch('http://127.0.0.1:5000/pusher/trigger', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     socketId: this.socketId,
+    //     channelId: this.channelId,
+    //   })
+    // });
+    // })
+
+    // this.channelId ='channel-' + document.getElementById('MyID').value
+    // this.channelId = 'channel-1234';
+    // console.log('channelId: ',this.channelId)
+    // const channel = pusher.subscribe(this.channelId)
+
+    // channel.bind('my-event',(data) => {
+    //   console.log('data: ',data)
+    //   alert(data.message)
+    // })
+
+    // presence channel
+    this.presenceChannelName = 'presence-1234'
+    const presenceChannel = pusher.subscribe(this.presenceChannelName);
+    // presenceChannel = pusher.subscribe(this.presenceChannelName);
+
+    //事件绑定
+    // presenceChannel.bind('pusher:member_added', (member)=>{
+    //   console.log(member.id)
+    // })
+    // presenceChannel.bind('pusher:subscription_succeeded',(members)=>{
+    //   console.log('sucessConnect')
+    //   // setInterval(()=>{
+    //   //   this.presenceChannel.trigger('client-headUpdate',{
+    //   //     position:VrHeadModel.position(),
+    //   //     rotation:VrHeadModel.rotation(),
+    //   //     memberId:presenceChannel.members.me.id,
+    //   //   })
+    //   // },500)
+    // })
+    this.preChannel = presenceChannel
+    
+
+    // this.presenceChannel.bind('client-headUpdate',(data)=>{
+    //   // console.log('VRhead: ',data)
+    //   this.setState({
+    //     headPosition: data.position,
+    //     headRotation: data.rotation,
+    //     memberId: data.memberId,
+    //   })
+    // })
+
+
+    pusher.connection.bind('connected',() => {
+      this.socketId = pusher.connection.socket_id
+      console.log('connected: ', this.socketId);
+    })    
+  }
+
+  // handleClick(e) {
+  //   this.setState({
+  //     mode: 'home',
+  //   })
+  // }
+  
   backHome() {
     this.setState({
       mode: 'home',
@@ -111,33 +202,24 @@ export default class zawa extends React.Component {
   }
 
   render() {
+    const Channel = this.preChannel;
     const mode = this.state.mode;
+    // const Position = this.state.headPosition;
+    // const Rotation = this.state.headRotation;
+    // const MemberId = this.state.memberId;
     return (
       // <Router>
         <View>
           {
             mode !== "home" ? null : 
             <View>
-              {/* <Button 
-                style={Styles.getIntoRollerCoaster}
-                index={0}
-                button={3}
-                eventType={'keydown'}
-                onEvent={() => this.getIntoRollerCoaster()}>
-                <Text style={Styles.text}>ROLLERCOASTER</Text>
-              </Button>
-              <Button 
-                style={Styles.getIntoJumping}
-                index={0}
-                button={3}
-                eventType={'keydown'}
-                onEvent={() => this.getIntoJumping()}>
-                <Text style={Styles.text}>JUMPING</Text>
-              </Button> */}
+              {/* <VrButton id="home" onClick={e => this.handleClick(e)}></VrButton> */}
+              {/* <App AppChannel={Channel} /> */}
               <App 
-                  onEnterJumping={() => this.getIntoJumping()}
-                  onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
-                  onBackHome={() => this.backHome()}
+                AppChannel={Channel}
+                onEnterJumping={() => this.getIntoJumping()}
+                onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                onBackHome={() => this.backHome()}
               />
               {/* <Route exact path="/" component={App}></Route> */}
             </View>
@@ -145,33 +227,20 @@ export default class zawa extends React.Component {
           {
             mode !== 'game-jumping' ? null :
             <View>
-              {/* <Button 
-                style={Styles.backHome}
-                index={0}
-                button={3}
-                eventType={'keydown'}
-                onEvent={() => this.backHome()}>
-                <Text style={Styles.text}>BACK</Text>
-              </Button> */}
+              {/* <VrButton id="game-chess" onClick={e => this.handleClick(e)}></VrButton> */}
+              {/* <Chess /> */}
               <Jumping 
                   onEnterJumping={() => this.getIntoJumping()}
                   onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
                   onBackHome={() => this.backHome()}
               />
-              {/* <Route exact path="/" component={Jumping} /> */}
             </View>
           }
           {
             mode !== 'game-rollercoaster' ? null :
             <View>
-              {/* <Button 
-                style={Styles.backHome}
-                index={0}
-                button={3}
-                eventType={'keydown'}
-                onEvent={() => this.backHome()}>
-                <Text style={Styles.text}>BACK</Text>
-              </Button> */}
+              {/* <VrButton id="game-foodshot" onClick={ e => this.handleClick(e) }></VrButton> */}
+              {/* <FoodShot /> */}
               <RollerCoasterGame 
                 onEnterJumping={() => this.getIntoJumping()}
                 onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
