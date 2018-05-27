@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-20 22:58:23
+ * @Last Modified time: 2018-05-27 12:52:20
  */
 import React from 'react';
 import {
@@ -137,8 +137,8 @@ export default class RollerCoasterGame extends React.Component{
         <World 
           hasTree={false} 
           plane={{
-            obj: asset('models/plane/plane_roller.obj'),
-            mtl: asset('models/plane/plane_roller.mtl'),
+            obj: asset('models/plane/planeroller527.obj'),
+            mtl: asset('models/plane/planeroller527.mtl'),
         }}>
           {/* <View style={Styles.interface}> */}
             {/* <View> */}

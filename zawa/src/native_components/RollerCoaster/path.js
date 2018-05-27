@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 
 const path = [
-    new THREE.Vector3( 50, 12, 0 ),
-    new THREE.Vector3( 80, 24, -30 ),
-    new THREE.Vector3( 66, 26, -50 ),
-    new THREE.Vector3( 46, 30, -75 ),
+    new THREE.Vector3( 50, 0, 0 ),
+    new THREE.Vector3( 50, 0, -8 ),
+
+    // new THREE.Vector3( 80, 6, -30 ),
+    new THREE.Vector3( 66, 20, -50 ),
+    // new THREE.Vector3( 46, 30, -75 ),
     new THREE.Vector3( 0, 36, -100),
     
     new THREE.Vector3( -66, 30, -60),
@@ -44,8 +46,9 @@ const path = [
     new THREE.Vector3( -100, 20, 100 ),
     new THREE.Vector3( 0, 5, 100 ),
 
-    new THREE.Vector3( 20, 12, 80 ),
-    // new THREE.Vector3( 50, 12, 0 ),
+    new THREE.Vector3( 20, 12, 50 ),
+    new THREE.Vector3( 50, 0, 8 ),
+    new THREE.Vector3( 50, 0, 0 ),
 ]
 export {
    path,
