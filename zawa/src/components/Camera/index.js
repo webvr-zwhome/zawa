@@ -1,8 +1,8 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
- * @Last Modified by:   zhaoxiaoqi 
- * @Last Modified time: 2018-04-12 23:18:16 
+ * @Last Modified by: zhaoxiaoqi
+ * @Last Modified time: 2018-05-25 02:09:37
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -25,8 +25,8 @@ const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 export default class Camera extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     const cameraPosition = VrHeadModel.position();
     this.state = {
       buttons: [],     // 手柄按键
@@ -144,6 +144,7 @@ export default class Camera extends React.Component {
     //   }
     // });
     window.addEventListener('message', this.onWindowMessage); // 监听瞬移事件
+    this.prePosition = this.state.cameraPosition;
   }
 
   componentWillMount() {
@@ -159,7 +160,7 @@ export default class Camera extends React.Component {
     if (this._isMounted && e.data.type == "newPosition") {
       const position = e.data.position;
       this.setState({
-        cameraPosition: [position.x, 4, position.z],
+        cameraPosition: [position.x, VrHeadModel.position()[1], position.z],
       })
     }
   }
@@ -182,12 +183,22 @@ export default class Camera extends React.Component {
     //   rotate: this.state.rotate,
     // }
       // NativeModules.GetHeadModelModule.setHeadModelPosition(vrHeadModelPositionObj);
+    const { vrPosition = false, position = [0, 0, 0], reset = false } = this.props;
+    const originPos = [0, 4, 0];
+    // console.log('prePos: ', this.prePosition);
+
+    const curPosition = reset ? originPos.slice() : [position[0] + this.prePosition[0], this.prePosition[1]+position[1], position[2] + this.prePosition[2]];
+    this.prePosition = curPosition;
+    // console.log('curPos: ', curPosition);
     return (
       <View>     
         <Scene 
           style={{
             transform: [
-              { translate: this.state.cameraPosition},
+              // {rotateX: rotation[0]},
+              // {rotateY: rotation[1]},
+              // {rotateZ: rotation[2]},
+              { translate: !vrPosition ? this.state.cameraPosition : curPosition},
               // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
               // { rotateY:  rotate },                           //camera的旋转
             ],

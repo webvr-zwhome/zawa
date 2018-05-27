@@ -29,7 +29,6 @@ export default class  HumanList extends React.Component {
         this.updateMember = this.updateMember.bind(this)
     }
     componentWillMount(){
-
         this.Channel.bind('pusher:subscription_succeeded',(members)=>{
             console.log('Render headmodel')
             setInterval(()=>{
@@ -56,8 +55,7 @@ export default class  HumanList extends React.Component {
         member.rotation = rotation;
         const memberAdd = {};
         memberAdd[memberId] = member;
-        this.memberList =  Object.assign({},this.memberList,memberAdd);
-        
+        this.memberList =  Object.assign({},this.memberList,memberAdd); 
     }
       
     updateMember(memberId,position,rotation){

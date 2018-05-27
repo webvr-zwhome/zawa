@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-13 11:28:40
+ * @Last Modified time: 2018-05-27 15:52:25
  */
 import React from 'react';
 import {
@@ -11,6 +11,7 @@ import {
   DirectionalLight,
   NativeModules,
   StyleSheet,
+  Sound,
   asset,
   Pano,
   Text,
@@ -23,12 +24,221 @@ import {
 } from 'react-vr';
 
 import Camera from '../components/Camera';
+import Button from '../components/Button';
+import Mountain from '../components/Mountain';
+// const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+
+// const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+
+
+const Styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#777879',
+    borderRadius: 0,
+    borderWidth: 0,
+    borderColor: '#7b612f',
+    flex: 1,
+    flexDirection: 'column',
+    width: 0,
+    height: 0,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  getIntoJumping: {
+    transform: [
+      {translate: [3, 6, -15]},
+    ],
+  },
+  getIntoRollerCoaster: {
+    transform: [
+      {translate: [-10, 6, 3]},
+      {rotateY: 90}
+    ],
+  },
+  backHome: {
+    transform: [
+      {translate: [4, 4, -3]}
+    ],
+  },
+  text: {
+    fontSize: 0.2, 
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  jumping: {
+    width: 0,
+    height: 0,
+    display: "none"
+  },
+});
 
 export default class Jumping extends React.Component{
   constructor(props) {
     super(props);
+    this.state={
+      jumpMove: 0,
+      jumpUp: 0,
+      percent: '',
+      pulse: 0,
+      play:'stop',
+      textMove: [-0.2, 0.5, -0.4],
+      resetCame: false,
+      mouIndex:null
+    }
+
+    this.power = 0;
+    this.accuPower = 0;
+    this.Collsion = {};
+    const mark = NativeModules.Mark;
+    // this.sound = {sound: asset('sound/add.mp3'), playerState:new MediaPlayerState({})}
+    window.addEventListener('message', (e)=>{
+      switch (e.data.type) {
+        case 'jumpPosition':
+          this.setDis(e.data.jumpDis, e.data.upDis);
+          break;
+        case 'isCollision':
+          this.Collision = e.data.Collision;
+          // this.mouIndex = e.data.indexCol
+          break;
+        case 'moveText':
+          this.setState({
+            textMove: e.data.moveText.slice()
+          })
+          break;
+        // case 'gamePad':
+        //   this.gamePad = e.data.Touch;
+        //   console.log('gamePad: ',this.gamePad)
+        default:
+        return;
+      }
+    });
+    // RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
+    //   if (e.type !== 'GamepadInputEvent') {
+    //     return;
+    //   }
+    //   // console.log(e.eventType);
+    //   // this.handleEvent(e);
+    //   // console.log(RCTDeviceEventEmitter);
+    //   // window.postMessage({
+    //   //   type:'getGamePad',
+    //   //   data:{
+    //   //     pre:this.power
+    //   //   }
+    //   // })
+    // });
   }
+
+  setDis(jumpDis,upDis){
+    console.log('jumpDis: ',jumpDis)
+    console.log('jumpUp: ',upDis)
+    if(upDis < 0 && this.Collision.isCollision){
+      this.setState({
+        resetCame: false,
+        jumMove: 0,
+        jumpUp: 0,
+        mouIndex: this.Collision.indexCol
+      })
+      // console.log('VRheadModel: ',VrHeadModel.position())
+      window.postMessage({
+        type:'endPower',
+        data:{
+          power: 0
+        }
+      })
+      console.log('collision: ',this.Collision.isCollision)
+    }else if(upDis < 0 && VrHeadModel.position()[1] < -1 && this.Collision.isCollision===false){
+      this.setState({
+        resetCame: true
+      })
+      window.postMessage({
+        type:'endPower',
+        data:{
+          power: 0
+        }
+      })
+      console.log('collision: ',this.Collision.isCollision)      
+    }else{
+      this.setState({
+        resetCame: false,
+        jumpMove: jumpDis,
+        jumpUp: upDis
+      })
+      console.log('power')
+    }
+    console.log('collision: ',this.Collision.isCollision)
+  }
+
+
+  setJumpDistance(power){
+    // console.log('power: ',power)
+    //向client发送蓄力值信息
+    window.postMessage({
+      type:'postPower',
+      data:{
+        power: power
+      }
+    })
+  }
+
+  Accumulation(){
+    if(this.power < 1){
+      this.power += 0.001;
+    }else{
+      this.power = 1;
+    }
+    this.setState({
+      jumpMove:0,
+      jumpUp: 0,
+      percent: `${(this.power * 100).toFixed()}%`,
+      pulse: this.power,
+      play: 'play'
+    })
+    // window.postMessage ( { type: "direction",  data: {
+    //   move : [moveDir, moveOrigin]
+    // }} ) ;
+    window.postMessage({
+      type: "rotateText",
+      data:{
+        HmPos: VrHeadModel.rotation()[1]
+      }
+    })
+  }
+
+  clearAccumulation(){
+    this.setState({
+      percent: '',
+      pulse: 0,
+      play: 'stop',
+    })
+    this.setJumpDistance(this.power)
+    this.power = 0;
+    // window.postMessage ( { type: "direction",  data: {
+    //   move : [null, null]
+    // }} ) ;
+    console.log('endPower: ',this.power)
+  }
+
   render() {
+    const accuPower = this.state.jumpMove;
+    const upPower = this.state.jumpUp;
+    const rotate = VrHeadModel.rotation();
+    console.log('vrPos: ', VrHeadModel.position());
+    console.log('vrRot: ', VrHeadModel.rotation());
+    console.log('upPower: ',upPower);
+    console.log('reset: ', this.state.resetCame);
+    const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
+    // const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
+    // const moveOrigin = [-1 * 2 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 2 * Math.cos(rotate[1] * Math.PI / 180)];
+    // const originPos = [0, 4, 0];
+    
+    window.postMessage({
+      type:'postVrHeadModel',
+      data:{
+        HmPosition: VrHeadModel.position()
+      }
+    })
+    
+    // const cameraRotate = [0, rotate[1], 0];
     return (
       <View>
         {/* <Pano source={asset('chess-world.jpg')}/> */}
@@ -38,11 +248,10 @@ export default class Jumping extends React.Component{
             transform: [
               {translate: [0, 1, 0]}  
             ],
-            color: "#D3E7B9"            
+            color: "#778899"
           }}
           intensity={1}
-        >
-         </AmbientLight>
+        ></AmbientLight>
         <DirectionalLight
           style={{
             transform: [
@@ -51,215 +260,57 @@ export default class Jumping extends React.Component{
             color: "#606060"
           }}
           intensity={1}
-        >
-        </DirectionalLight>
+        ></DirectionalLight>
         <SpotLight
           style={{
             transform:[
-              {translate: [-1,50,0]}
+              {translate: [-1,70,0]}
             ]
           }}
           intensity={0.5}
-        >
-        </SpotLight>
-        {/* <World /> */}
-        <Pano 
-          source={asset('heaven.png')}
-        >
-        </Pano>
-        <Camera />
-        <Text
-            style={{
-                backgroundColor: '#777879',
-                fontSize: 0.8,
-                fontWeight: '400',
-                layoutOrigin: [0.5, 0.5],
-                paddingLeft: 0.2,
-                paddingRight: 0.2,
-                textAlign: 'center',
-                textAlignVertical: 'center',
-                transform: [{translate: [0, 0, -3]}],
-        }}>
-          hello
-        </Text>
-        <Model
-          source={{
-            obj: asset('models/jumping/land.obj'),
-            mtl: asset('models/jumping/land.mtl')
-          }}
-          style={{
-            transform:[
-              {translate: [20, -60, -30]},
-              {scale: 100}
-            ]
-          }}
-          lit={true}
-          // wireframe={true}
-        >
-        </Model>
-        {/* stones */}
-        <View
-          style={{
-            transform: [
-              {translate: [-1.2, 1, 0.7]},
-              {scale: 0.2}
-            ]
-          }}
+        ></SpotLight>
 
+        <Pano source={asset('heaven.jpg')} />
+        <Text
+          style={{
+            fontSize: 0.05,
+            color: 'green',
+            transform:[
+              {translate: [VrHeadModel.position()[0]+this.state.textMove[0], 4, VrHeadModel.position()[2]+this.state.textMove[2]]},
+            ]
+          }}
         >
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone001.obj'),
-              mtl: asset('models/jumping/stones/stone001.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone002.obj'),
-              mtl: asset('models/jumping/stones/stone002.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone003.obj'),
-              mtl: asset('models/jumping/stones/stone003.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone004.obj'),
-              mtl: asset('models/jumping/stones/stone004.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone005.obj'),
-              mtl: asset('models/jumping/stones/stone005.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone006.obj'),
-              mtl: asset('models/jumping/stones/stone006.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone007.obj'),
-              mtl: asset('models/jumping/stones/stone007.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone007.obj'),
-              mtl: asset('models/jumping/stones/stone007.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone008.obj'),
-              mtl: asset('models/jumping/stones/stone008.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}
-            
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone009.obj'),
-              mtl: asset('models/jumping/stones/stone009.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}
-          
-          >
-          </Model>
-          <Model 
-            source={{
-              obj: asset('models/jumping/stones/stone010.obj'),
-              mtl: asset('models/jumping/stones/stone010.mtl')
-            }}
-            style={{
-              transform: [
-                {translate: [0, 0, 0]}
-              ]
-            }}
-            lit={true}            
-          >
-          </Model>
-        </View>
-      </View> 
+          {this.state.percent} percent
+        </Text>
+        <Sound
+          source = {asset('sound/add.mp3')}
+          autoPlay = {false}
+          playControl = {this.state.play}
+          volume={10.0}
+        ></Sound>
+        
+        <Button 
+          style={Styles.jumping}
+          needFocus={false}
+          index={1}
+          button={1}
+          eventType={'keydown'}
+          pulse={this.state.pulse}
+          onEvent={() => this.Accumulation()}
+        ></Button>
+        <Button 
+          style={Styles.jumping}
+          needFocus={false}          
+          index={1}
+          button={1}
+          eventType={'keyup'}
+          pulse={this.state.pulse}
+          onEvent={() => this.clearAccumulation()}
+        ></Button>
+
+        <Camera vrPosition={ true }  position={move.slice()} reset={this.state.resetCame} />
+        <Mountain moveIndex={ this.state.mouIndex } />
+      </View>
     )
   }
 }

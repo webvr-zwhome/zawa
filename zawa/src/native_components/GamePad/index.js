@@ -1,0 +1,37 @@
+import {Module} from "react-vr-web";
+import * as  THREE from 'three';
+
+export default class GamePad extends Module {
+    constructor(){
+        super('GamePad');
+        // super('Fog');
+        // this._scene = scene;
+        // this._fog = new THREE.FogExp2( 0xefd1b5, 0.04);
+        // this._fog = new THREE.Fog( 0xefd1b5, 0.005, 10);
+        // const gamePad = navigator.getGamepads();
+        // this.HapticActuators  = gamePad[1].hapticActuators;
+        window.ongamepadconnected = function(e) {
+            // All buttons and axes values can be accessed through
+            // let gamepad =  e.gamepad;
+            console.log('gamePad: ');
+          };
+        console.log('gamePad: ');
+        this.init();
+    }
+
+    init() {
+        // const parent = new THREE.Object3D();
+        // parent.add(this._fog);
+        // this._scene.fog = this._fog;
+    }
+    setAct(pre){
+        const gamePad = navigator.getGamepads();
+        const HapticActuators = gamePad[1].hapticActuators;
+        HapticActuators[0].pulse(pre, 1000);
+        // this.hapticActuators.pulse(per);
+        console.log('setAct')
+    }
+    frame(time){
+        // console.log(time)
+    }
+}
