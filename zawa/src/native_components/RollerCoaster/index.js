@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-27 23:34:55
+ * @Last Modified time: 2018-05-29 09:54:19
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
@@ -230,7 +230,7 @@ export default class RollerCoaster extends Module{
         this._tubeRight = meshRight;
         // this._tubeLeft.position.set(-0.2, 0.1, 0);
         // this._tubeRight.position.set(0.2, 0.1, 0);
-        console.log(this._tube);
+        // console.log(this._tube);
     }
 
     frame(time) {
@@ -238,9 +238,10 @@ export default class RollerCoaster extends Module{
             return;
         }
         const timeNow = Date.now();
-        const g = 10;
+        const g = 1000;
         
-        const t = ( (timeNow - this._startTime) % this._loopTime ) / this._loopTime;
+        let t = ( (timeNow - this._startTime) % this._loopTime ) / this._loopTime;
+        console.log(t);
         var prePos = this._path.getPointAt(this._preT);
         var pos = this._path.getPointAt(t);
         // var segments = this._tube.geometry.tangents.length;
@@ -258,6 +259,14 @@ export default class RollerCoaster extends Module{
 
         // we move on a offset on its binormal
         // pos.add(this._normal.clone().multiplyScalar(offset));
+        // console.log(timeNow);
+        // console.log(((timeNow - this._startTime) % this._loopTime));
+        // if (dir.y > 0) { 
+        //     t = t - g / ((timeNow - this._startTime) % this._loopTime);
+        // } else {
+        //     t = t + g / ((timeNow - this._startTime) % this._loopTime);
+        // }
+        // pos = this._path.getPointAt(t);
         pos.add(new THREE.Vector3(0, offset, 0));
         this._setPosition(pos);
 
@@ -297,7 +306,7 @@ export default class RollerCoaster extends Module{
     }
 
     hide(visible) {
-        console.log(this._rollerCoaster);
+        // console.log(this._rollerCoaster);
         this._rollerCoaster.visible = visible;
     }
 

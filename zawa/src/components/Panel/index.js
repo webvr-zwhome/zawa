@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-18 23:08:16 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-21 05:57:43
+ * @Last Modified time: 2018-05-28 20:32:48
  */
 import React from 'react';
 import {
@@ -101,7 +101,7 @@ export default class Panel extends React.Component{
             if (e.gamepad === 1 && e.button === 1) {
                 var position = VrHeadModel.position();
                 var rotation = VrHeadModel.rotation()[1];
-                console.log('rotation', rotation);
+                // console.log('rotation', rotation);
                 if(e.eventType === 'keydown') {
                     this.setState({
                         display: true,
