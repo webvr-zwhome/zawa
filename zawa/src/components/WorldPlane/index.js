@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:01:09 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-04-12 23:17:08
+ * @Last Modified time: 2018-05-16 21:09:19
  */
 import React from 'react';
 import { 
@@ -15,18 +15,20 @@ export default class WorldPlane extends React.Component{
     super(props);
   }
   render() {
-    const { position } = this.props;
+    const { position, source = {
+      obj: asset('models/plane/plane.obj'),
+      mtl: asset('models/plane/plane.mtl'),
+    } } = this.props;
     return (
       <Model 
-        source={{
-          obj: asset('models/plane/plane.obj'),
-          mtl: asset('models/plane/plane.mtl'),
-        }}
+        source={ source }
         style={{
           transform: [
             { translate: position },
+            { scale: 10 }
           ]
         }}
+        lit={true}
       />
     )
   }

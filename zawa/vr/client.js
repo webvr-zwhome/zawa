@@ -12,10 +12,15 @@ import Water from '../src/native_components/Water';
 import Mark from '../src/native_components/Mark';
 import Collision from '../src/native_components/Collision';
 // import GamePad from '../src/native_components/GamePad'
+import RollerCoaster from '../src/native_components/RollerCoaster';
+// import Fog from '../src/native_components/Fog';
 
 function init(bundle, parent, options) {
   const scene = new THREE.Scene();
   const threeDOFRayCaster =  new ThreeDOFRayCaster(scene);
+  const rollerCoaster = new RollerCoaster(scene);
+  // const fog = new Fog(scene);
+
   let cameraPosition = threeDOFRayCaster._getCameraNewPosition();
   const fog = new Fog(scene);
   const water = new Water(scene);
@@ -37,24 +42,29 @@ function init(bundle, parent, options) {
       water,
       mark,
       collision,
-      // gamePad,
+      rollerCoaster,
+      fog,
     ],
     cursorVisibility: 'auto',
     scene: scene,
     ...options,
   });
-  vr.render = function(time) {
+
+  vr.render = function(time) { 
     // Any custom behavior you want to perform on each frame goes here
     fog.frame(time);
     water.frame(time);
     mark.frame();
-    // gamePad.frame();
+    rollerCoaster.frame(time);    // start play roller coaster
     const cameraNewPosition = threeDOFRayCaster._getCameraNewPosition();
+    const cameraNewPositionInRoller = rollerCoaster.getPosition();
+    const cameraNewRotationInRoller = rollerCoaster.getRotation();
     const defaultPower = 10;
+    // console.log(cameraNewRotationInRoller);
 
     if(cameraNewPosition != cameraPosition) {
       // console.log(cameraNewPosition);
-     
+      
       vr.rootView.context.bridge._worker.postMessage({
         type: "newPosition", 
         position: cameraNewPosition,
@@ -120,6 +130,21 @@ function init(bundle, parent, options) {
     }
   });
   
+  if(rollerCoaster.getStatus() && cameraNewPositionInRoller != cameraPosition) {
+    // console.log(cameraNewPosition);
+    vr.rootView.context.bridge._worker.postMessage({
+      type: "rollerPosition", 
+      position: cameraNewPositionInRoller,
+    });
+
+    vr.rootView.context.bridge._worker.postMessage({
+      type: "rollerRotation", 
+      rotation: cameraNewRotationInRoller,
+    });
+    cameraPosition = cameraNewPositionInRoller;
+  }
+
+
   // Begin the animation loop  
   vr.start();
   return vr;
@@ -137,5 +162,6 @@ function init(bundle, parent, options) {
 //     return;
 //   }
 // }
+
 
 window.ReactVR = {init};

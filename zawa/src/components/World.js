@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 22:54:45 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-04-29 22:38:38
+ * @Last Modified time: 2018-05-26 16:35:32
  */
 import React from 'react';
 import {
@@ -24,7 +24,7 @@ export default class World extends React.Component {
 
   static defaultProps = {
     sky: asset('heaven.png'),
-    size: 100,  // 树的数量
+    size: 0,  // 树的数量
     hasTree: true,
   }
 
@@ -58,11 +58,11 @@ export default class World extends React.Component {
   }
 
   randomScale() {
-    return (Math.random() * 5);
+    return (Math.random() * 2 + 1);
   }
 
   randomHeight() {
-    return (Math.random() + 0.5);
+    return (Math.random() + 0.2);
   }
 
   generateForest(size) {
@@ -82,12 +82,12 @@ export default class World extends React.Component {
   }
   
   render() {
-    const { sky, size, hasTree } = this.props;
-    // const forest = this.generateForest(size);
-    const forest = this.state.forest;
+    const { sky, size, hasTree, plane } = this.props;
+    // const test = 1;
+    const forest = this.generateForest(size);
     return (
       <View>
-        <AmbientLightAll />
+        {/* <AmbientLightAll /> */}
         <WorldPano source={sky} />
         {
           !hasTree ? null : forest.map((tree, index) => (
@@ -101,7 +101,8 @@ export default class World extends React.Component {
           ))
         }
         { this.props.children }
-        <WorldPlane position={[0, 0, 0]}/>
+        <WorldPlane position={[0, 0, 0]} source={plane}
+        />
       </View>
     )
   }

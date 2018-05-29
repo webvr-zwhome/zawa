@@ -12,12 +12,16 @@ import {
   View,
   VrButton,
   StyleSheet,
-  VrHeadModel
+  VrHeadModel,
+  NativeModules,
 } from 'react-vr';
 import App from './src/routes/App';
 import Jumping from './src/routes/Jumping';
-import RollerCoaster from './src/routes/RollerCoaster';
+import RollerCoasterGame from './src/routes/RollerCoaster';
 import Button from './src/components/Button';
+import Panel from './src/components/Panel';
+const rollerCoaster = NativeModules.RollerCoaster;
+
 
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
@@ -90,7 +94,7 @@ export default class zawa extends React.Component {
     });
   }
   state = {
-    mode: 'game-jumping',
+    mode: 'game-rollercoaster',
     // headPosition:[0,0,0],
     // headRotation:[0,0,0],
     // memberId: ''
@@ -173,6 +177,12 @@ export default class zawa extends React.Component {
     })    
   }
 
+  // handleClick(e) {
+  //   this.setState({
+  //     mode: 'home',
+  //   })
+  // }
+  
   backHome() {
     this.setState({
       mode: 'home',
@@ -190,7 +200,7 @@ export default class zawa extends React.Component {
       mode: 'game-rollercoaster',
     });
   }
-  
+
   render() {
     const Channel = this.preChannel;
     const mode = this.state.mode;
@@ -203,55 +213,40 @@ export default class zawa extends React.Component {
           {
             mode !== "home" ? null : 
             <View>
-              {/* {
-                this.state.memberId=='' ? <App /> : <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} />
-              } */}
-              {/* <App AppPosition={Position} AppRotation={Rotation} AppMemberId={MemberId} AppChannel={preChannel} /> */}              
-              <Button 
-                style={Styles.getIntoRollerCoaster}
-                index={0}
-                button={3}
-                eventType={'keydown'}
-                onEvent={() => this.getIntoRollerCoaster()}>
-                <Text style={Styles.text}>ROLLERCOASTER</Text>
-              </Button>
-              <Button 
-                style={Styles.getIntoJumping}
-                index={0}
-                button={3}
-                eventType={'keydown'}
-                onEvent={() => this.getIntoJumping()}>
-                <Text style={Styles.text}>JUMPING</Text>
-              </Button>
-              <App AppChannel={Channel} />
+              {/* <VrButton id="home" onClick={e => this.handleClick(e)}></VrButton> */}
+              {/* <App AppChannel={Channel} /> */}
+              <App 
+                AppChannel={Channel}
+                onEnterJumping={() => this.getIntoJumping()}
+                onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                onBackHome={() => this.backHome()}
+              />
+              {/* <Route exact path="/" component={App}></Route> */}
             </View>
           }
           {
             mode !== 'game-jumping' ? null :
             <View>
-              <Button 
-                style={Styles.backHome}
-                index={0}
-                button={3}
-                eventType={'keydown'}
-                onEvent={() => this.backHome()}>
-                <Text style={Styles.text}>BACK</Text>
-              </Button>
-              <Jumping />
+              {/* <VrButton id="game-chess" onClick={e => this.handleClick(e)}></VrButton> */}
+              {/* <Chess /> */}
+              <Jumping 
+                  onEnterJumping={() => this.getIntoJumping()}
+                  onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                  onBackHome={() => this.backHome()}
+              />
             </View>
           }
           {
             mode !== 'game-rollercoaster' ? null :
             <View>
-              <Button 
-                style={Styles.backHome}
-                index={0}
-                button={3}
-                eventType={'keydown'}
-                onEvent={() => this.backHome()}>
-                <Text style={Styles.text}>BACK</Text>
-              </Button>
-              <RollerCoaster />
+              {/* <VrButton id="game-foodshot" onClick={ e => this.handleClick(e) }></VrButton> */}
+              {/* <FoodShot /> */}
+              <RollerCoasterGame 
+                onEnterJumping={() => this.getIntoJumping()}
+                onEnterRollerCoaster={() => this.getIntoRollerCoaster()}
+                onBackHome={() => this.backHome()}
+              />
+              {/* <Route exact path="/" component={RollerCoasterGame} /> */}
             </View>
           }
         </View>

@@ -2,7 +2,11 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
  * @Last Modified by: zhaoxiaoqi
+<<<<<<< HEAD
  * @Last Modified time: 2018-05-25 02:09:37
+=======
+ * @Last Modified time: 2018-05-29 09:59:55
+>>>>>>> rollercaster
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -22,6 +26,8 @@ import {
 import { cameraMove } from './move';
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
+// const rollerCoaster = NativeModules.RollerCoaster;
+
 
 export default class Camera extends React.Component {
 
@@ -40,6 +46,7 @@ export default class Camera extends React.Component {
       isSecond: false, // 针对手柄，手柄摇杆的横纵向值不是同时检测
       vrHeadModelPosition: [0, 0, 0],
       cameraPosition: [cameraPosition[0], 4, cameraPosition[2]],
+      cameraRotation: [0, 0, 0],
     }
     let preAxes = [];
       
@@ -149,6 +156,8 @@ export default class Camera extends React.Component {
 
   componentWillMount() {
     this._isMounted = true;
+    // console.log(rollerCoaster.getPoints());
+
   }
 
   componentWillUnmount() {
@@ -157,11 +166,38 @@ export default class Camera extends React.Component {
 
   onWindowMessage = (e) => {
     // teleport to new position
-    if (this._isMounted && e.data.type == "newPosition") {
-      const position = e.data.position;
-      this.setState({
-        cameraPosition: [position.x, VrHeadModel.position()[1], position.z],
-      })
+    // if (this._isMounted && e.data.type == "newPosition") {
+    //   const position = e.data.position;
+    //   this.setState({
+    //     cameraPosition: [position.x, 4, position.z],
+    //   })
+    // }
+
+    if (this._isMounted) {
+      switch(e.data.type) {
+        case 'newPosition': {
+          const position = e.data.position;
+          this.setState({
+            cameraPosition: [position.x, 4, position.z],
+          });
+          break;
+        }
+        case 'rollerPosition': {
+          const position = e.data.position;
+          this.setState({
+            cameraPosition: [position.x, position.y, position.z],
+          });
+          break;
+        }
+        case 'rollerRotation': {
+          const rotation = e.data.rotation;
+          // console.log('ro:', rotation);
+          this.setState({
+            cameraRotation: [rotation.x, rotation.y, rotation.z],
+          })
+          break;
+        }
+      }
     }
   }
 
@@ -200,7 +236,7 @@ export default class Camera extends React.Component {
               // {rotateZ: rotation[2]},
               { translate: !vrPosition ? this.state.cameraPosition : curPosition},
               // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
-              // { rotateY:  rotate },                           //camera的旋转
+              { rotateY:  this.state.cameraRotation[1] },                           //camera的旋转
             ],
           }}
         >                     

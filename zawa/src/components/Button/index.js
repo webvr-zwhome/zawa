@@ -20,7 +20,11 @@ const Styles = StyleSheet.create({
         justifyContent: 'center', 
     },
     hasFocus: {
-        backgroundColor: '#123456',
+        backgroundColor: '#9c712f',
+        borderColor: '#9c712f',
+        // opacity: 1,
+        borderWidth: 0.02,
+
     }
 });
 
@@ -77,8 +81,8 @@ export default class Button extends React.Component{
             <View
                 style={[
                     Styles.button,
-                    this.state.hasFocus ? Styles.hasFocus : null,
                     this.props.style,
+                    this.state.hasFocus ? Styles.hasFocus : null,
                 ]}
                 onEnter={() => this.handleEnter()}
                 onExit={() => this.handleExit()}
