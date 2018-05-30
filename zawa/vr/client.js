@@ -85,6 +85,20 @@ function init(bundle, parent, options) {
     }else{
       jumpTime = 0;
     }
+
+    if(rollerCoaster.getStatus() && cameraNewPositionInRoller != cameraPosition) {
+      // console.log(cameraNewPosition);
+      vr.rootView.context.bridge._worker.postMessage({
+        type: "rollerPosition", 
+        position: cameraNewPositionInRoller,
+      });
+  
+      vr.rootView.context.bridge._worker.postMessage({
+        type: "rollerRotation", 
+        rotation: cameraNewRotationInRoller,
+      });
+      cameraPosition = cameraNewPositionInRoller;
+    }
   };
   // vr.rootView.context.bridge._worker.addEventListener({'message', onVRMessage });
   vr.rootView.context.bridge._worker.addEventListener('message', (e)=>{
@@ -130,19 +144,7 @@ function init(bundle, parent, options) {
     }
   });
   
-  if(rollerCoaster.getStatus() && cameraNewPositionInRoller != cameraPosition) {
-    // console.log(cameraNewPosition);
-    vr.rootView.context.bridge._worker.postMessage({
-      type: "rollerPosition", 
-      position: cameraNewPositionInRoller,
-    });
 
-    vr.rootView.context.bridge._worker.postMessage({
-      type: "rollerRotation", 
-      rotation: cameraNewRotationInRoller,
-    });
-    cameraPosition = cameraNewPositionInRoller;
-  }
 
 
   // Begin the animation loop  

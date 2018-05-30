@@ -2,11 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
  * @Last Modified by: zhaoxiaoqi
-<<<<<<< HEAD
- * @Last Modified time: 2018-05-25 02:09:37
-=======
- * @Last Modified time: 2018-05-29 09:59:55
->>>>>>> rollercaster
+ * @Last Modified time: 2018-05-30 11:27:41
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -184,6 +180,7 @@ export default class Camera extends React.Component {
         }
         case 'rollerPosition': {
           const position = e.data.position;
+          console.log(position);
           this.setState({
             cameraPosition: [position.x, position.y, position.z],
           });

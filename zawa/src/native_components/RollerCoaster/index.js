@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-29 09:54:19
+ * @Last Modified time: 2018-05-29 11:23:26
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
@@ -241,7 +241,7 @@ export default class RollerCoaster extends Module{
         const g = 1000;
         
         let t = ( (timeNow - this._startTime) % this._loopTime ) / this._loopTime;
-        console.log(t);
+        // console.log(t);
         var prePos = this._path.getPointAt(this._preT);
         var pos = this._path.getPointAt(t);
         // var segments = this._tube.geometry.tangents.length;
