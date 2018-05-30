@@ -75,7 +75,7 @@ function init(bundle, parent, options) {
     if(jumpPower !== 0){
       console.log('jumpPower: ',jumpPower)
       jumpTime += 0.005;
-      let jumpDis = jumpPower/10 * defaultPower * jumpTime;
+      let jumpDis = jumpPower/3 * defaultPower * jumpTime;
       let upDis = jumpPower * defaultPower * jumpTime - g * Math.pow(jumpTime, 2)/2;
       vr.rootView.context.bridge._worker.postMessage({
         type: 'jumpPosition',

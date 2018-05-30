@@ -36,6 +36,7 @@ export default class Collision extends Module {
                 isCollision = true;
                 indexCol = index;
                 console.log('collistion sucess')
+                console.log('collision Index: ',indexCol);
             }
         })
         return {

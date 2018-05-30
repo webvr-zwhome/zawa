@@ -46,8 +46,8 @@ export default class Room extends React.Component {
         ></Model> */}
         <Model
           source={{
-            mtl: asset('models/main_room/room525.mtl'),
-            obj: asset('models/main_room/room525.obj'),
+            mtl: asset('models/main_room/newroom002.mtl'),
+            obj: asset('models/main_room/newroom002.obj'),
           }}
           style={{
             transform: [

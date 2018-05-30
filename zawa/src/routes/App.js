@@ -139,7 +139,7 @@ export default class App extends React.Component{
             onStartJumping={() => {}}
             onStartRollerCoaster={() => {}}
         />
-        <Camera />
+        <Camera reset={true}/>
         <World />
           
         {/* </World> */}

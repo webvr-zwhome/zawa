@@ -20,7 +20,7 @@ import {
 export default class Mountain extends React.Component{
     constructor(props){
         super(props);
-        Animated.Model = Animated.createAnimatedComponent(Model)
+        // Animated.Model = Animated.createAnimatedComponent(Model)
         this.state={
           animaValue: new Animated.Value(0)
         }
@@ -59,7 +59,8 @@ export default class Mountain extends React.Component{
         const stoneList = this.props.stonePosition.map((position, index) => {
           if(index===this.props.moveIndex){
             return (
-              <Animated.Model
+              // <Animated.Model
+              <Model
                 key={index}
                 source={{
                   obj: asset(`${prefix}stone00${index + 2}.obj`),
@@ -68,7 +69,8 @@ export default class Mountain extends React.Component{
                 style={{
                   transform: [
                     // { translate: [position[0], position[1]+this.props.move, position[2]] }
-                    { translate: [position[0], position[1]+this.state.animaValue, position[2]] } 
+                    // { translate: [position[0], position[1]+this.state.animaValue, position[2]] } 
+                    {translate: position}
                   ],
                   color: 'red'
                 }}

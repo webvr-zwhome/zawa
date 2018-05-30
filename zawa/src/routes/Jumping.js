@@ -26,7 +26,11 @@ import {
 import Camera from '../components/Camera';
 import Button from '../components/Button';
 import Mountain from '../components/Mountain';
+import Panel from '../components/Panel';
+
 const water = NativeModules.Water;
+const rollerCoaster = NativeModules.RollerCoaster;
+
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
@@ -76,6 +80,7 @@ const Styles = StyleSheet.create({
 export default class Jumping extends React.Component{
   constructor(props) {
     super(props);
+    rollerCoaster.hide(false);
     this.state={
       jumpMove: 0,
       jumpUp: 0,
@@ -245,13 +250,26 @@ export default class Jumping extends React.Component{
       data:{
         HmPosition: VrHeadModel.position()
       }
-    })
+    });
+    const { 
+      onEnterJumping,
+      onEnterRollerCoaster,
+      onBackHome,
+     } = this.props;
     
     // const cameraRotate = [0, rotate[1], 0];
     return (
       <View>
         {/* <Pano source={asset('chess-world.jpg')}/> */}
         {/* <Camera /> */}
+        <Panel 
+            mode={'game-rollercoaster'}
+            onEnterJumping={() => onEnterJumping()}
+            onEnterRollerCoaster={() => onEnterRollerCoaster()}
+            onBackHome={() => onBackHome()}
+            onStartJumping={() => {}}
+            onStartRollerCoaster={() => rollerCoaster.start()}
+        />
         <AmbientLight 
           style={{
             transform: [
@@ -285,7 +303,7 @@ export default class Jumping extends React.Component{
             fontSize: 0.05,
             color: 'green',
             transform:[
-              {translate: [VrHeadModel.position()[0]+this.state.textMove[0], 4, VrHeadModel.position()[2]+this.state.textMove[2]]},
+              {translate: [VrHeadModel.position()[0]+this.state.textMove[0], VrHeadModel.position()[1], VrHeadModel.position()[2]+this.state.textMove[2]]},
             ]
           }}
         >
@@ -302,7 +320,7 @@ export default class Jumping extends React.Component{
           style={Styles.jumping}
           needFocus={false}
           index={1}
-          button={1}
+          button={2}
           eventType={'keydown'}
           // pulse={this.state.pulse}
           onEvent={() => this.Accumulation()}
@@ -311,7 +329,7 @@ export default class Jumping extends React.Component{
           style={Styles.jumping}
           needFocus={false}          
           index={1}
-          button={1}
+          button={2}
           eventType={'keyup'}
           // pulse={this.state.pulse}
           onEvent={() => this.clearAccumulation()}
