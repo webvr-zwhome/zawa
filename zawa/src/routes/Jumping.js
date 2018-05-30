@@ -79,7 +79,7 @@ export default class Jumping extends React.Component{
       jumpMove: 0,
       jumpUp: 0,
       percent: '',
-      pulse: 0,
+      // pulse: 0,
       play:'stop',
       textMove: [-0.2, 0.5, -0.4],
       resetCame: false,
@@ -146,9 +146,11 @@ export default class Jumping extends React.Component{
         }
       })
       console.log('collision: ',this.Collision.isCollision)
-    }else if(upDis < 0 && VrHeadModel.position()[1] < -1 && this.Collision.isCollision===false){
+    }else if(upDis < 0 && VrHeadModel.position()[1] < -4 && this.Collision.isCollision===false){
       this.setState({
-        resetCame: true
+        resetCame: true,
+        // jumpMove: 0,
+        // jumpUp: 0
       })
       window.postMessage({
         type:'endPower',
@@ -190,18 +192,18 @@ export default class Jumping extends React.Component{
       jumpMove:0,
       jumpUp: 0,
       percent: `${(this.power * 100).toFixed()}%`,
-      pulse: this.power,
+      // pulse: this.power,
       play: 'play'
     })
     // window.postMessage ( { type: "direction",  data: {
     //   move : [moveDir, moveOrigin]
     // }} ) ;
-    window.postMessage({
-      type: "rotateText",
-      data:{
-        HmPos: VrHeadModel.rotation()[1]
-      }
-    })
+    // window.postMessage({
+    //   type: "rotateText",
+    //   data:{
+    //     HmPos: VrHeadModel.rotation()[1]
+    //   }
+    // })
   }
 
   clearAccumulation(){
@@ -270,7 +272,7 @@ export default class Jumping extends React.Component{
           intensity={0.5}
         ></SpotLight>
 
-        <Pano source={asset('heaven.jpg')} />
+        <Pano source={asset('heaven.png')} />
         <Text
           style={{
             fontSize: 0.05,
@@ -295,7 +297,7 @@ export default class Jumping extends React.Component{
           index={1}
           button={1}
           eventType={'keydown'}
-          pulse={this.state.pulse}
+          // pulse={this.state.pulse}
           onEvent={() => this.Accumulation()}
         ></Button>
         <Button 
@@ -304,12 +306,25 @@ export default class Jumping extends React.Component{
           index={1}
           button={1}
           eventType={'keyup'}
-          pulse={this.state.pulse}
+          // pulse={this.state.pulse}
           onEvent={() => this.clearAccumulation()}
         ></Button>
 
         <Camera vrPosition={ true }  position={move.slice()} reset={this.state.resetCame} />
         <Mountain moveIndex={ this.state.mouIndex } />
+        {/* test stone position  */}
+        <Model
+          source={{
+            obj: asset('models/testCube/testCube.obj'),
+            mtl: asset('models/testCube/testCube.mtl')
+          }} 
+          style={{
+            transform: [
+              {translate: [-22, 3, -35]},
+              {scale: 2.2}
+            ]
+          }}
+        />
       </View>
     )
   }

@@ -22,7 +22,7 @@ export default class Mountain extends React.Component{
         super(props);
         Animated.Model = Animated.createAnimatedComponent(Model)
         this.state={
-          animaValue: 0
+          animaValue: new Animated.Value(0)
         }
         // const fog = NativeModules.Fog;
     }
