@@ -43,7 +43,6 @@ function init(bundle, parent, options) {
       mark,
       collision,
       rollerCoaster,
-      fog,
     ],
     cursorVisibility: 'auto',
     scene: scene,

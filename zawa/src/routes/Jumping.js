@@ -1,8 +1,8 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
- * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-29 10:13:23
+ * @Last Modified by: penghuiwu
+ * @Last Modified time: 2018-05-30 11:43:16
  */
 import React from 'react';
 import {
@@ -26,6 +26,7 @@ import {
 import Camera from '../components/Camera';
 import Button from '../components/Button';
 import Mountain from '../components/Mountain';
+const water = NativeModules.Water;
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
@@ -86,6 +87,12 @@ export default class Jumping extends React.Component{
       mouIndex:null
     }
 
+    water.setTexture('../../static_assets/water.jpg');
+    water.setColor({
+      r: 0,
+      g: 0,
+      b: 1,
+    })
     this.power = 0;
     this.accuPower = 0;
     this.Collsion = {};

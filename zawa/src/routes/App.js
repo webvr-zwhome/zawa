@@ -1,13 +1,8 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
-<<<<<<< HEAD
  * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-07 11:35:05
-=======
- * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-24 19:47:18
->>>>>>> 9de3809a04223af56cebe163759da0017e75a96e
+ * @Last Modified time: 2018-05-30 11:37:54
  */
 import React from 'react';
 import {
