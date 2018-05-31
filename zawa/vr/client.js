@@ -28,7 +28,7 @@ function init(bundle, parent, options) {
   const collision = new Collision();
   let jumpPower = 0;
   let jumpTime = 0;
-  const g = 9.8;
+  const g = 13;
   // const gamePad = new GamePad();
   // let moveText = new THREE.Vector3(-0.2, 0.5, -0.4);
   const vr = new VRInstance(bundle, 'zawa', parent, {
@@ -75,7 +75,7 @@ function init(bundle, parent, options) {
     if(jumpPower !== 0){
       console.log('jumpPower: ',jumpPower)
       jumpTime += 0.005;
-      let jumpDis = jumpPower/3 * defaultPower * jumpTime;
+      let jumpDis = jumpPower/2 * defaultPower * jumpTime;
       let upDis = jumpPower * defaultPower * jumpTime - g * Math.pow(jumpTime, 2)/2;
       vr.rootView.context.bridge._worker.postMessage({
         type: 'jumpPosition',
