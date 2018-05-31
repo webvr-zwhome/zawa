@@ -77,4 +77,8 @@ export default class Water extends Module {
         console.log(this._material);
         this._texture.color = new THREE.Color(color);
     }
+
+    visible(visible) {
+        this._mesh.visible = visible;
+    }
 }
