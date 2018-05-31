@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-29 11:11:50
+ * @Last Modified time: 2018-05-31 16:12:24
  */
 import React from 'react';
 import {
@@ -30,6 +30,7 @@ import Button from '../components/Button';
 import Panel from '../components/Panel';
 const rollerCoaster = NativeModules.RollerCoaster;
 const fog = NativeModules.Fog;
+const water = NativeModules.Water;
 
 const Styles = StyleSheet.create({
   interface: {
@@ -72,7 +73,8 @@ export default class RollerCoasterGame extends React.Component{
   constructor(props) {
     super(props);
     rollerCoaster.hide(true);
-    fog.changeDensity(0.001);
+    fog.changeDensity(0.002);
+    water.visible(false);
   }
 
   render() {
@@ -139,8 +141,8 @@ export default class RollerCoasterGame extends React.Component{
         <World 
           hasTree={false} 
           plane={{
-            obj: asset('models/plane/planeroller527.obj'),
-            mtl: asset('models/plane/planeroller527.mtl'),
+            obj: asset('models/plane/planeroller530.obj'),
+            mtl: asset('models/plane/planeroller530.mtl'),
         }}>
           {/* <View style={Styles.interface}> */}
             {/* <View> */}

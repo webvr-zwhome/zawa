@@ -12,11 +12,11 @@ export default class Water extends Module {
         this._position.dynamic = true;
         // this._fog = new THREE.Fog( 0xefd1b5, 0.005, 10);
         this.changePosition();
-        this._texture = new THREE.TextureLoader().load( '../../../static_assets/water529.png' );
+        this._texture = new THREE.TextureLoader().load( '../../../static_assets/water530.png' );
         this._texture.wrapS =  THREE.RepeatWrapping;
         this._texture.wrapT =  THREE.RepeatWrapping;
 		this._texture.repeat.set( 10, 10 );
-        this._material = new THREE.MeshBasicMaterial( { color: 0xccecff, map: this._texture } );
+        this._material = new THREE.MeshBasicMaterial( { color: 0x00ffff, map: this._texture } );
 		this._mesh = new THREE.Mesh( this._geometry, this._material );
         this.init();
     }
@@ -76,5 +76,9 @@ export default class Water extends Module {
     setColor(color) {
         console.log(this._material);
         this._texture.color = new THREE.Color(color);
+    }
+
+    visible(visible) {
+        this._mesh.visible = visible;
     }
 }
