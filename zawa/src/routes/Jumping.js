@@ -1,8 +1,8 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
- * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-30 11:43:16
+ * @Last Modified by: zhaoxiaoqi
+ * @Last Modified time: 2018-05-30 21:57:13
  */
 import React from 'react';
 import {
@@ -345,7 +345,7 @@ export default class Jumping extends React.Component{
           }} 
           style={{
             transform: [
-              {translate: [-22, 3, -35]},
+              {translate: [-20.1, 3, -35]},
               {scale: 2.2}
             ]
           }}
