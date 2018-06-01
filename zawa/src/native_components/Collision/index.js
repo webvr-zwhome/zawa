@@ -28,7 +28,7 @@ export default class Collision extends Module {
         let isCollision = false;
         let indexCol = null;
         this.collisionList.map((colPos, index)=>{
-            if((Math.pow(colPos[0]-position[0], 2) + Math.pow(colPos[1]-position[1], 2) + Math.pow(colPos[2]-position[2], 2)) <= 1 ){
+            if((Math.pow(colPos[0]-position[0], 2) + Math.pow(colPos[1]-position[1]+1, 2) + Math.pow(colPos[2]-position[2], 2)) <= 0.5 && position[1] >= 3){
             //     isCollision = true;
             // }
             // if(( position[1] > colPos[1] )&&( position[1] < colPos[1]+1 ) && (colPos[0]-0.5 < position[0]) && (position[0] < colPos[0] + 0.5) && (colPos[2] - 0.5 < position[2]) && (position[2] < colPos[2] + 0.5)){
