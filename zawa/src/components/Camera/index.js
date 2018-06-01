@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-30 11:27:41
+ * @Last Modified time: 2018-06-01 23:45:15
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -21,6 +21,7 @@ import {
 
 import { cameraMove } from './move';
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+import RollerChair from '../RollerChair';
 
 // const rollerCoaster = NativeModules.RollerCoaster;
 
@@ -238,6 +239,14 @@ export default class Camera extends React.Component {
           }}
         >                     
         </Scene> 
+        <RollerChair 
+          style={{
+            transform: [
+              // { translate: !vrPosition ? this.state.cameraPosition : curPosition},
+              // { rotateY:  this.state.cameraRotation[1] },                           //camera的旋转
+            ],
+          }}
+        />
       </View>
     )
   }
