@@ -100,8 +100,8 @@ export default class Mountain extends React.Component{
             <View>
               <Model
                 source={{
-                  obj: asset('models/jumping/land.obj'),
-                  mtl: asset('models/jumping/land.mtl')
+                  obj: asset('models/jumping/mount001.obj'),
+                  mtl: asset('models/jumping/mount001.mtl')
                 }}
                 style={{
                   transform:[
