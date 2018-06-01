@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-06-01 15:56:08 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-01 16:45:13
+ * @Last Modified time: 2018-06-01 17:23:15
  */
 import React from 'react';
 import { 
@@ -24,11 +24,11 @@ export default class RollerStart extends React.Component{
           }}
         style={{
           transform: [
-            { translate: [50, 4, 0] },
-            // { scale: 10 }
+            { translate: [50, -3, 0] },
+            { scale: [10, 20, 20] }
           ]
         }}
-        // lit={true}
+        lit={true}
       />
     )
   }

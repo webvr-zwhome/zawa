@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-01 16:02:39
+ * @Last Modified time: 2018-06-01 17:22:14
  */
 import React from 'react';
 import {
@@ -132,8 +132,8 @@ export default class RollerCoasterGame extends React.Component{
             obj: asset('models/plane/planeroller530.obj'),
             mtl: asset('models/plane/planeroller530.mtl'),
         }}>
-          <RollerStart />
         </World>
+          <RollerStart />
       </View> 
     )
   }
