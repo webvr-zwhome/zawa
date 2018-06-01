@@ -22,7 +22,7 @@ function box(position, color) {
 
 function cylinder(height, position, quaternion) {
     var geometry = new THREE.CylinderBufferGeometry( 0.05, 0.05, height, 12 );
-    var material = new THREE.MeshLambertMaterial( {color: '#fff'} );
+    var material = new THREE.MeshBasicMaterial( {color: '#000'} );
     var cylinder = new THREE.Mesh( geometry, material );
     cylinder.position.set(position.x, position.y, position.z);
     // cylinder.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
@@ -216,9 +216,12 @@ export default class RollerCoaster extends Module{
             this._params.closed,
         );
         
-        const material = new THREE.MeshLambertMaterial({color: '#9c712f'});
-        const materialLeft = new THREE.MeshLambertMaterial({color: '#fff'});
-        const materialRight = new THREE.MeshLambertMaterial({color: '#ff0'});
+        // const material = new THREE.MeshLambertMaterial({color: '#9c712f'});
+        // const materialLeft = new THREE.MeshLambertMaterial({color: '#fff'});
+        // const materialRight = new THREE.MeshLambertMaterial({color: '#ff0'});
+        const material = new THREE.MeshBasicMaterial({color: '#9c712f'});
+        const materialLeft = new THREE.MeshBasicMaterial({color: '#fff'});
+        const materialRight = new THREE.MeshBasicMaterial({color: '#ff0'});
 
         const mesh = new THREE.Mesh(geometry, material);
 

@@ -133,7 +133,7 @@ export default class RollerCoasterGame extends React.Component{
             mtl: asset('models/plane/planeroller530.mtl'),
         }}>
         </World>
-          <RollerStart />
+        <RollerStart />
       </View> 
     )
   }

@@ -24,7 +24,7 @@ export default class RollerStart extends React.Component{
           }}
         style={{
           transform: [
-            { translate: [50, -3, 0] },
+            { translate: [50, -10, 0] },
             { scale: [10, 20, 20] }
           ]
         }}
