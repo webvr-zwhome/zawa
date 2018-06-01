@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-06-01 15:56:08 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-01 21:12:11
+ * @Last Modified time: 2018-06-01 23:46:07
  */
 import React from 'react';
 import { 
@@ -10,22 +10,23 @@ import {
   asset,
 } from 'react-vr';
 
-export default class RollerStart extends React.Component{
+export default class RollerChair extends React.Component{
   constructor(props) {
     super(props);
   }
   render() {
-    // const { position } = this.props;
+    const { position = [ 50, 0, 0 ], rotation = 180 } = this.props;
     return (
       <Model 
         source={{
-          obj: asset('models/rollerstart.obj'),
-          mtl: asset('models/rollerstart.mtl'),
+          obj: asset('models/rollerchair.obj'),
+          mtl: asset('models/rollerchair.mtl'),
           }}
         style={{
           transform: [
-            { translate: [50, -10, 0] },
-            { scale: [10, 20, 20] }
+            { translate: position },
+            { rotateY: rotation },
+            { scale: [10, 20, 20] },
           ]
         }}
         lit={true}

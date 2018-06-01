@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-01 17:22:14
+ * @Last Modified time: 2018-06-01 23:34:24
  */
 import React from 'react';
 import {
@@ -118,8 +118,8 @@ export default class RollerCoasterGame extends React.Component{
         <DirectionalLight
           style={{
             transform:[
-              {translate: [0, 1000, 100]},
-              {rotateX: -30}
+              { translate: [0, 1000, 100] },
+              { rotateX: -30 }
             ]
           }} 
           intensity={1.0}  
