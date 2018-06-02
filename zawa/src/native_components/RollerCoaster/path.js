@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
 const path = [
-    new THREE.Vector3( 50, 0, 0 ),
-    new THREE.Vector3( 50, 0, -8 ),
+    new THREE.Vector3( 50, 0, -20 ),
+    // new THREE.Vector3( 50, 0, -25 ),
 
     // new THREE.Vector3( 80, 6, -30 ),
     new THREE.Vector3( 66, 20, -50 ),
@@ -48,7 +48,7 @@ const path = [
 
     new THREE.Vector3( 20, 12, 50 ),
     new THREE.Vector3( 50, 0, 8 ),
-    new THREE.Vector3( 50, 0, 0 ),
+    new THREE.Vector3( 50, 0, -20 ),
 ]
 export {
    path,

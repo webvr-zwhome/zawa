@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-01 23:34:24
+ * @Last Modified time: 2018-06-02 21:49:38
  */
 import React from 'react';
 import {
@@ -96,15 +96,14 @@ export default class RollerCoasterGame extends React.Component{
             onStartRollerCoaster={() => rollerCoaster.start()}
         />
 
-        {/* <AmbientLight
+        <AmbientLight
           style={{
             transform:[
-              {translate: [0, 100, 0]},
-              {rotateX: 30}
+              {translate: [0, 0, 0]},
             ]
           }} 
           intensity={0.1} 
-        ></AmbientLight> */}
+        ></AmbientLight>
         {/* <DirectionalLight
           style={{
             transform:[
@@ -118,8 +117,8 @@ export default class RollerCoasterGame extends React.Component{
         <DirectionalLight
           style={{
             transform:[
-              { translate: [0, 1000, 100] },
-              { rotateX: -30 }
+              { translate: [0, 1000, 0] },
+              { rotateZ: 60 }
             ]
           }} 
           intensity={1.0}  
@@ -129,8 +128,8 @@ export default class RollerCoasterGame extends React.Component{
         <World 
           hasTree={false} 
           plane={{
-            obj: asset('models/plane/planeroller530.obj'),
-            mtl: asset('models/plane/planeroller530.mtl'),
+            obj: asset('models/plane/planeroller62.obj'),
+            mtl: asset('models/plane/planeroller62.mtl'),
         }}>
         </World>
           <RollerStart />
