@@ -6,7 +6,7 @@ export default class Water extends Module {
         super('Water');
         this._scene = scene;
         this._geometry = new THREE.PlaneBufferGeometry(2500, 2500, 14, 14);
-        console.log(this._geometry);
+        // console.log(this._geometry);
         this._geometry.rotateX( -Math.PI/2 );
         this._position = this._geometry.attributes.position;
         this._position.dynamic = true;
@@ -74,7 +74,7 @@ export default class Water extends Module {
     }
 
     setColor(color) {
-        console.log(this._material);
+        // console.log(this._material);
         this._texture.color = new THREE.Color(color);
     }
 

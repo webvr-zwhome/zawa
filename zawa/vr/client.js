@@ -87,7 +87,6 @@ function init(bundle, parent, options) {
     }
 
     if(rollerCoaster.getStatus() && cameraNewPositionInRoller != cameraPosition) {
-      // console.log(cameraNewPosition);
       vr.rootView.context.bridge._worker.postMessage({
         type: "rollerPosition", 
         position: cameraNewPositionInRoller,
