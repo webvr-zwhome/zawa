@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-01 23:45:15
+ * @Last Modified time: 2018-06-02 23:14:40
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -181,7 +181,7 @@ export default class Camera extends React.Component {
         }
         case 'rollerPosition': {
           const position = e.data.position;
-          console.log(position);
+          // console.log(position);
           this.setState({
             cameraPosition: [position.x, position.y, position.z],
           });
@@ -200,53 +200,36 @@ export default class Camera extends React.Component {
   }
 
   render() {     
-    //camera的初始位置、方向、高度
-    // const INITIAL_X = 0;  
-    // const INITIAL_Z = 0;
-    // const INITIAL_ROTATION = 0;
-    // const CAMERA_HEIGHT = 4;
-
-    // const moveX = this.state.moveX;
-    // const moveZ = this.state.moveZ;
-    // const rotate = this.state.rotate;
-
-    // let vrHeadModelPositionObj = {
-    //   x: this.state.vrHeadModelPosition[0],
-    //   y: this.state.vrHeadModelPosition[1],
-    //   z: this.state.vrHeadModelPosition[2],
-    //   rotate: this.state.rotate,
-    // }
-      // NativeModules.GetHeadModelModule.setHeadModelPosition(vrHeadModelPositionObj);
-    const { vrPosition = false, position = [0, 0, 0], reset = false } = this.props;
+    // NativeModules.GetHeadModelModule.setHeadModelPosition(vrHeadModelPositionObj);
+    const { vrPosition = false, position = [0, 0, 0], reset = false, init = false, initPosition = [0, 0, 0]} = this.props;
     const originPos = [0, 4, 0];
     // console.log('prePos: ', this.prePosition);
 
     const curPosition = reset ? originPos.slice() : [position[0] + this.prePosition[0], this.prePosition[1]+position[1], position[2] + this.prePosition[2]];
     this.prePosition = curPosition;
     // console.log('curPos: ', curPosition);
+    const trans = init ? [
+      { translate: initPosition },
+    ]: [
+      { translate: !vrPosition ? this.state.cameraPosition : curPosition},
+      { rotateY:  this.state.cameraRotation[1] },              
+    ];
     return (
       <View>     
         <Scene 
           style={{
-            transform: [
-              // {rotateX: rotation[0]},
-              // {rotateY: rotation[1]},
-              // {rotateZ: rotation[2]},
-              { translate: !vrPosition ? this.state.cameraPosition : curPosition},
-              // { translate: [moveX, CAMERA_HEIGHT, moveZ]},    //camera的位置
-              { rotateY:  this.state.cameraRotation[1] },                           //camera的旋转
-            ],
+            transform: trans,
           }}
         >                     
         </Scene> 
-        <RollerChair 
+        {/* <RollerChair 
           style={{
             transform: [
               // { translate: !vrPosition ? this.state.cameraPosition : curPosition},
               // { rotateY:  this.state.cameraRotation[1] },                           //camera的旋转
             ],
           }}
-        />
+        /> */}
       </View>
     )
   }

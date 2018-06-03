@@ -73,7 +73,7 @@ function init(bundle, parent, options) {
 
     //判定是否需要计算跳跃路线
     if(jumpPower !== 0){
-      console.log('jumpPower: ',jumpPower)
+      // console.log('jumpPower: ',jumpPower)
       jumpTime += 0.005;
       let jumpDis = jumpPower/2 * defaultPower * jumpTime;
       let upDis = jumpPower * defaultPower * jumpTime - g * Math.pow(jumpTime, 2)/2;
@@ -87,7 +87,6 @@ function init(bundle, parent, options) {
     }
 
     if(rollerCoaster.getStatus() && cameraNewPositionInRoller != cameraPosition) {
-      // console.log(cameraNewPosition);
       vr.rootView.context.bridge._worker.postMessage({
         type: "rollerPosition", 
         position: cameraNewPositionInRoller,

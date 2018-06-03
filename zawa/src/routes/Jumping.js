@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-30 21:57:13
+ * @Last Modified time: 2018-06-01 22:32:12
  */
 import React from 'react';
 import {
@@ -17,6 +17,7 @@ import {
   Text,
   View,
   Model,
+  MediaPlayerState,
   Scene,
   Sphere,
   SpotLight,
@@ -102,7 +103,7 @@ export default class Jumping extends React.Component{
     this.accuPower = 0;
     this.Collsion = {};
     const mark = NativeModules.Mark;
-    // this.sound = {sound: asset('sound/add.mp3'), playerState:new MediaPlayerState({})}
+    this.sound = {sound: asset('sound/down.mp3'), playerState:new MediaPlayerState({})}
     window.addEventListener('message', (e)=>{
       switch (e.data.type) {
         case 'jumpPosition':
@@ -141,9 +142,9 @@ export default class Jumping extends React.Component{
   }
 
   setDis(jumpDis,upDis){
-    console.log('jumpDis: ',jumpDis)
-    console.log('jumpUp: ',upDis)
-    if(upDis < 0 && this.Collision.isCollision){
+    // console.log('jumpDis: ',jumpDis)
+    // console.log('jumpUp: ',upDis)
+    if(upDis < 0 && this.Collision.isCollision && VrHeadModel.position()[1] >= 3 ){
       this.setState({
         resetCame: false,
         jumMove: 0,
@@ -157,6 +158,7 @@ export default class Jumping extends React.Component{
           power: 0
         }
       })
+      this.sound.playerState.play();
       console.log('collision: ',this.Collision.isCollision)
     }else if(upDis < 0 && VrHeadModel.position()[1] < -4 && this.Collision.isCollision===false){
       this.setState({
@@ -179,7 +181,7 @@ export default class Jumping extends React.Component{
       })
       console.log('power')
     }
-    console.log('collision: ',this.Collision.isCollision)
+    // console.log('collision: ',this.Collision.isCollision)
   }
 
 
@@ -229,17 +231,17 @@ export default class Jumping extends React.Component{
     // window.postMessage ( { type: "direction",  data: {
     //   move : [null, null]
     // }} ) ;
-    console.log('endPower: ',this.power)
+    // console.log('endPower: ',this.power)
   }
 
   render() {
     const accuPower = this.state.jumpMove;
     const upPower = this.state.jumpUp;
     const rotate = VrHeadModel.rotation();
-    console.log('vrPos: ', VrHeadModel.position());
-    console.log('vrRot: ', VrHeadModel.rotation());
-    console.log('upPower: ',upPower);
-    console.log('reset: ', this.state.resetCame);
+    // console.log('vrPos: ', VrHeadModel.position());
+    // console.log('vrRot: ', VrHeadModel.rotation());
+    // console.log('upPower: ',upPower);
+    // console.log('reset: ', this.state.resetCame);
     const move = [-1 * accuPower * Math.sin(rotate[1] * Math.PI / 180 ), upPower, -1 * accuPower * Math.cos(rotate[1] * Math.PI / 180)];
     // const moveDir = [-1 * 3 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 3 * Math.cos(rotate[1] * Math.PI / 180)];
     // const moveOrigin = [-1 * 2 * Math.sin(rotate[1] * Math.PI / 180 ), 4 , -1 * 2 * Math.cos(rotate[1] * Math.PI / 180)];
@@ -301,21 +303,41 @@ export default class Jumping extends React.Component{
         <Text
           style={{
             fontSize: 0.05,
-            color: 'green',
+            color: '#33e8ec',
             transform:[
               {translate: [VrHeadModel.position()[0]+this.state.textMove[0], VrHeadModel.position()[1], VrHeadModel.position()[2]+this.state.textMove[2]]},
             ]
           }}
         >
-          {this.state.percent} percent
+          {this.state.percent}
         </Text>
+        <Sound
+          style = {{
+            transform:[
+              {translate: [-2, 0, -4]}
+            ]
+          }}
+          source = {asset('sound/sea.mp3')}
+          autoPlay = {true}
+          loop = {true}
+          volume = {5.0}
+        ></Sound>
         <Sound
           source = {asset('sound/add.mp3')}
           autoPlay = {false}
           playControl = {this.state.play}
           volume={10.0}
         ></Sound>
-        
+        <Sound
+          style = {{
+            transform: [
+              {translate: VrHeadModel.position()}
+            ]
+          }}
+          source = {this.sound.sound}
+          playerState = {this.sound.playerState}
+        ></Sound>
+
         <Button 
           style={Styles.jumping}
           needFocus={false}
