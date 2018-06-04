@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-01 22:32:12
+ * @Last Modified time: 2018-06-04 15:46:48
  */
 import React from 'react';
 import {
@@ -357,7 +357,14 @@ export default class Jumping extends React.Component{
           onEvent={() => this.clearAccumulation()}
         ></Button>
 
-        <Camera vrPosition={ true }  position={move.slice()} reset={this.state.resetCame} />
+        <Camera 
+          enableTeleport={false}
+          mode={'game-jumping'}
+          initPosition={[0, 0, 0]}
+          reset={this.state.resetCame}
+          resetPosition={move.slice()}
+          position={move.slice()} 
+        />
         <Mountain moveIndex={ this.state.mouIndex } />
         {/* test stone position  */}
         <Model

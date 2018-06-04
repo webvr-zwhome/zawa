@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-02 21:49:38
+ * @Last Modified time: 2018-06-04 16:18:01
  */
 import React from 'react';
 import {
@@ -104,16 +104,6 @@ export default class RollerCoasterGame extends React.Component{
           }} 
           intensity={0.1} 
         ></AmbientLight>
-        {/* <DirectionalLight
-          style={{
-            transform:[
-              {translate: [100, 1000, 1000]},
-              {rotateX: 60}
-            ]
-          }} 
-          intensity={0.5}  
-        >
-        </DirectionalLight> */}
         <DirectionalLight
           style={{
             transform:[
@@ -124,7 +114,13 @@ export default class RollerCoasterGame extends React.Component{
           intensity={1.0}  
         >
         </DirectionalLight>
-        <Camera />
+        <Camera 
+          enableTeleport={false}
+          mode={'game-rollercoaster'}
+          initPosition={[50, -4, -10]}
+          reset={false}
+          resetPosition={[50, -4, -10]}
+        />
         <World 
           hasTree={false} 
           plane={{
