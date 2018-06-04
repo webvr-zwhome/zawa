@@ -85,7 +85,7 @@ export default class Jumping extends React.Component{
     this.state={
       jumpMove: 0,
       jumpUp: 0,
-      percent: '',
+      percent: 0,
       // pulse: 0,
       play:'stop',
       textMove: [-0.2, 0.5, -0.4],
@@ -205,7 +205,7 @@ export default class Jumping extends React.Component{
     this.setState({
       jumpMove:0,
       jumpUp: 0,
-      percent: `${(this.power * 100).toFixed()}%`,
+      percent: (this.power * 100).toFixed(),
       // pulse: this.power,
       play: 'play'
     })
@@ -222,7 +222,7 @@ export default class Jumping extends React.Component{
 
   clearAccumulation(){
     this.setState({
-      percent: '',
+      percent: 0,
       pulse: 0,
       play: 'stop',
     })
@@ -300,17 +300,68 @@ export default class Jumping extends React.Component{
         ></SpotLight>
 
         <Pano source={asset('heaven.png')} />
-        <Text
+        <Model
+          source={{
+            obj: asset('models/jumping/circle.obj'),
+            mtl: asset('models/jumping/circle.mtl')
+          }} 
+          style={{
+            transform: [
+              {translate: [0, 3.5, 0.5]},
+              {scale: 0.2}
+            ], 
+          }}
+          // lit = {true}
+        ></Model>
+
+        <View
+          style={{
+            transform: [
+              {translate: [VrHeadModel.position()[0], VrHeadModel.position()[1], VrHeadModel.position()[2]]}
+            ]
+          }}
+        >
+          <Text
           style={{
             fontSize: 0.05,
             color: '#33e8ec',
             transform:[
-              {translate: [VrHeadModel.position()[0]+this.state.textMove[0], VrHeadModel.position()[1], VrHeadModel.position()[2]+this.state.textMove[2]]},
+              {translate: [this.state.textMove[0], 0, this.state.textMove[2]]},
             ]
           }}
-        >
-          {this.state.percent}
-        </Text>
+          >
+            {this.state.percent}%
+          </Text>
+          <Model
+            source={{
+              obj: asset('models/jumping/pointer.obj'),
+              mtl: asset('models/jumping/pointer.mtl')
+            }}
+            style={{
+              transform: [
+                {translate: [this.state.textMove[0] + 1, 0, this.state.textMove[2] + 1]},
+                {rotateZ: this.state.percent},
+                {scale: 1.0}
+              ]
+            }}
+          >
+          </Model>
+          <Model
+            source={{
+              obj: asset('models/jumping/dashBoard.obj'),
+              mtl: asset('models/jumping/dashBoard.mtl')
+            }}
+            style={{
+              transform: [
+                {translate: [this.state.textMove[0]+1, 0, this.state.textMove[2]+1]},
+                {rotateX: 90},
+                {scale: 1.0}
+              ]
+            }}
+          >
+          </Model>
+        </View>
+        
         <Sound
           style = {{
             transform:[

@@ -94,7 +94,7 @@ export default class zawa extends React.Component {
     });
   }
   state = {
-    mode: 'game-rollercoaster',
+    mode: 'game-jumping',
     // headPosition:[0,0,0],
     // headRotation:[0,0,0],
     // memberId: ''
