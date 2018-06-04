@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-04 16:57:45
+ * @Last Modified time: 2018-06-04 19:27:39
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -44,7 +44,7 @@ export default class Camera extends React.Component {
       // isSecond: false, // 针对手柄，手柄摇杆的横纵向值不是同时检测
       // vrHeadModelPosition: [0, 0, 0],
       initPosition: props.initPosition,
-      teleportPosition: [cameraPosition[0], cameraPosition[1], cameraPosition[2]],
+      teleportPosition:props.initPosition,
       rollerPosition: props.initPosition,
       rollerRotation: [0, 0, 0],
       
@@ -54,8 +54,6 @@ export default class Camera extends React.Component {
       // cameraRotation: [0, 0, 0],
     }
     // let preAxes = [];
-
-
   /* 
     RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {     
       if (e.type !== 'MouseInputEvent' && e.type !== 'KeyboardInputEvent') 
@@ -159,7 +157,7 @@ export default class Camera extends React.Component {
     });
     */
     window.addEventListener('message', this.onWindowMessage); // 监听瞬移事件
-    this.prePosition = this.state.cameraPosition;
+    this.prePosition = props.initPosition;
   }
 
   componentWillMount() {
@@ -204,11 +202,7 @@ export default class Camera extends React.Component {
   render() {     
     // NativeModules.GetHeadModelModule.setHeadModelPosition(vrHeadModelPositionObj);
     // const { vrPosition = false, position = [0, 0, 0], reset = false, init = false, initPosition = [0, 0, 0]} = this.props;
-    // const originPos = [0, 4, 0];
-    // console.log('prePos: ', this.prePosition);
-
-    // const curPosition = reset ? originPos.slice() : [position[0] + this.prePosition[0], this.prePosition[1]+position[1], position[2] + this.prePosition[2]];
-    // this.prePosition = curPosition;
+ 
     // console.log('curPos: ', curPosition);
     const { 
       enableTeleport = true,
@@ -222,11 +216,9 @@ export default class Camera extends React.Component {
     let transform = [];
     
     if (mode === 'home') {
-      console.log('home start');
       transform = [
         { translate: enableTeleport ? this.state.teleportPosition : this.state.initPosition }
       ];
-      console.log('trans: ', transform);
     }
 
     if (mode === 'game-rollercoaster') {
@@ -237,8 +229,11 @@ export default class Camera extends React.Component {
     }
 
     if (mode === 'game-jumping') {
+      console.log(this.prePosition);
+      const curPosition = reset ? resetPosition : [position[0] + this.prePosition[0], this.prePosition[1] + position[1], position[2] + this.prePosition[2]];
+      this.prePosition = curPosition;
       transform = [
-        { translate: enableTeleport ?  this.state.teleportPosition : this.state.jumpingPosition }
+        { translate: enableTeleport ? this.state.teleportPosition : curPosition }
       ];
     }
     return (

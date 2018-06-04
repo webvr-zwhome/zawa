@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:09 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-25 02:04:23
+ * @Last Modified time: 2018-06-04 17:15:24
  */
 import React from 'react';
 import {
@@ -53,7 +53,7 @@ export default class Room extends React.Component {
             transform: [
                 { translate: [0, 0, 0]}, //初始化进入时的高度
                 // { rotateY: 0 },         //矫正camera的视角
-                { scale: [1, 0.8, 1]}
+                { scale: [0.8, 0.6, 0.8]}
             ],
           }}
           lit={true}

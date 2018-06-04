@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-18 23:08:16 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-28 20:32:48
+ * @Last Modified time: 2018-06-04 17:33:54
  */
 import React from 'react';
 import {
@@ -19,6 +19,7 @@ const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 const Styles = StyleSheet.create({
     wrapper: {
+        position: 'absolute',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',

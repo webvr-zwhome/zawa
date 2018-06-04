@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-04 15:46:48
+ * @Last Modified time: 2018-06-04 18:18:13
  */
 import React from 'react';
 import {
@@ -31,7 +31,6 @@ import Panel from '../components/Panel';
 
 const water = NativeModules.Water;
 const rollerCoaster = NativeModules.RollerCoaster;
-
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
@@ -81,7 +80,13 @@ const Styles = StyleSheet.create({
 export default class Jumping extends React.Component{
   constructor(props) {
     super(props);
-    rollerCoaster.hide(false);
+    rollerCoaster.visible(false);
+    window.postMessage({
+      type:'controllerVisible',
+      data:{
+        visible: false,
+      }
+    });
     this.state={
       jumpMove: 0,
       jumpUp: 0,
@@ -90,7 +95,7 @@ export default class Jumping extends React.Component{
       play:'stop',
       textMove: [-0.2, 0.5, -0.4],
       resetCame: false,
-      mouIndex:null
+      mouIndex: null,
     }
 
     water.setTexture('../../static_assets/water.jpg');
@@ -360,7 +365,7 @@ export default class Jumping extends React.Component{
         <Camera 
           enableTeleport={false}
           mode={'game-jumping'}
-          initPosition={[0, 0, 0]}
+          initPosition={[0, 4, 0]}
           reset={this.state.resetCame}
           resetPosition={move.slice()}
           position={move.slice()} 

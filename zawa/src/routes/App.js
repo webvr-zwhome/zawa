@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-04 16:31:54
+ * @Last Modified time: 2018-06-04 17:43:42
  */
 import React from 'react';
 import {
@@ -45,7 +45,7 @@ export default class App extends React.Component{
     this.memberList = {}
     this.addMember = this.addMember.bind(this);
     this.updateMember = this.updateMember.bind(this);
-    rollerCoaster.hide(false);
+    rollerCoaster.visible(false);
   }
 
   addMember(memberId,position,rotation) {
@@ -142,9 +142,9 @@ export default class App extends React.Component{
         <Camera   
           enableTeleport={true}
           mode={'home'}
-          initPosition={[0, 4, 0]}
+          initPosition={[0, 3, 0]}
           reset={false}
-          resetPosition={[0, 4, 0]}
+          resetPosition={[0, 3, 0]}
         />
         <World />
         <Home />

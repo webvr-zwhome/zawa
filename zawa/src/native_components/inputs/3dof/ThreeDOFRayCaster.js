@@ -157,6 +157,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
     this._cameraQuaternion = new THREE.Quaternion();
     this._gamepadPosition = new THREE.Vector3();
     this._cameraPosition = new THREE.Vector3(0, 0, 0);
+    this._visible = true;
 
     const initialGamepads = navigator.getGamepads();
     let i = 0;
@@ -270,7 +271,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
   }
   // 当button2按下时采用曲线光束，否则采用默认光束
  _changeController(gamepad, angle) {
-    if (gamepad && gamepad.pose) {
+    if (gamepad && gamepad.pose && this._visible) {
       if (gamepad.buttons[2].pressed) {
         const vector = this.getRayVector();
         const beamCurve = createBeamCurveMesh(this._mesh, angle, vector);
@@ -342,6 +343,12 @@ export default class ThreeDOFRayCaster extends RayCaster {
     }
   }
 
+  setUpControllerPosition(position) {
+    const pos = this._mesh.position;
+    console.log(pos);
+    // this._mesh.position.set(pos[0])
+  }
+
   /**
    * Return an array containing the x,y,z coordinates of the controller, which
    * is used as the starting point for casting the ray.
@@ -408,5 +415,12 @@ export default class ThreeDOFRayCaster extends RayCaster {
 
   drawsCursor() {
     return true;
+  }
+
+  visible(visible) {
+    console.log(visible);
+    this._mesh.visible = visible;
+    this._teleport.visible = visible;
+    this._visible = visible;
   }
 }

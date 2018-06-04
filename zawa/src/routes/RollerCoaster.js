@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-04 16:18:01
+ * @Last Modified time: 2018-06-04 18:40:35
  */
 import React from 'react';
 import {
@@ -73,9 +73,19 @@ const Styles = StyleSheet.create({
 export default class RollerCoasterGame extends React.Component{
   constructor(props) {
     super(props);
-    rollerCoaster.hide(true);
+    rollerCoaster.visible(true);
     fog.changeDensity(0.002);
     water.visible(false);
+    this.state = {
+      enableTeleport: true,
+    }
+  }
+
+  handleStartRollerCoaster() {
+    rollerCoaster.start();
+    this.setState({
+      enableTeleport: false,
+    });
   }
 
   render() {
@@ -93,7 +103,7 @@ export default class RollerCoasterGame extends React.Component{
             onEnterRollerCoaster={() => onEnterRollerCoaster()}
             onBackHome={() => onBackHome()}
             onStartJumping={() => {}}
-            onStartRollerCoaster={() => rollerCoaster.start()}
+            onStartRollerCoaster={() => this.handleStartRollerCoaster()}
         />
 
         <AmbientLight
@@ -115,11 +125,11 @@ export default class RollerCoasterGame extends React.Component{
         >
         </DirectionalLight>
         <Camera 
-          enableTeleport={false}
+          enableTeleport={this.state.enableTeleport}
           mode={'game-rollercoaster'}
-          initPosition={[50, -4, -10]}
+          initPosition={[50, 0, -10]}
           reset={false}
-          resetPosition={[50, -4, -10]}
+          resetPosition={[50, 0, -10]}
         />
         <World 
           hasTree={false} 

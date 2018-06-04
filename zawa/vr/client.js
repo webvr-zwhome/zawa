@@ -125,12 +125,14 @@ function init(bundle, parent, options) {
         const moveText = new THREE.Vector3(-0.2, 0.5, -0.4);
         const moveHY = new THREE.Vector3(0,1,0);
         const moveAngle = e.data.data.HmPos * Math.PI / 180;
-        moveText.applyAxisAngle(moveHY, moveAngle)
+        moveText.applyAxisAngle(moveHY, moveAngle);
         vr.rootView.context.bridge._worker.postMessage({
           type: 'moveText',
           moveText: [moveText.x, moveText.y, moveText.z]
         });
         break;
+      case 'controllerVisible': 
+        threeDOFRayCaster.visible(e.data.data.visible);
       // case 'getGamePad':
       //   // vr.rootView.context.bridge._worker.postMessage({
       //   //   type: 'gamePad',
