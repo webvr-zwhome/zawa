@@ -198,7 +198,7 @@ export default class Jumping extends React.Component{
 
   Accumulation(){
     if(this.power < 1){
-      this.power += 0.001;
+      this.power += 0.005;
     }else{
       this.power = 1;
     }
@@ -339,9 +339,10 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [this.state.textMove[0] + 1, 0, this.state.textMove[2] + 1]},
-                {rotateZ: this.state.percent},
-                {scale: 1.0}
+                {translate: [this.state.textMove[0], 0, this.state.textMove[2]]},
+                {rotateZ: -this.state.percent/100 * 217.6},
+                {rotateX: 90},
+                {scale: 0.1}
               ]
             }}
           >
@@ -353,9 +354,9 @@ export default class Jumping extends React.Component{
             }}
             style={{
               transform: [
-                {translate: [this.state.textMove[0]+1, 0, this.state.textMove[2]+1]},
+                {translate: [this.state.textMove[0], 0, this.state.textMove[2]]},
                 {rotateX: 90},
-                {scale: 1.0}
+                {scale: 0.1}
               ]
             }}
           >

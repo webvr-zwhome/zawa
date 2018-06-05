@@ -58,7 +58,7 @@ function init(bundle, parent, options) {
     const cameraNewPosition = threeDOFRayCaster._getCameraNewPosition();
     const cameraNewPositionInRoller = rollerCoaster.getPosition();
     const cameraNewRotationInRoller = rollerCoaster.getRotation();
-    const defaultPower = 10;
+    const defaultPower = 3;
     // console.log(cameraNewRotationInRoller);
 
     if(cameraNewPosition != cameraPosition) {
