@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-02 21:49:38
+ * @Last Modified time: 2018-06-04 18:40:35
  */
 import React from 'react';
 import {
@@ -73,9 +73,26 @@ const Styles = StyleSheet.create({
 export default class RollerCoasterGame extends React.Component{
   constructor(props) {
     super(props);
-    rollerCoaster.hide(true);
+    rollerCoaster.visible(true);
     fog.changeDensity(0.002);
     water.visible(false);
+    this.state = {
+      enableTeleport: true,
+    }
+    window.postMessage({
+      type:'controllerVisible',
+      data:{
+        visible: false,
+        mode: 'game-rollercoaster',
+      }
+  });
+  }
+
+  handleStartRollerCoaster() {
+    rollerCoaster.start();
+    this.setState({
+      enableTeleport: false,
+    });
   }
 
   render() {
@@ -93,7 +110,7 @@ export default class RollerCoasterGame extends React.Component{
             onEnterRollerCoaster={() => onEnterRollerCoaster()}
             onBackHome={() => onBackHome()}
             onStartJumping={() => {}}
-            onStartRollerCoaster={() => rollerCoaster.start()}
+            onStartRollerCoaster={() => this.handleStartRollerCoaster()}
         />
 
         <AmbientLight
@@ -104,16 +121,6 @@ export default class RollerCoasterGame extends React.Component{
           }} 
           intensity={0.1} 
         ></AmbientLight>
-        {/* <DirectionalLight
-          style={{
-            transform:[
-              {translate: [100, 1000, 1000]},
-              {rotateX: 60}
-            ]
-          }} 
-          intensity={0.5}  
-        >
-        </DirectionalLight> */}
         <DirectionalLight
           style={{
             transform:[
@@ -124,7 +131,13 @@ export default class RollerCoasterGame extends React.Component{
           intensity={1.0}  
         >
         </DirectionalLight>
-        <Camera />
+        <Camera 
+          enableTeleport={this.state.enableTeleport}
+          mode={'game-rollercoaster'}
+          initPosition={[50, 0, -10]}
+          reset={false}
+          resetPosition={[50, 0, -10]}
+        />
         <World 
           hasTree={false} 
           plane={{

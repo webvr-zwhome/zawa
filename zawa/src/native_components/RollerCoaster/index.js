@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-05-29 11:23:26
+ * @Last Modified time: 2018-06-04 17:43:20
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
@@ -308,7 +308,7 @@ export default class RollerCoaster extends Module{
         this._startTime = Date.now();
     }
 
-    hide(visible) {
+    visible(visible) {
         // console.log(this._rollerCoaster);
         this._rollerCoaster.visible = visible;
     }

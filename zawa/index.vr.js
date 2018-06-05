@@ -18,9 +18,9 @@ import {
 import App from './src/routes/App';
 import Jumping from './src/routes/Jumping';
 import RollerCoasterGame from './src/routes/RollerCoaster';
-import Button from './src/components/Button';
-import Panel from './src/components/Panel';
-const rollerCoaster = NativeModules.RollerCoaster;
+// import Button from './src/components/Button';
+// import Panel from './src/components/Panel';
+// const rollerCoaster = NativeModules.RollerCoaster;
 
 
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
@@ -70,11 +70,11 @@ export default class zawa extends React.Component {
   constructor() {
     super();
     // window.addEventListener('message', this.onWindowMessage);
-    RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
+    // RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
       // if (e.type !== 'GamepadInputEvent') {
       //   return;
       // }
-      // // console.log(e);
+      // console.log(e);
       // if (e.gamepad === 0 && e.button === 1 && e.eventType === 'keydown') {
 
       // }
@@ -91,7 +91,7 @@ export default class zawa extends React.Component {
       //   axes[e.axis] = e.value;
       //   this.setState({axes});
       // }
-    });
+    // });
   }
   state = {
     mode: 'game-jumping',

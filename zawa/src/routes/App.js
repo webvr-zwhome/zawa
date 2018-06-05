@@ -1,8 +1,8 @@
 /*
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
- * @Last Modified by: penghuiwu
- * @Last Modified time: 2018-05-30 11:37:54
+ * @Last Modified by: zhaoxiaoqi
+ * @Last Modified time: 2018-06-04 17:43:42
  */
 import React from 'react';
 import {
@@ -45,7 +45,14 @@ export default class App extends React.Component{
     this.memberList = {}
     this.addMember = this.addMember.bind(this);
     this.updateMember = this.updateMember.bind(this);
-    rollerCoaster.hide(false);
+    rollerCoaster.visible(false);
+    window.postMessage({
+      type:'controllerVisible',
+      data:{
+        visible: true,
+        mode: 'home',
+      }
+    });
   }
 
   addMember(memberId,position,rotation) {
@@ -129,24 +136,24 @@ export default class App extends React.Component{
             ]
           }} 
           intensity={1.0}  
-        >
-        </DirectionalLight> */}
+        />*/}
         <Panel 
-            mode={'home'}
-            onEnterJumping={() => onEnterJumping()}
-            onEnterRollerCoaster={() => onEnterRollerCoaster()}
-            onBackHome={() => onBackHome()}
-            onStartJumping={() => {}}
-            onStartRollerCoaster={() => {}}
+          mode={'home'}
+          onEnterJumping={() => onEnterJumping()}
+          onEnterRollerCoaster={() => onEnterRollerCoaster()}
+          onBackHome={() => onBackHome()}
+          onStartJumping={() => {}}
+          onStartRollerCoaster={() => {}}
         />
-        <Camera reset={true}/>
+        <Camera   
+          enableTeleport={true}
+          mode={'home'}
+          initPosition={[0, 3, 0]}
+          reset={false}
+          resetPosition={[0, 3, 0]}
+        />
         <World />
-          
-        {/* </World> */}
         <Home />
-        {/* <Human /> */}
-        {/* <Hoster /> */}
-        {/* {list} */}
         <HumanList HumanChannel={humanChannel} />
       </View> 
     )

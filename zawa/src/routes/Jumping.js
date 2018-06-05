@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-01 22:32:12
+ * @Last Modified time: 2018-06-04 18:18:13
  */
 import React from 'react';
 import {
@@ -31,7 +31,6 @@ import Panel from '../components/Panel';
 
 const water = NativeModules.Water;
 const rollerCoaster = NativeModules.RollerCoaster;
-
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 // const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
@@ -81,7 +80,14 @@ const Styles = StyleSheet.create({
 export default class Jumping extends React.Component{
   constructor(props) {
     super(props);
-    rollerCoaster.hide(false);
+    rollerCoaster.visible(false);
+    window.postMessage({
+      type:'controllerVisible',
+      data:{
+        visible: false,
+        mode: 'game-jumping',
+      }
+    });
     this.state={
       jumpMove: 0,
       jumpUp: 0,
@@ -90,9 +96,9 @@ export default class Jumping extends React.Component{
       play:'stop',
       textMove: [-0.2, 0.5, -0.4],
       resetCame: false,
-      mouIndex:null
+      mouIndex: null,
     }
-
+    // console.log('getController: ',controllerInfo.getControllers());
     water.setTexture('../../static_assets/water.jpg');
     water.setColor({
       r: 0,
@@ -139,6 +145,16 @@ export default class Jumping extends React.Component{
     //   //   }
     //   // })
     // });
+    // console.log('Gamepad connected');
+    // window.addEventListener("gamepadconnected", function(e) {
+    //   console.log(e);
+    //   if(!e.gamepad.displayId) {
+    //     console.log('Gamepad connected');
+    //   } else {
+    //     console.log('Gamepad connected, associated with VR display ' + e.gamepad.displayId);
+    //   }
+    // });
+    // console.log('Gamepad connected');
   }
 
   setDis(jumpDis,upDis){
@@ -221,6 +237,7 @@ export default class Jumping extends React.Component{
   }
 
   clearAccumulation(){
+
     this.setState({
       percent: 0,
       pulse: 0,
@@ -313,56 +330,57 @@ export default class Jumping extends React.Component{
           }}
           // lit = {true}
         ></Model>
-
-        <View
-          style={{
-            transform: [
-              {translate: [VrHeadModel.position()[0], VrHeadModel.position()[1], VrHeadModel.position()[2]]}
-            ]
-          }}
-        >
-          <Text
-          style={{
-            fontSize: 0.05,
-            color: '#33e8ec',
-            transform:[
-              {translate: [this.state.textMove[0], 0, this.state.textMove[2]]},
-            ]
-          }}
-          >
-            {this.state.percent}%
-          </Text>
-          <Model
-            source={{
-              obj: asset('models/jumping/pointer.obj'),
-              mtl: asset('models/jumping/pointer.mtl')
-            }}
+        {
+          !this.state.percent ? null : 
+          <View
             style={{
               transform: [
-                {translate: [this.state.textMove[0], 0, this.state.textMove[2]]},
-                {rotateZ: -this.state.percent/100 * 217.6},
-                {rotateX: 90},
-                {scale: 0.1}
+                {translate: [VrHeadModel.position()[0], VrHeadModel.position()[1], VrHeadModel.position()[2]]}
               ]
             }}
           >
-          </Model>
-          <Model
-            source={{
-              obj: asset('models/jumping/dashBoard.obj'),
-              mtl: asset('models/jumping/dashBoard.mtl')
-            }}
+            <Text
             style={{
-              transform: [
+              fontSize: 0.05,
+              color: '#33e8ec',
+              transform:[
                 {translate: [this.state.textMove[0], 0, this.state.textMove[2]]},
-                {rotateX: 90},
-                {scale: 0.1}
               ]
             }}
-          >
-          </Model>
-        </View>
-        
+            >
+              {this.state.percent}%
+            </Text>
+            <Model
+              source={{
+                obj: asset('models/jumping/pointer.obj'),
+                mtl: asset('models/jumping/pointer.mtl')
+              }}
+              style={{
+                transform: [
+                  {translate: [this.state.textMove[0], 0, this.state.textMove[2]]},
+                  {rotateZ: -this.state.percent/100 * 217.6},
+                  {rotateX: 90},
+                  {scale: 0.1}
+                ]
+              }}
+            >
+            </Model>
+            <Model
+              source={{
+                obj: asset('models/jumping/dashBoard.obj'),
+                mtl: asset('models/jumping/dashBoard.mtl')
+              }}
+              style={{
+                transform: [
+                  {translate: [this.state.textMove[0], 0, this.state.textMove[2]]},
+                  {rotateX: 90},
+                  {scale: 0.1}
+                ]
+              }}
+            >
+            </Model>
+          </View>
+        }
         <Sound
           style = {{
             transform:[
@@ -409,7 +427,14 @@ export default class Jumping extends React.Component{
           onEvent={() => this.clearAccumulation()}
         ></Button>
 
-        <Camera vrPosition={ true }  position={move.slice()} reset={this.state.resetCame} />
+        <Camera 
+          enableTeleport={false}
+          mode={'game-jumping'}
+          initPosition={[0, 5, 0.5]}
+          reset={this.state.resetCame}
+          resetPosition={[0, 5, 0.5]}
+          position={move.slice()} 
+        />
         <Mountain moveIndex={ this.state.mouIndex } />
         {/* test stone position  */}
         <Model
