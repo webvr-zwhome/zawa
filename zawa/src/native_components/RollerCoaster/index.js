@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-05-12 21:23:20 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-04 17:43:20
+ * @Last Modified time: 2018-06-06 17:29:15
  */
 import { Module } from 'react-vr-web';
 import * as THREE from 'three';
@@ -306,6 +306,10 @@ export default class RollerCoaster extends Module{
     start() {
         this._start = true;
         this._startTime = Date.now();
+    }
+
+    stop() {
+        this._start = false;
     }
 
     visible(visible) {

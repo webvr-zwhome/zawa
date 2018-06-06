@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-04 19:27:39
+ * @Last Modified time: 2018-06-06 18:08:10
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -223,7 +223,7 @@ export default class Camera extends React.Component {
 
     if (mode === 'game-rollercoaster') {
       transform = [
-        { translate: enableTeleport ? this.state.teleportPosition : this.state.rollerPosition },
+        { translate: enableTeleport ? this.state.teleportPosition : this.state.rollerPosition},
         { rotateY: this.state.rollerRotation[1]}
       ];
     }

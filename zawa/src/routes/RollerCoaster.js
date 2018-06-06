@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-06 16:47:59
+ * @Last Modified time: 2018-06-06 18:02:24
  */
 import React from 'react';
 import {
@@ -32,6 +32,7 @@ import RollerStart from '../components/RollerStart';
 const rollerCoaster = NativeModules.RollerCoaster;
 const fog = NativeModules.Fog;
 const water = NativeModules.Water;
+const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 const Styles = StyleSheet.create({
   interface: {
@@ -78,6 +79,7 @@ export default class RollerCoasterGame extends React.Component{
     water.visible(false);
     this.state = {
       enableTeleport: true,
+      reset: false,
     }
     // window.postMessage({
     //   type:'controllerVisible',
@@ -95,6 +97,25 @@ export default class RollerCoasterGame extends React.Component{
       type:'cameraNewPosition',
       data:{
         position: [50, 4, -10],
+      }
+    });
+    RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
+      if (e.type !== 'GamepadInputEvent') {
+        return;
+      }
+      // stop 
+      if (e.gamepad === 0 && e.button === 4) {
+        rollerCoaster.stop();
+        if(e.eventType === 'keydown') {
+          this.setState({
+            reset: true,
+          });
+        } 
+        if (e.eventType === 'keyup') {
+          this.setState({
+            reset: false,
+          });
+        }
       }
     });
   }
@@ -146,7 +167,7 @@ export default class RollerCoasterGame extends React.Component{
           enableTeleport={this.state.enableTeleport}
           mode={'game-rollercoaster'}
           initPosition={[50, 0, -10]}
-          reset={false}
+          reset={this.state.reset}
           resetPosition={[50, 0, -10]}
         />
         <World 
