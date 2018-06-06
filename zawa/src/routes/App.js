@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-04 17:43:42
+ * @Last Modified time: 2018-06-06 16:59:04
  */
 import React from 'react';
 import {
@@ -46,11 +46,22 @@ export default class App extends React.Component{
     this.addMember = this.addMember.bind(this);
     this.updateMember = this.updateMember.bind(this);
     rollerCoaster.visible(false);
+    // window.postMessage({
+    //   type:'controllerVisible',
+    //   data:{
+    //     visible: true,
+    //   }
+    // });
     window.postMessage({
-      type:'controllerVisible',
+      type:'mode',
       data:{
-        visible: true,
-        mode: 'home',
+        mode: "home",
+      }
+    });
+    window.postMessage({
+      type:'cameraNewPosition',
+      data:{
+        position: [0, 4, 0],
       }
     });
   }

@@ -132,8 +132,17 @@ function init(bundle, parent, options) {
         });
         break;
       case 'controllerVisible': 
-        threeDOFRayCaster.visible(e.data.data.visible);
+        threeDOFRayCaster.controllerVisible(e.data.data.visible);
+     
+        break;
+      case 'mode':
+        // console.log('e.mode', e.data.data.mode);
         threeDOFRayCaster.setMode(e.data.data.mode);
+        break;
+      case 'cameraNewPosition':
+        const position = e.data.data.position;
+        threeDOFRayCaster._setUpCameraNewPosition(new THREE.Vector3(position[0], position[1], position[2]));
+        break;
       // case 'getGamePad':
       //   // vr.rootView.context.bridge._worker.postMessage({
       //   //   type: 'gamePad',

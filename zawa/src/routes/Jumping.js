@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-04 18:18:13
+ * @Last Modified time: 2018-06-06 15:58:29
  */
 import React from 'react';
 import {
@@ -81,11 +81,22 @@ export default class Jumping extends React.Component{
   constructor(props) {
     super(props);
     rollerCoaster.visible(false);
+    // window.postMessage({
+    //   type:'controllerVisible',
+    //   data:{
+    //     visible: false,
+    //   }
+    // });
     window.postMessage({
-      type:'controllerVisible',
+      type:'mode',
       data:{
-        visible: false,
-        mode: 'game-jumping',
+        mode: "game-jumping",
+      }
+    });
+    window.postMessage({
+      type:'cameraNewPosition',
+      data:{
+        position: [0, 5, 0.5],
       }
     });
     this.state={
@@ -111,25 +122,28 @@ export default class Jumping extends React.Component{
     const mark = NativeModules.Mark;
     this.sound = {sound: asset('sound/down.mp3'), playerState:new MediaPlayerState({})}
     window.addEventListener('message', (e)=>{
-      switch (e.data.type) {
-        case 'jumpPosition':
-          this.setDis(e.data.jumpDis, e.data.upDis);
-          break;
-        case 'isCollision':
-          this.Collision = e.data.Collision;
-          // this.mouIndex = e.data.indexCol
-          break;
-        case 'moveText':
-          this.setState({
-            textMove: e.data.moveText.slice()
-          })
-          break;
-        // case 'gamePad':
-        //   this.gamePad = e.data.Touch;
-        //   console.log('gamePad: ',this.gamePad)
-        default:
-        return;
+      if(this._isMounted){
+        switch (e.data.type) {
+          case 'jumpPosition':
+            this.setDis(e.data.jumpDis, e.data.upDis);
+            break;
+          case 'isCollision':
+            this.Collision = e.data.Collision;
+            // this.mouIndex = e.data.indexCol
+            break;
+          case 'moveText':
+            this.setState({
+              textMove: e.data.moveText.slice()
+            })
+            break;
+          // case 'gamePad':
+          //   this.gamePad = e.data.Touch;
+          //   console.log('gamePad: ',this.gamePad)
+          default:
+          return;
+        }
       }
+      
     });
     // RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {
     //   if (e.type !== 'GamepadInputEvent') {
@@ -157,6 +171,15 @@ export default class Jumping extends React.Component{
     // console.log('Gamepad connected');
   }
 
+  componentWillMount() {
+    this._isMounted = true;
+    // console.log(rollerCoaster.getPoints());
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   setDis(jumpDis,upDis){
     // console.log('jumpDis: ',jumpDis)
     // console.log('jumpUp: ',upDis)
@@ -174,6 +197,13 @@ export default class Jumping extends React.Component{
           power: 0
         }
       })
+
+      window.postMessage({
+        type:'cameraNewPosition',
+        data:{
+          position: [0, 5, 0.5],
+        }
+      })
       this.sound.playerState.play();
       console.log('collision: ',this.Collision.isCollision)
     }else if(upDis < 0 && VrHeadModel.position()[1] < -4 && this.Collision.isCollision===false){
@@ -185,17 +215,17 @@ export default class Jumping extends React.Component{
       window.postMessage({
         type:'endPower',
         data:{
-          power: 0
+          power: 0,
         }
       })
-      console.log('collision: ',this.Collision.isCollision)      
+      // console.log('collision: ',this.Collision.isCollision)      
     }else{
       this.setState({
         resetCame: false,
         jumpMove: jumpDis,
         jumpUp: upDis
       })
-      console.log('power')
+      // console.log('power')
     }
     // console.log('collision: ',this.Collision.isCollision)
   }

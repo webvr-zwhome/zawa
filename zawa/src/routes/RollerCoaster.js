@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-04 18:40:35
+ * @Last Modified time: 2018-06-06 16:47:59
  */
 import React from 'react';
 import {
@@ -79,13 +79,24 @@ export default class RollerCoasterGame extends React.Component{
     this.state = {
       enableTeleport: true,
     }
+    // window.postMessage({
+    //   type:'controllerVisible',
+    //   data:{
+    //     visible: false,
+    //   }
+    // });
     window.postMessage({
-      type:'controllerVisible',
+      type:'mode',
       data:{
-        visible: false,
-        mode: 'game-rollercoaster',
+        mode: "game-rollercoaster",
       }
-  });
+    });
+    window.postMessage({
+      type:'cameraNewPosition',
+      data:{
+        position: [50, 4, -10],
+      }
+    });
   }
 
   handleStartRollerCoaster() {

@@ -157,7 +157,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
     this._cameraQuaternion = new THREE.Quaternion();
     this._gamepadPosition = new THREE.Vector3();
     this._cameraPosition = new THREE.Vector3(0, 0, 0);
-    this._visible = true;
+    this._controllerVisible = true;
     this._mode = 'home';
 
     const initialGamepads = navigator.getGamepads();
@@ -272,7 +272,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
   }
   // 当button2按下时采用曲线光束，否则采用默认光束
  _changeController(gamepad, angle) {
-    if (gamepad && gamepad.pose && this._visible && this._mode === 'home') {
+    if (gamepad && gamepad.pose && this._mode === 'home') {
       if (gamepad.buttons[2].pressed) {
         const vector = this.getRayVector();
         const beamCurve = createBeamCurveMesh(this._mesh, angle, vector);
@@ -286,6 +286,8 @@ export default class ThreeDOFRayCaster extends RayCaster {
         this._teleport.visible = true;
        
         if (gamepad.buttons[1].pressed) {
+          const y = this._cameraPosition.y;
+          endPointPosition.y = y;
           this._setUpCameraNewPosition(endPointPosition);
         }
       } else {
@@ -336,7 +338,7 @@ export default class ThreeDOFRayCaster extends RayCaster {
       if (!gamepad.buttons[1].pressed) {
         this._mesh.position.set(
           this._cameraPosition.x + gamepadPosition[0], 
-          gamepadPosition[1] + GAMEPAD_HEIGHT, 
+          this._cameraPosition.y + gamepadPosition[1], 
           this._cameraPosition.z + gamepadPosition[2]
         );
       }
@@ -344,11 +346,11 @@ export default class ThreeDOFRayCaster extends RayCaster {
     }
   }
 
-  setUpControllerPosition(position) {
-    const pos = this._mesh.position;
-    console.log(pos);
-    // this._mesh.position.set(pos[0])
-  }
+  // setUpControllerPosition(position) {
+  //   const pos = this._mesh.position;
+  //   console.log(pos);
+  //   // this._mesh.position.set(pos[0])
+  // }
 
   /**
    * Return an array containing the x,y,z coordinates of the controller, which
@@ -418,14 +420,26 @@ export default class ThreeDOFRayCaster extends RayCaster {
     return true;
   }
 
+  controllerVisible(visible) {
+    if(this._mode !== 'home') {
+      this._mesh.visible = visible;
+    }
+    // this._controllerVisible = visible;
+  }
+
   visible(visible) {
-    console.log(visible);
+    // console.log(visible);
     this._mesh.visible = visible;
-    this._teleport.visible = false;
-    this._visible = visible;
+    this._teleport.visible = visible;
   }
 
   setMode(mode) {
+    // console.log('mode', mode);
     this._mode = mode;
+    if (mode != 'home') {
+      this.visible(false);
+    } else {
+      this.visible(true);
+    }
   }
 }
