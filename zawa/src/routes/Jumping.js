@@ -105,7 +105,7 @@ export default class Jumping extends React.Component{
       percent: 0,
       // pulse: 0,
       play:'stop',
-      textMove: [-0.2, 0.5, -0.4],
+      textMove: [-0.4, 0.6, -0.6],
       resetCame: false,
       mouIndex: null,
     }
@@ -305,6 +305,24 @@ export default class Jumping extends React.Component{
       onEnterRollerCoaster,
       onBackHome,
      } = this.props;
+     const dashBoardList = [];
+     for(let i = 0; i < (this.state.percent/5); i++){
+       dashBoardList[i] = <Model
+                            source = {{
+                              obj: asset('models/jumping/percent.obj'),
+                              mtl: asset('models/jumping/percent.mtl')
+                            }}
+                            style={{
+                              transform: [
+                                {translate: [0, 0, 0]},
+                                {rotateZ: 19 * i},
+                                {rotateX: 90},
+                                {scale: 0.1}
+                              ]
+                            }}
+                            >
+                           </Model>
+     }
     
     // const cameraRotate = [0, rotate[1], 0];
     return (
@@ -365,22 +383,25 @@ export default class Jumping extends React.Component{
           <View
             style={{
               transform: [
-                {translate: [VrHeadModel.position()[0], VrHeadModel.position()[1], VrHeadModel.position()[2]]}
+                {translate: [VrHeadModel.position()[0]+this.state.textMove[0], VrHeadModel.position()[1], VrHeadModel.position()[2]+this.state.textMove[2]]}
               ]
             }}
           >
             <Text
-            style={{
+            style = {{
               fontSize: 0.05,
               color: '#33e8ec',
               transform:[
-                {translate: [this.state.textMove[0], 0, this.state.textMove[2]]},
+                {translate: [0, 0, 0]},
               ]
             }}
             >
               {this.state.percent}%
             </Text>
-            <Model
+            {
+              dashBoardList
+            }
+            {/* <Model
               source={{
                 obj: asset('models/jumping/pointer.obj'),
                 mtl: asset('models/jumping/pointer.mtl')
@@ -408,7 +429,7 @@ export default class Jumping extends React.Component{
                 ]
               }}
             >
-            </Model>
+            </Model> */}
           </View>
         }
         <Sound
@@ -420,7 +441,7 @@ export default class Jumping extends React.Component{
           source = {asset('sound/sea.mp3')}
           autoPlay = {true}
           loop = {true}
-          volume = {5.0}
+          volume = {10.0}
         ></Sound>
         <Sound
           source = {asset('sound/add.mp3')}

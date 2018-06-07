@@ -121,7 +121,7 @@ function init(bundle, parent, options) {
         jumpPower = 0;
         break;
       case 'rotateText':
-        console.log('postVrheadpos: ',e.data.data.HmPos)
+        // console.log('postVrheadpos: ',e.data.data.HmPos)
         const moveText = new THREE.Vector3(-0.2, 0.5, -0.4);
         const moveHY = new THREE.Vector3(0,1,0);
         const moveAngle = e.data.data.HmPos * Math.PI / 180;
