@@ -35,8 +35,8 @@ export default class Collision extends Module {
             // if(colPos[1] + 1  < position[1]){
                 isCollision = true;
                 indexCol = index;
-                console.log('collistion sucess')
-                console.log('collision Index: ',indexCol);
+                // console.log('collistion sucess')
+                // console.log('collision Index: ',indexCol);
             }
         })
         return {
