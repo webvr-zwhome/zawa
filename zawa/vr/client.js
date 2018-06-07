@@ -85,7 +85,7 @@ function init(bundle, parent, options) {
     }else{
       jumpTime = 0;
     }
-
+    // console.log('status: ', rollerCoaster.getStatus());
     if(rollerCoaster.getStatus() && cameraNewPositionInRoller != cameraPosition) {
       vr.rootView.context.bridge._worker.postMessage({
         type: "rollerPosition", 
@@ -133,7 +133,6 @@ function init(bundle, parent, options) {
         break;
       case 'controllerVisible': 
         threeDOFRayCaster.controllerVisible(e.data.data.visible);
-     
         break;
       case 'mode':
         // console.log('e.mode', e.data.data.mode);

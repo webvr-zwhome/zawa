@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-06 18:02:24
+ * @Last Modified time: 2018-06-07 17:29:21
  */
 import React from 'react';
 import {
@@ -75,10 +75,11 @@ export default class RollerCoasterGame extends React.Component{
   constructor(props) {
     super(props);
     rollerCoaster.visible(true);
+    rollerCoaster.stop();
     fog.changeDensity(0.002);
     water.visible(false);
     this.state = {
-      enableTeleport: true,
+      // enableTeleport: true,
       reset: false,
     }
     // window.postMessage({
@@ -106,16 +107,22 @@ export default class RollerCoasterGame extends React.Component{
       // stop 
       if (e.gamepad === 0 && e.button === 4) {
         rollerCoaster.stop();
+        window.postMessage({
+          type:'cameraNewPosition',
+          data:{
+            position: props.initPosition,
+          }
+        });
         if(e.eventType === 'keydown') {
           this.setState({
             reset: true,
           });
         } 
-        if (e.eventType === 'keyup') {
-          this.setState({
-            reset: false,
-          });
-        }
+        // if (e.eventType === 'keyup') {
+        //   this.setState({
+        //     reset: false,
+        //   });
+        // }
       }
     });
   }
@@ -123,8 +130,11 @@ export default class RollerCoasterGame extends React.Component{
   handleStartRollerCoaster() {
     rollerCoaster.start();
     this.setState({
-      enableTeleport: false,
+      reset: false,
     });
+    // this.setState({
+    //   enableTeleport: false,
+    // });
   }
 
   render() {
@@ -164,7 +174,7 @@ export default class RollerCoasterGame extends React.Component{
         >
         </DirectionalLight>
         <Camera 
-          enableTeleport={this.state.enableTeleport}
+          enableTeleport={false}
           mode={'game-rollercoaster'}
           initPosition={[50, 0, -10]}
           reset={this.state.reset}

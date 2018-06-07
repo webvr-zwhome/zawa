@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-08 20:36:41 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-06 15:58:29
+ * @Last Modified time: 2018-06-07 18:16:43
  */
 import React from 'react';
 import {
@@ -110,12 +110,12 @@ export default class Jumping extends React.Component{
       mouIndex: null,
     }
     // console.log('getController: ',controllerInfo.getControllers());
-    water.setTexture('../../static_assets/water.jpg');
-    water.setColor({
-      r: 0,
-      g: 0,
-      b: 1,
-    })
+    // water.setTexture('../../static_assets/water.jpg');
+    // water.setColor({
+    //   r: 0,
+    //   g: 0,
+    //   b: 1,
+    // })
     this.power = 0;
     this.accuPower = 0;
     this.Collsion = {};
@@ -317,7 +317,7 @@ export default class Jumping extends React.Component{
             onEnterRollerCoaster={() => onEnterRollerCoaster()}
             onBackHome={() => onBackHome()}
             onStartJumping={() => {}}
-            onStartRollerCoaster={() => rollerCoaster.start()}
+            // onStartRollerCoaster={() => rollerCoaster.start()}
         />
         <AmbientLight 
           style={{

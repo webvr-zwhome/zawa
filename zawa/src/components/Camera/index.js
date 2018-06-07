@@ -2,7 +2,7 @@
  * @Author: zhaoxiaoqi 
  * @Date: 2018-04-12 23:18:16 
  * @Last Modified by: zhaoxiaoqi
- * @Last Modified time: 2018-06-06 18:08:10
+ * @Last Modified time: 2018-06-07 17:59:23
  */
 import React from 'react';
 import { PerspectiveCamera } from 'three';
@@ -53,6 +53,8 @@ export default class Camera extends React.Component {
       // cameraPosition: [cameraPosition[0], 4, cameraPosition[2]],
       // cameraRotation: [0, 0, 0],
     }
+
+    // this.reset = false;
     // let preAxes = [];
   /* 
     RCTDeviceEventEmitter.addListener('onReceivedInputEvent', e => {     
@@ -169,6 +171,15 @@ export default class Camera extends React.Component {
     this._isMounted = false;
   }
 
+  // componentWillUpdate() {
+  //   if (this.props.reset) {
+  //     this.setState({
+  //       rollerPosition: this.props.resetPosition,
+  //       rollerRotation: [0, 0, 0],
+  //     });
+  //   }
+  // }
+
   onWindowMessage = (e) => {
     // teleport to new position
 
@@ -183,19 +194,27 @@ export default class Camera extends React.Component {
         }
         case 'rollerPosition': {
           const position = e.data.position;
+          console.log('posi: ', position);
           this.setState({
-            rollerPosition: [position.x, position.y, position.z],
+            rollerPosition: this.props.reset ? this.props.resetPosition : [position.x, position.y, position.z],
           });
           break;
         }
         case 'rollerRotation': {
           const rotation = e.data.rotation;
+          console.log('rotat: ', rotation);
           this.setState({
-            rollerRotation: [rotation.x, rotation.y, rotation.z],
+            rollerRotation: this.props.reset ? [0, 0, 0] : [rotation.x, rotation.y, rotation.z],
           })
           break;
         }
       }
+      // if (this.props.reset) {
+      //   this.setState({
+      //     rollerPosition: this.props.resetPosition,
+      //     rollerRotation: [0, 0, 0],
+      //   });
+      // }
     }
   }
 
@@ -207,10 +226,12 @@ export default class Camera extends React.Component {
     const { 
       enableTeleport = true,
       mode = 'home',
-      // initPosition = [0, 0, 0],
+      initPosition = [0, 0, 0],
+      initRotation = [0, 0, 0],
       reset = false,
       resetPosition = [0, 0, 0],
       position = [0, 0, 0],    // position from jumping game 
+
     } = this.props;
 
     let transform = [];
@@ -219,16 +240,13 @@ export default class Camera extends React.Component {
       transform = [
         { translate: enableTeleport ? this.state.teleportPosition : this.state.initPosition }
       ];
-    }
-
-    if (mode === 'game-rollercoaster') {
+    }else if (mode === 'game-rollercoaster') {
       transform = [
-        { translate: enableTeleport ? this.state.teleportPosition : this.state.rollerPosition},
-        { rotateY: this.state.rollerRotation[1]}
+        { translate: reset ? resetPosition : this.state.rollerPosition},
+        { rotateY: reset ? 0 : this.state.rollerRotation[1] }
       ];
-    }
-
-    if (mode === 'game-jumping') {
+      console.log('translate: ', transform[1].rotateY);
+    }else if(mode === 'game-jumping') {
       // console.log(this.prePosition);
       const curPosition = reset ? resetPosition : [position[0] + this.prePosition[0], this.prePosition[1] + position[1], position[2] + this.prePosition[2]];
       this.prePosition = curPosition;
